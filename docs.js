@@ -21,7 +21,7 @@ const CSS=(lang,fontCss)=>`${fontCss||'<link rel="preconnect" href="https://font
 html,body{margin:0;background:#f5f0e8;-webkit-print-color-adjust:exact;print-color-adjust:exact}
 body{font-family:${lang==='he'?'Heebo,Lato':'Lato,Heebo'},Arial,sans-serif;color:#2b211c;font-size:12.5pt;line-height:1.42;font-weight:${lang==='he'?300:400}}
 .pg{width:210mm;height:297mm;position:relative;padding:0 23mm;overflow:hidden;page-break-after:always;break-after:page;background:#f5f0e8}
-.pg:last-child{page-break-after:auto;break-after:auto}
+.pg:last-of-type{page-break-after:auto;break-after:auto}
 .hd{position:absolute;top:13mm;left:23mm;right:23mm;height:11mm;border-bottom:.8pt solid #c2b19f;display:flex;justify-content:space-between;align-items:center;direction:ltr}
 .wm{font-family:Lato,Arial,sans-serif;font-size:12pt;letter-spacing:.42em;color:#2a211d}
 .hn{font-family:Lato,Arial,sans-serif;font-size:8.5pt;color:#806b5e;letter-spacing:.02em}

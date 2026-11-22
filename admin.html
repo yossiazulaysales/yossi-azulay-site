@@ -567,6 +567,7 @@ table.t tr.click:hover td{background:var(--soft)}
 <div id="modal" role="dialog" aria-modal="true"><div class="box" id="mbox"></div></div>
 <div id="toast" role="status" aria-live="polite"></div>
 
+<script src="docs.js"></script>
 <script>
 {
 /* ================= DATA ================= */
@@ -775,7 +776,7 @@ function totals(qt,lang='he'){
  if(qt.sound==='paid'&&qt.soundPrice>0)lines.push({n:L(SOUND,lang),a:qt.soundPrice});
  if(qt.discount>0)lines.push({n:({he:'הנחה',en:'Discount',fr:'Remise',es:'Descuento'})[lang],a:-qt.discount});
  const sub=lines.reduce((s,l)=>s+l.a,0);
- const vat=(!qt.abroad&&qt.cur==='ILS')?Math.round(sub*0.18):0;
+ const vat=(!qt.feeMode&&!qt.abroad&&qt.cur==='ILS')?Math.round(sub*0.18):0;
  const total=sub+vat;
  const dep=Math.round(total*qt.depositPct/100);
  return {lines,sub,vat,total,dep,bal:total-dep,flights:qt.abroad&&qt.exp.flights?qt.flights:0};
@@ -1479,7 +1480,8 @@ function aSettings(){
   <div class="hr"></div><h2>גיבויים</h2><div class="alist"><div class="aitem"><div class="t"><b>גיבוי מלא אוטומטי</b><small>כל יום ראשון ב-03:00 · כל הנתונים + כל המסמכים</small></div><span class="tag" style="background:var(--okbg);color:var(--ok)">פעיל</span></div><div class="aitem"><div class="t"><b>יעד</b><small>Dropbox / Yossi Azulay / Backups · וגם עותק בתיקייה במחשב</small></div></div><div class="aitem"><div class="t"><b>כל מסמך שנוצר</b><small>נשמר מיד גם בתיקיית הלקוח: Clients / C-1001 שם הלקוח /</small></div></div></div><button class="btn pri" type="button" data-act="backupNow" style="margin-top:10px">גיבוי עכשיו</button>
   <div class="hr"></div><h2>משתמשים</h2><div class="aitem"><div class="t"><b>יוסי אזולאי</b><small>בעלים · הכול</small></div></div><div class="aitem" style="margin-top:6px"><div class="t"><b>איתמר לשנסקי</b><small>מנהל · הכול</small></div></div></div></div>`;
 }
-const nextContract=()=>String(Math.max(Number(TODAY.getFullYear()+'100'),...EVENTS.map(e=>+e.contractNo||0))+1);
+const nextContract=()=>String(Math.max(202700,...EVENTS.map(e=>+e.contractNo||0).filter(n=>n>=202700&&n<300000))+1);
+const nextQuote=()=>String(Math.max(52700,...EVENTS.map(e=>+e.quoteNo||0).filter(n=>n>=52700&&n<100000))+1);
 
 function evDetail(e){
  const tt=totals(e.quote);const tabs=[['path','מסלול וצ׳קליסט'],['details','פרטים'],['quote','הצעת מחיר'],['contract','חוזה'],['pay','תשלומים'],['songs','שירים'],['eform','טופס אירוע'],['docs','מסמכים'],['costs','ספקים והוצאות'],['log','יומן פעילות']];
@@ -1509,20 +1511,9 @@ function evDetail(e){
   <label class="wide">הערות<textarea data-f="notes" rows="2">${esc(e.notes)}</textarea></label></div>
   <p class="muted" style="font-size:14px;margin-bottom:0">כל שינוי כאן מתעדכן ביומן גוגל.</p></div>`;
  } else if(S.evTab==='quote'){
-  const qt=e.quote;
-  b=`<div class="qb"><div class="panel"><h2>מופע בסיס</h2><div class="radios">${BASES.map(x=>`<label><input type="radio" name="qbase" value="${x.id}" ${qt.base===x.id?'checked':''} data-q="base"> ${esc(x.he.replace('יוסי אזולאי – ',''))}</label>`).join('')}</div>
-  <div class="row" style="margin-top:10px"><span>מחיר המופע</span><input class="inp" type="number" data-q="basePrice" value="${qt.basePrice}" style="width:130px"><select data-q="cur"><option ${qt.cur==='ILS'?'selected':''} value="ILS">₪ שקל</option><option ${qt.cur==='USD'?'selected':''} value="USD">$ דולר</option><option ${qt.cur==='EUR'?'selected':''} value="EUR">€ יורו</option></select><label class="row" style="gap:6px"><input type="checkbox" data-q="abroad" ${qt.abroad?'checked':''}> אירוע בחו״ל</label></div>
-  <div class="hr"></div><h2>תוספות</h2>${ADDONS.map(a=>{const it=qt.items[a.id]||{on:false,qty:1,price:a.price};return `<div class="opt"><input type="checkbox" data-qi="${a.id}" data-p="on" ${it.on?'checked':''} aria-label="${esc(a.he)}"><span>${esc(a.he)}</span><input class="inp" type="number" min="1" data-qi="${a.id}" data-p="qty" value="${it.qty}" aria-label="כמות"><input class="inp" type="number" data-qi="${a.id}" data-p="price" value="${it.price}" aria-label="מחיר"></div>`}).join('')}
-  <div class="hr"></div><h2>הגברה</h2><div class="radios"><label><input type="radio" name="snd" value="spec" data-q="sound" ${qt.sound==='spec'?'checked':''}> בכפוף למפרט טכני</label><label><input type="radio" name="snd" value="paid" data-q="sound" ${qt.sound==='paid'?'checked':''}> בתוספת תשלום</label><input class="inp" type="number" data-q="soundPrice" value="${qt.soundPrice}" style="width:120px" aria-label="מחיר הגברה"></div>
-  ${qt.abroad?`<div class="hr"></div><h2>הוצאות על חשבון הלקוח</h2>${EXP.map(x=>`<label class="row" style="padding:6px 0"><input type="checkbox" data-qe="${x.id}" ${qt.exp[x.id]?'checked':''}> ${esc(x.he)} ${x.id==='flights'?`<input class="inp" type="number" data-q="flights" value="${qt.flights}" style="width:120px" aria-label="סכום טיסות">`:''}</label>`).join('')}`:''}
-  <div class="hr"></div><div class="row"><span>הנחה</span><input class="inp" type="number" data-q="discount" value="${qt.discount}" style="width:120px"><span>מקדמה %</span><input class="inp" type="number" data-q="depositPct" value="${qt.depositPct}" style="width:90px"></div></div>
-  <div class="panel sticky"><h2>סיכום</h2><div id="qsum">${qsum(e)}</div>
-  <div class="row" style="margin-top:14px"><button class="btn" type="button" data-act="previewQuote">תצוגה כמו אצל הלקוח</button><button class="btn wa" type="button" data-act="sendQuote">שליחה בוואטסאפ</button></div>
-  <p class="muted" style="font-size:13.5px">ההצעה נשלחת בשפת הלקוח (${({he:'עברית',en:'אנגלית',fr:'צרפתית',es:'ספרדית'})[e.lang]}) כקישור לאזור האישי.</p></div></div>`;
+  b=docPanel(e,'quote');
  } else if(S.evTab==='contract'){
-  b=`<div class="panel contract"><div class="row" style="font-family:Assistant"><h2 class="sp">חוזה ${esc(e.contractNo||'(יקבל מספר באישור ההצעה)')}</h2>${e.contract==='signed'?'<span class="tag" style="background:var(--okbg);color:var(--ok)">חתום '+(e.signedAt?'· '+esc(e.signedAt):'')+'</span>':e.contract==='sent'?'<span class="tag" style="background:var(--warnbg);color:var(--warn)">נשלח, ממתין לחתימה</span>':'<span class="tag" style="background:var(--soft)">טיוטה</span>'}</div>
-  <ol>${contractClauses(e,'he').map(x=>`<li>${esc(x)}</li>`).join('')}</ol><p class="muted" style="font-family:Assistant;font-size:14px">נוסח לדוגמה בלבד. החוזה שלכם ייכנס כאן כתבנית, בארבע שפות, וכל השדות יתמלאו לבד מהפנייה.</p>
-  <div class="row" style="font-family:Assistant">${e.contract!=='signed'?`<button class="btn wa" type="button" data-act="sendContract">שליחה לחתימה</button>`:''}<button class="btn" type="button" data-act="previewContract">תצוגה כמו אצל הלקוח</button><button class="btn" type="button" data-act="pdf">PDF</button></div></div>`;
+  b=docPanel(e,'order');
  } else if(S.evTab==='pay'){
   const rows=[['deposit','מקדמה',tt.dep],['balance','יתרה',tt.bal]];if(e.quote.abroad&&e.quote.flights)rows.push(['flights','החזר טיסות',e.quote.flights]);
   b=`<div class="panel scroll"><table class="t"><thead><tr><th>עבור</th><th class="n">סכום</th><th>סטטוס</th><th>אמצעי ותאריך</th><th>חשבונית מס קבלה</th><th></th></tr></thead><tbody>
@@ -1562,13 +1553,97 @@ function initSig(){const c=$('#sig');if(!c)return;const r=c.getBoundingClientRec
  c.onpointerup=()=>{d=false}}
 
 /* ================= ACTIONS ================= */
-function newEvent(o){const id='E'+Date.now().toString(36)+Math.floor(Math.random()*36**3).toString(36);const e=Object.assign({id,clientNo:'C-'+(1001+EVENTS.length),quoteNo:'27'+String(46+EVENTS.length).padStart(3,'0'),ageDays:0,contractNo:'',client:'לקוח חדש',couple:'',ctype:'private',etype:'wedding',date:'2027-06-20',hours:'',venue:'',city:'',country:'ישראל',phone:'',email:'',lang:'he',source:'whatsapp',team:'yossi',status:'lead',contract:'none',quote:q('chuppah'),pay:pay(),music:'',sound:'',suppliers:[],notes:'',log:[]},o);EVENTS.push(e);return e}
+function newEvent(o){const id='E'+Date.now().toString(36)+Math.floor(Math.random()*36**3).toString(36);const e=Object.assign({id,clientNo:'C-'+(1001+EVENTS.length),quoteNo:'',ageDays:0,contractNo:'',client:'לקוח חדש',couple:'',ctype:'private',etype:'wedding',date:'2027-06-20',hours:'',venue:'',city:'',country:'ישראל',phone:'',email:'',lang:'he',source:'whatsapp',team:'yossi',status:'lead',contract:'none',quote:q('chuppah',{basePrice:0,feeMode:true}),pay:pay(),music:'',sound:'',suppliers:[],notes:'',log:[]},o);EVENTS.push(e);return e}
 const followText={he:e=>`היי ${e.couple||e.client}, רצינו לוודא שההצעה הגיעה. נשמח לענות על כל שאלה 🙂`,en:e=>`Hi ${e.couple||e.client}, just checking you received our quote. Happy to answer any questions.`,fr:e=>`Bonjour ${e.couple||e.client}, nous voulions vérifier que vous avez bien reçu notre devis. N’hésitez pas si vous avez des questions.`,es:e=>`Hola ${e.couple||e.client}, queríamos confirmar que recibieron nuestro presupuesto. Con gusto respondemos cualquier pregunta.`};
 const formText={he:'שלום! תודה שפנית ליוסי אזולאי 🎶 כדי שנבדוק זמינות ונכין הצעה, נשמח שתמלא/י את הטופס הקצר: yossi-azulay.com/he/form',en:'Hi! Thank you for contacting Yossi Azulay 🎶 To check availability and prepare a quote, please fill in this short form: yossi-azulay.com/en/form',fr:'Bonjour ! Merci d’avoir contacté Yossi Azulay 🎶 Pour vérifier la disponibilité et préparer un devis, merci de remplir ce court formulaire : yossi-azulay.com/fr/form',es:'¡Hola! Gracias por contactar a Yossi Azulay 🎶 Para consultar disponibilidad y preparar un presupuesto, complete este breve formulario: yossi-azulay.com/es/form'};
+
+/* ================= DOCUMENTS (quote + order form, new design) ================= */
+const NATURE={wedding:['כניסה לחופה','חתונה'],aliyah:['עלייה לתורה','בר מצווה'],tefillin:['הנחת תפילין','בר מצווה'],henna:['מופע חינה','חינה'],other:['','']};
+function docD(e){
+ const o=e.doc||(e.doc={});const qt=e.quote;
+ const abroad=o.abroad!=null?o.abroad:(e.ctype==='abroad'||!!qt.abroad);
+ const N=NATURE[e.etype]||NATURE.other;
+ const lang=o.lang||((e.lang==='he'&&!abroad)?'he':'en');
+ return {lang,abroad,cur:o.cur||(abroad?'EUR':'ILS'),fee:o.fee!=null?o.fee:(qt.feeMode&&qt.basePrice?qt.basePrice:''),
+  depositPct:o.depositPct||(abroad?50:25),nights:o.nights||2,
+  client:o.client!=null?o.client:(e.couple||e.client||''),contact:o.contact!=null?o.contact:(e.couple||e.client||''),
+  company:o.company!=null?o.company:(e.ctype==='producer'?e.client:''),place:o.place!=null?o.place:[e.venue,e.city].filter(Boolean).join(', '),
+  title:o.title||'',idno:o.idno||'',street:o.street||'',house:o.house||'',city:o.city!=null?o.city:(e.city||''),country:o.country!=null?o.country:(e.country||''),phone2:o.phone2||'',
+  nature:o.nature!=null?o.nature:N[0],etypeHe:o.etypeHe!=null?o.etypeHe:N[1],typeEn:o.typeEn!=null?o.typeEn:((window.YDOC&&YDOC.ET[e.etype]||{en:''}).en),
+  venue:o.venue!=null?o.venue:[e.venue,e.city].filter(Boolean).join(', '),startTime:o.startTime||'',showTime:o.showTime||'',endTime:o.endTime||'',
+  team:o.team!=null?o.team:(lang==='he'?'יוסי אזולאי + מנהל מופע':'Yossi Azulay + Show manager'),notes:o.notes||''};
+}
+function syncQuote(e){const d=docD(e);Object.assign(e.quote,{feeMode:true,basePrice:+d.fee||0,items:{},sound:'spec',discount:0,cur:d.cur,abroad:d.abroad,depositPct:+d.depositPct||25})}
+function docPanel(e,kind){
+ const d=docD(e);const isQ=kind==='quote';const no=isQ?e.quoteNo:e.contractNo;
+ const fld=(k,label,opt={})=>`<label${opt.wide?' class="wide"':''}>${label}<input class="inp" data-d="${k}" value="${esc(d[k]??'')}"${opt.type?` type="${opt.type}"`:''}${opt.ltr?' style="direction:ltr;text-align:end"':''}></label>`;
+ const common=`<div class="fields">
+  <label>שפת המסמך<select data-d="lang"><option value="he" ${d.lang==='he'?'selected':''}>עברית</option><option value="en" ${d.lang==='en'?'selected':''}>English</option></select></label>
+  <label>סכום ${d.cur==='ILS'?'(כולל מע״מ)':''}<input class="inp" type="number" data-d="fee" value="${esc(d.fee)}"></label>
+  <label>מטבע<select data-d="cur">${[['ILS','₪ שקל'],['EUR','€ יורו'],['USD','$ דולר']].map(([v,l])=>`<option value="${v}" ${d.cur===v?'selected':''}>${l}</option>`).join('')}</select></label>
+  <label>מקדמה %<input class="inp" type="number" data-d="depositPct" value="${esc(d.depositPct)}"></label>
+  <label class="row" style="gap:8px;align-self:end"><input type="checkbox" data-d="abroad" ${d.abroad?'checked':''}> אירוע בחו״ל</label>
+  ${d.abroad?fld('nights','לילות מלון',{type:'number'}):''}</div>`;
+ const qf=`<div class="fields">${fld('client','עבור (שמות הזוג / הלקוח)')}${fld('company','חברת הפקה (אם יש)')}${fld('contact','פנייה אישית ("שלום ...")')}${fld('place','מקום, כפי שיופיע במסמך')}${fld('title','כותרת (ריק = לפי סוג האירוע)',{wide:true})}</div>`;
+ const of=`<div class="fields">${fld('client','המזמין')}${fld('idno',d.lang==='he'?'ת.ז / ח.פ':'מספר דרכון')}
+  ${d.lang==='he'?fld('street','רחוב')+fld('house','מס׳')+fld('city','יישוב')+fld('phone2','טלפון נוסף'):fld('street','כתובת')+fld('country','מדינה')}
+  ${d.lang==='he'?fld('nature','מהות ההופעה')+fld('etypeHe','סוג האירוע'):fld('typeEn','Type of performance')}
+  ${fld('venue','מקום ההופעה',{wide:true})}
+  ${d.lang==='he'?fld('startTime','שעת התחלת האירוע'):''}${fld('showTime','שעת המופע')}${d.lang==='he'?fld('endTime','שעת סיום'):''}
+  ${fld('team','צוות',{wide:true})}${fld('notes','הערות',{wide:true})}</div>`;
+ const sent=isQ?(e.quoteSentOn||e.quoteSentDays!=null):e.contract==='sent'||e.contract==='signed';
+ return `<div class="panel"><div class="row"><h2>${isQ?'הצעת מחיר':'טופס הזמנה'} ${no?'· '+esc(no):''}</h2>${no?`<span class="tag" style="background:var(--soft)">${sent?'נשלח':'הופק'}</span>`:'<span class="muted" style="font-size:14px">המספר יינתן בהפקה הראשונה</span>'}</div>
+  <p class="muted" style="font-size:14px;margin:4px 0 14px">התאריך, הטלפון והמייל נלקחים מלשונית "פרטים". כל שדה כאן נשמר באירוע.</p>
+  ${common}<div class="hr"></div>${isQ?qf:of}
+  <div class="row" style="margin-top:16px;gap:10px;flex-wrap:wrap">
+   <button class="btn pri" type="button" data-act="docOpen" data-k="${kind}">${no?'פתיחת המסמך (PDF)':'הפקת '+(isQ?'הצעת מחיר':'טופס הזמנה')+' (PDF)'}</button>
+   ${no?`<button class="btn wa" type="button" data-act="docSend" data-k="${kind}">שליחה ללקוח</button>`:''}</div>
+  <p class="muted" style="font-size:13.5px;margin-bottom:0">המסמך נפתח בחלון חדש. שם לוחצים "שמירה כ-PDF", ואת הקובץ מצרפים להודעה.</p></div>`;
+}
+function docHtml(e,kind){
+ const d=Object.assign(docD(e),{etype:e.etype,date:e.date,phone:e.phone,email:e.email});
+ if(kind==='quote')return YDOC.quote(Object.assign(d,{no:e.quoteNo,docDate:e.quoteDate}));
+ return YDOC.order(Object.assign(d,{no:e.contractNo,docDate:e.contractDate}));
+}
+function docOpen(e,kind){
+ if(!window.YDOC){toast('קובץ התבניות לא נטען. רעננו את הדף');return}
+ const isQ=kind==='quote';const d=docD(e);
+ if(!d.fee){toast('חסר סכום');return}
+ const iso=TODAY.toISOString().slice(0,10);
+ if(isQ&&!e.quoteNo){e.quoteNo=nextQuote();e.quoteDate=iso;log(e,'הופקה הצעת מחיר '+e.quoteNo)}
+ if(!isQ&&!e.contractNo){e.contractNo=nextContract();e.contractDate=iso;log(e,'הופק טופס הזמנה '+e.contractNo)}
+ if(!isQ&&!e.contractDate)e.contractDate=iso;
+ syncQuote(e);
+ const bar='<div class="noprint" style="position:fixed;top:10px;left:50%;transform:translateX(-50%);z-index:9;display:flex;gap:8px;font-family:Heebo,Arial,sans-serif"><button onclick="print()" style="background:#2b211c;color:#f5f0e8;border:0;border-radius:999px;padding:10px 22px;font:inherit;font-size:15px;cursor:pointer">שמירה כ-PDF / הדפסה</button></div><style>@media print{.noprint{display:none!important}}</style>';
+ const w=window.open('','_blank');if(!w){toast('הדפדפן חסם את החלון. אשרו חלונות קופצים לאתר');render();return}
+ w.document.open();w.document.write(docHtml(e,kind).replace('</body>',bar+'</body>'));w.document.close();
+ render();
+}
+function docSend(e,kind){
+ const d=docD(e);const isQ=kind==='quote';const he=d.lang==='he';const nm=d.contact||e.client;const dt=dshortRaw(e.date).replace(/\./g,'/');
+ const txt=isQ?(he?`שלום ${nm},\nמצורפת הצעת המחיר להופעה של יוסי אזולאי בתאריך ${dt}.\nהתאריך שמור עבורכם שבעה ימים. אשמח לענות על כל שאלה.\n\nמנהל האמן`
+  :`Hello ${nm},\nPlease find attached the quotation for Yossi Azulay's performance on ${dt}.\nThe date is held for you for seven days. I am happy to answer any questions.\n\nArtist Manager`)
+  :(he?`שלום ${nm},\nמצורף טופס ההזמנה לחתימה.\nההזמנה נכנסת לתוקף עם החתימה ותשלום מקדמה בשיעור ${d.depositPct}%.\n\nמנהל האמן`
+  :`Hello ${nm},\nPlease find attached the performance agreement for your signature.\nThe booking is confirmed upon signature and a ${d.depositPct}% advance payment.\n\nArtist Manager`);
+ const su=isQ?(he?`הצעת מחיר ${e.quoteNo} – יוסי אזולאי`:`Quotation ${e.quoteNo} – Yossi Azulay`):(he?`טופס הזמנה ${e.contractNo} – יוסי אזולאי`:`Performance Agreement ${e.contractNo} – Yossi Azulay`);
+ const gm=`https://mail.google.com/mail/?authuser=yossiazulaysales@gmail.com&view=cm&fs=1&to=${encodeURIComponent(e.email||'')}&su=${encodeURIComponent(su)}&body=${encodeURIComponent(txt)}`;
+ openModal(`<h2 style="font-size:24px;margin-bottom:10px">${isQ?'שליחת הצעת מחיר':'שליחת טופס הזמנה'}</h2><div class="bub out" style="max-width:100%;white-space:pre-wrap">${esc(txt)}</div>
+  <p class="muted" style="font-size:14px">שמרו קודם את ה-PDF, ואז צרפו אותו להודעה.</p>
+  <div class="row" style="margin-top:10px;gap:8px;flex-wrap:wrap">${e.phone?`<a class="btn wa" target="_blank" rel="noopener" href="${waLink(e.phone,txt)}">וואטסאפ</a>`:''}<a class="btn" target="_blank" rel="noopener" href="${gm}">Gmail</a>
+  <button class="btn pri" type="button" data-act="docMark" data-k="${kind}">סימון כנשלח</button><button class="btn" type="button" data-act="closeModal">סגירה</button></div>`);
+}
+function docMark(e,kind){
+ if(kind==='quote'){if(stIdx(e)<2)e.status='quote';e.quoteSentDays=0;delete e.quoteSentOn;log(e,'הצעת מחיר '+e.quoteNo+' נשלחה')}
+ else{if(e.contract!=='signed')e.contract='sent';e.contractSentDays=0;delete e.contractSentOn;if(stIdx(e)<3)e.status='contract';log(e,'טופס הזמנה '+e.contractNo+' נשלח')}
+ closeModal();render();toast('נרשם כנשלח');
+}
 function waLink(phone,text){return `https://wa.me/${String(phone).replace(/\D/g,'').replace(/^0/,'972')}?text=${encodeURIComponent(text)}`}
 function waModal(e,text,title){openModal(`<h2 style="font-size:24px;margin-bottom:10px">${esc(title)}</h2><div class="bub out" style="max-width:100%">${esc(text)}</div><div class="row" style="margin-top:14px"><a class="btn wa" href="${waLink(e.phone,text)}">פתיחה בוואטסאפ</a><button class="btn" type="button" data-act="copyText">העתקה</button><button class="btn" type="button" data-act="closeModal">סגירה</button></div><p class="muted" style="font-size:13px">בגרסה האמיתית אפשר לשלוח ישירות דרך WhatsApp Business בלי לצאת מהמערכת.</p>`);$('#mbox').dataset.text=text}
 
 const ACT={
+ docOpen:t=>docOpen(ev(S.ev),t.dataset.k),
+ docSend:t=>docSend(ev(S.ev),t.dataset.k),
+ docMark:t=>docMark(ev(S.ev),t.dataset.k),
  galF:a=>{GF=a.dataset.k;document.querySelectorAll('.gfil button').forEach(b=>{const on=b.dataset.k===GF;b.classList.toggle('on',on);b.setAttribute('aria-selected',on)});const g=document.querySelector('.ggrid');if(g)g.className='ggrid f-'+GF},
  galOpen:a=>galShow(+a.dataset.i),
  formReset:()=>{S.formDone=false;S.fstep=1;S.fdata={};render()},
@@ -1662,6 +1737,7 @@ document.addEventListener('input',e=>{
  if(S.ev){const e=ev(S.ev);
   if(t.dataset.q&&t.type==='number'){e.quote[t.dataset.q]=+t.value||0;const qs=$('#qsum');if(qs)qs.innerHTML=qsum(e);return}
   if(t.dataset.qi&&t.dataset.p!=='on'){const it=e.quote.items[t.dataset.qi]||(e.quote.items[t.dataset.qi]={on:false,qty:1,price:ADDONS.find(a=>a.id===t.dataset.qi).price});it[t.dataset.p]=+t.value||0;$('#qsum').innerHTML=qsum(e);return}
+  if(t.dataset.d&&t.tagName!=='SELECT'&&t.type!=='checkbox'){(e.doc||(e.doc={}))[t.dataset.d]=t.type==='number'?(t.value===''?'':+t.value):t.value;syncQuote(e);return}
   if(t.dataset.f&&t.tagName!=='SELECT'){if(t.dataset.f==='city'){const [c,...r]=t.value.split(',');e.city=c.trim();e.country=r.join(',').trim()}else e[t.dataset.f]=t.value}
  }
 });
@@ -1677,6 +1753,7 @@ document.addEventListener('change',e=>{
  if(t.dataset.pf!==undefined){S.payFilter=t.value;render();return}
  if(t.id==='upl'){toast(`נבחרו ${t.files.length} קבצים. בגרסה האמיתית הם יועלו לספרייה`);return}
  if(!S.ev)return;const ev_=ev(S.ev);
+ if(t.dataset.d&&(t.tagName==='SELECT'||t.type==='checkbox')){const o=ev_.doc||(ev_.doc={});const k=t.dataset.d;o[k]=t.type==='checkbox'?t.checked:t.value;if(k==='abroad'){delete o.cur;delete o.depositPct;delete o.lang}if(k==='lang')delete o.team;syncQuote(ev_);render();return}
  if(t.dataset.f&&t.tagName==='SELECT'){const k=t.dataset.f;ev_[k]=k==='hotelApproved'?t.value==='1':t.value;if(k==='status'){log(ev_,'סטטוס שונה ל"'+stage(t.value)[1]+'"');toast('הסטטוס עודכן, וגם ביומן גוגל')}render();return}
  if(t.dataset.q==='base'){ev_.quote.base=t.value;ev_.quote.basePrice=BASES.find(b=>b.id===t.value).price;render();return}
  if(t.dataset.q==='cur'){ev_.quote.cur=t.value;render();return}
