@@ -1707,7 +1707,7 @@ const fbApp = initializeApp({
   appId: "1:884186379961:web:9d6559a66c97fc7ead8d68"
 });
 const auth = getAuth(fbApp), db = getFirestore(fbApp);
-const ADMINS = ['yossiazulaysales@gmail.com', 'yossiazulayfacebook@gmail.com'];
+const ADMINS = ['yossiazulaysales@gmail.com'];
 const C = window.__crm;
 const gate = document.getElementById('gate');
 const escH = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
