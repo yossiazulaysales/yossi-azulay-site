@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>ניהול פניות · יוסי אזולאי</title>
+<link rel="icon" type="image/png" href="logo-mark.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Frank+Ruhl+Libre:wght@400;500&family=Heebo:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--ivory:#f3ede3;--card:#fbf8f2;--ink:#231812;--mute:#7a6a5c;--line:#e1d9cb;--gold:#a87a45;--metal:linear-gradient(118deg,#7c5129,#c99a5c 30%,#f1d9a8 45%,#b88a52 70%,#7c5129);--ok:#2f6b3a;--okbg:#e5efe2;--warn:#8a5a12;--warnbg:#f6ecd8;--bad:#8b2c22;--badbg:#f5e3df;--new:#5a3a8a;--newbg:#ece6f5}
+*{box-sizing:border-box}
+body{margin:0;background:var(--ivory);color:var(--ink);font:400 15px/1.55 Heebo,system-ui,sans-serif}
+button,select,textarea,input{font:inherit;color:inherit}
+header{position:sticky;top:0;z-index:5;display:flex;align-items:center;gap:14px;padding:12px max(3vw,14px);background:#1d140f;color:#efe6da}
+header img{height:30px}
+header h1{font:500 18px "Frank Ruhl Libre",serif;margin:0;flex:1}
+header .who{font-size:13px;opacity:.75}
+header button{border:1px solid #4a3a2e;background:transparent;color:#efe6da;border-radius:999px;padding:6px 14px;cursor:pointer}
+main{max-width:980px;margin:0 auto;padding:22px max(3vw,14px) 60px}
+.login{max-width:420px;margin:12vh auto;text-align:center;background:var(--card);border:1px solid var(--line);padding:40px 28px;border-radius:4px}
+.login img{height:64px;margin-bottom:10px}
+.login h2{font:500 26px "Frank Ruhl Libre",serif;margin:0 0 6px}
+.login p{color:var(--mute);margin:0 0 22px}
+.gbtn{display:inline-flex;align-items:center;gap:10px;background:var(--metal);border:0;color:#1d140f;font-weight:500;padding:12px 26px;border-radius:2px;cursor:pointer;min-height:46px}
+.err{color:var(--bad);margin-top:14px;font-size:14px}
+.tabs{display:flex;gap:6px;flex-wrap:wrap;margin:0 0 16px}
+.tabs button{background:transparent;border:1px solid var(--line);border-radius:999px;padding:7px 16px;cursor:pointer;color:var(--mute)}
+.tabs button.on{background:var(--ink);border-color:var(--ink);color:#efe6da}
+.tabs b{font-weight:500;margin-inline-start:4px}
+.empty{color:var(--mute);text-align:center;padding:50px 0}
+.lead{background:var(--card);border:1px solid var(--line);border-radius:4px;padding:18px 20px;margin-bottom:12px}
+.lead.st-new{border-inline-start:4px solid var(--new)}
+.top{display:flex;align-items:flex-start;gap:12px;flex-wrap:wrap}
+.top h3{margin:0;font:500 20px "Frank Ruhl Libre",serif;flex:1;min-width:180px}
+.when{color:var(--mute);font-size:13px}
+.chip{display:inline-block;font-size:12.5px;padding:2px 10px;border-radius:999px;background:#efe7da;color:#5b4636;margin-inline-end:6px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:8px 18px;margin:12px 0}
+.grid div small{display:block;color:var(--mute);font-size:12px}
+.grid a{color:var(--ink)}
+.note{margin:6px 0 10px;padding:10px 12px;background:#f4eee4;border-radius:3px;white-space:pre-wrap}
+.acts{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.acts a,.acts button{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--line);background:#fff;border-radius:999px;padding:7px 14px;text-decoration:none;color:var(--ink);cursor:pointer;font-size:14px;min-height:38px}
+.acts a.wa{background:#1f8a4c;border-color:#1f8a4c;color:#fff}
+.acts select{border:1px solid var(--line);border-radius:999px;padding:7px 12px;background:#fff;min-height:38px;margin-inline-start:auto}
+.inote{width:100%;margin-top:10px;border:1px solid var(--line);border-radius:3px;padding:8px 10px;background:#fff;min-height:42px;resize:vertical}
+.saved{font-size:12px;color:var(--ok);margin-inline-start:6px}
+.s-new{background:var(--newbg);color:var(--new)}.s-work{background:var(--warnbg);color:var(--warn)}.s-won{background:var(--okbg);color:var(--ok)}.s-lost{background:var(--badbg);color:var(--bad)}
+@media (max-width:600px){.acts select{margin-inline-start:0;width:100%}header .who{display:none}}
+</style>
+</head>
+<body>
+<header><img src="logo-mark-dark.png" alt=""><h1>ניהול פניות</h1><span class="who" id="who"></span><button id="out" hidden>יציאה</button></header>
+<main id="app"><div class="empty">טוען…</div></main>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import { getAuth, GoogleAuthProvider, signInWithPopup, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+import { getFirestore, collection, query, orderBy, onSnapshot, doc, updateDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+const app = initializeApp({
+  apiKey: "AIzaSyBQg7PvR6yxFbU_Lkpd4MvAq88fROldjZ0",
+  authDomain: "yossi-azulay.firebaseapp.com",
+  projectId: "yossi-azulay",
+  storageBucket: "yossi-azulay.firebasestorage.app",
+  messagingSenderId: "884186379961",
+  appId: "1:884186379961:web:9d6559a66c97fc7ead8d68"
+});
+const auth = getAuth(app), db = getFirestore(app);
+const ADMINS = ['yossiazulaysales@gmail.com','yossiazulayfacebook@gmail.com'];
+const $ = s => document.querySelector(s);
+const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const ETYPE = {wedding:'חתונה – כניסה לחופה',tefillin:'בר מצווה – הנחת תפילין',aliyah:'בר מצווה – עלייה לתורה',henna:'חינה – מופע מזרחי',other:'אחר'};
+const LANG = {he:'עברית',en:'English',fr:'Français',es:'Español'};
+const ST = {new:['חדשה','s-new'],work:['בטיפול','s-work'],won:['נסגר','s-won'],lost:['לא רלוונטי','s-lost']};
+let leads = [], tab = 'new', unsub = null;
+
+function fdate(iso){ if(!iso) return '—'; const [y,m,d] = iso.split('-'); return d && m && y ? `${+d}.${+m}.${y}` : iso; }
+function ago(ts){
+  if(!ts) return 'עכשיו';
+  const t = ts.toDate ? ts.toDate() : new Date(ts), s = (Date.now() - t) / 1000;
+  if(s < 60) return 'עכשיו';
+  if(s < 3600) return `לפני ${Math.round(s/60)} דק׳`;
+  if(s < 86400) return `לפני ${Math.round(s/3600)} שע׳`;
+  return t.toLocaleString('he-IL',{day:'numeric',month:'numeric',year:'2-digit',hour:'2-digit',minute:'2-digit'});
+}
+function waNum(p){
+  let d = String(p||'').replace(/\D/g,'');
+  if(d.startsWith('00')) d = d.slice(2);
+  if(d.startsWith('0')) d = '972' + d.slice(1);
+  return d;
+}
+function waText(l){
+  const n = (l.name||'').split(' ')[0], dt = fdate(l.date), loc = l.loc ? (l.lang==='he' ? ` ב${l.loc}` : ` (${l.loc})`) : '';
+  const T = {
+    he:`היי${n?' '+n:''}, כאן יוסי אזולאי. תודה על הפנייה דרך האתר${l.date?` לגבי האירוע ב-${dt}`:''}${loc}. אשמח לדבר ולשמוע עוד פרטים – מתי נוח לך?`,
+    en:`Hi${n?' '+n:''}, this is Yossi Azulay. Thank you for your inquiry through the website${l.date?` about your event on ${dt}`:''}${loc}. I'd love to talk and hear more – when is a good time for you?`,
+    fr:`Bonjour${n?' '+n:''}, c’est Yossi Azulay. Merci pour votre demande via le site${l.date?` pour votre événement du ${dt}`:''}${loc}. Je serais ravi d’en parler avec vous – quand êtes-vous disponible ?`,
+    es:`Hola${n?' '+n:''}, soy Yossi Azulay. Gracias por su consulta a través de la web${l.date?` sobre su evento del ${dt}`:''}${loc}. Me encantaría hablar y conocer más detalles – ¿cuándo le viene bien?`
+  };
+  return T[l.lang] || T.he;
+}
+
+function render(){
+  const counts = {new:0,work:0,won:0,lost:0};
+  leads.forEach(l => counts[l.status||'new'] = (counts[l.status||'new']||0) + 1);
+  const list = tab==='all' ? leads : leads.filter(l => (l.status||'new') === tab);
+  $('#app').innerHTML = `
+  <div class="tabs">${[['new','חדשות'],['work','בטיפול'],['won','נסגרו'],['lost','לא רלוונטי'],['all','הכל']].map(([k,t]) =>
+    `<button data-tab="${k}" class="${tab===k?'on':''}">${t}<b>${k==='all'?leads.length:counts[k]||0}</b></button>`).join('')}</div>
+  ${list.length ? list.map(l => {
+    const st = ST[l.status||'new'];
+    return `<article class="lead st-${l.status||'new'}">
+     <div class="top"><h3>${esc(l.name||'ללא שם')}</h3><span class="chip ${st[1]}">${st[0]}</span><span class="when">${esc(ago(l.createdAt))}</span></div>
+     <div class="grid">
+      <div><small>סוג אירוע</small>${esc(ETYPE[l.etype]||l.etype||'—')}</div>
+      <div><small>תאריך</small>${esc(fdate(l.date))}</div>
+      <div><small>מקום</small>${esc(l.loc||'—')}</div>
+      <div><small>טלפון</small><a href="tel:${esc(l.phone)}" dir="ltr">${esc(l.phone||'—')}</a></div>
+      <div><small>מייל</small>${l.email?`<a href="mailto:${esc(l.email)}" dir="ltr">${esc(l.email)}</a>`:'—'}</div>
+      <div><small>שמעו עלינו</small>${esc(l.heard||'—')}</div>
+      ${l.names?`<div><small>שמות</small>${esc(l.names)}</div>`:''}
+      <div><small>שפה</small>${esc(LANG[l.lang]||l.lang||'—')}</div>
+     </div>
+     ${l.notes?`<div class="note">${esc(l.notes)}</div>`:''}
+     <div class="acts">
+      ${l.phone?`<a class="wa" target="_blank" rel="noopener" href="https://wa.me/${waNum(l.phone)}?text=${encodeURIComponent(waText(l))}">וואטסאפ</a><a href="tel:${esc(l.phone)}">שיחה</a>`:''}
+      ${l.email?`<a href="mailto:${esc(l.email)}?subject=${encodeURIComponent('יוסי אזולאי · הפנייה שלכם')}">מייל</a>`:''}
+      <select data-st="${l.id}" aria-label="סטטוס">${Object.entries(ST).map(([k,v]) => `<option value="${k}" ${k===(l.status||'new')?'selected':''}>${v[0]}</option>`).join('')}</select>
+     </div>
+     <textarea class="inote" data-note="${l.id}" placeholder="הערה פנימית (נשמרת אוטומטית)">${esc(l.internal||'')}</textarea>
+    </article>`;
+  }).join('') : `<div class="empty">אין פניות ברשימה הזו</div>`}`;
+}
+
+document.addEventListener('click', e => {
+  const t = e.target.closest('[data-tab]'); if(t){ tab = t.dataset.tab; render(); }
+});
+document.addEventListener('change', async e => {
+  const s = e.target.closest('[data-st]');
+  if(s) await updateDoc(doc(db,'leads',s.dataset.st), {status:s.value, updatedAt:serverTimestamp()});
+});
+document.addEventListener('focusout', async e => {
+  const n = e.target.closest('[data-note]'); if(!n) return;
+  const l = leads.find(x => x.id === n.dataset.note); if(l && (l.internal||'') === n.value) return;
+  await updateDoc(doc(db,'leads',n.dataset.note), {internal:n.value, updatedAt:serverTimestamp()});
+  n.insertAdjacentHTML('afterend','<span class="saved">נשמר ✓</span>'); setTimeout(()=>{const x=n.nextElementSibling; if(x&&x.classList.contains('saved')) x.remove()},1500);
+});
+
+function showLogin(msg){
+  $('#who').textContent=''; $('#out').hidden = true;
+  $('#app').innerHTML = `<div class="login"><img src="logo-mark.png" alt=""><h2>ניהול פניות</h2><p>כניסה עם חשבון הגוגל של יוסי</p>
+   <button class="gbtn" id="gin">כניסה עם Google</button>${msg?`<div class="err">${esc(msg)}</div>`:''}</div>`;
+  $('#gin').onclick = () => signInWithPopup(auth, new GoogleAuthProvider()).catch(err => showLogin('הכניסה לא הצליחה: ' + (err.code||err.message)));
+}
+$('#out').onclick = () => signOut(auth);
+
+onAuthStateChanged(auth, user => {
+  if(unsub){ unsub(); unsub = null; }
+  if(!user) return showLogin();
+  if(!ADMINS.includes(user.email)){ signOut(auth); return showLogin(`לחשבון ${user.email} אין הרשאה למערכת.`); }
+  $('#who').textContent = user.email; $('#out').hidden = false;
+  unsub = onSnapshot(query(collection(db,'leads'), orderBy('createdAt','desc')), snap => {
+    leads = snap.docs.map(d => ({id:d.id, ...d.data()}));
+    render();
+  }, err => { $('#app').innerHTML = `<div class="empty">שגיאה בטעינה: ${esc(err.code||err.message)}</div>`; });
+});
+</script>
+</body>
+</html>
