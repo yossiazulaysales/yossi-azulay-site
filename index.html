@@ -567,7 +567,6 @@ table.t tr.click:hover td{background:var(--soft)}
 </head>
 <body>
 
-<form name="inquiry" data-netlify="true" netlify-honeypot="bot-field" hidden><input name="bot-field"><input name="lang"><input name="etype"><input name="date"><input name="loc"><input name="name"><input name="phone"><input name="email"><input name="heard"><input name="names"><textarea name="notes"></textarea></form>
 <div id="app"></div>
 <div id="modal" role="dialog" aria-modal="true"><div class="box" id="mbox"></div></div>
 <div id="toast" role="status" aria-live="polite"></div>
@@ -1629,9 +1628,13 @@ document.addEventListener('submit',e=>{
  const need={1:['date','loc'],2:['phone','email'],3:['heard']}[S.fstep];
  for(const k of need)if(!String(d[k]||'').trim()){toast(t.f.req+': '+t.f[k]);return}
  if(S.fstep<3){S.fstep++;render();return}
- const body=new URLSearchParams({'form-name':'inquiry',lang:S.lang,etype:d.etype||'wedding',date:d.date||'',loc:d.loc||'',name:d.name||'',phone:d.phone||'',email:d.email||'',heard:d.heard||'',names:d.names||'',notes:d.notes||''});
+ const ty=ETYPES[d.etype]?(ETYPES[d.etype].he||d.etype):(d.etype||'');
+ const body={_subject:'פנייה חדשה מהאתר: '+(d.name||'')+' · '+(d.date||''),_template:'table',_captcha:'false','שפה':S.lang,'סוג אירוע':ty,'תאריך':d.date||'','מקום':d.loc||'','שם':d.name||'','טלפון':d.phone||'','מייל':d.email||'','שמעו עלינו':d.heard||'','שמות':d.names||'','הערות':d.notes||''};
+ if(d.email)body._replyto=d.email;
  const btn=e.target.querySelector('button[type=submit]');if(btn)btn.disabled=true;
- fetch('/',{method:'POST',headers:{'Content-Type':'application/x-www-form-urlencoded'},body:body.toString()}).then(r=>{if(!r.ok)throw 0;S.formDone=true;render();window.scrollTo(0,0)}).catch(()=>{if(btn)btn.disabled=false;toast(({he:'השליחה לא הצליחה. אפשר לשלוח לנו בוואטסאפ',en:'Sending failed. Please message us on WhatsApp',fr:'Échec de l’envoi. Écrivez-nous sur WhatsApp',es:'No se pudo enviar. Escríbanos por WhatsApp'})[S.lang]);window.open(waInquiry(),'_blank')});
+ const mail=fetch('https://formsubmit.co/ajax/Yossiazulaysales@gmail.com',{method:'POST',headers:{'Content-Type':'application/json',Accept:'application/json'},body:JSON.stringify(body)}).then(r=>r.json().then(j=>{if(!r.ok||String(j.success)==='false')throw 0;return 1}));
+ const store=window.ydbSaveLead?window.ydbSaveLead({lang:S.lang,etype:d.etype||'wedding',date:d.date||'',loc:d.loc||'',name:d.name||'',phone:d.phone||'',email:d.email||'',heard:d.heard||'',names:d.names||'',notes:d.notes||''}):Promise.reject(0);
+ Promise.allSettled([mail,store]).then(rs=>{if(rs.some(r=>r.status==='fulfilled')){S.formDone=true;render();window.scrollTo(0,0)}else{if(btn)btn.disabled=false;toast(({he:'השליחה לא הצליחה. אפשר לשלוח לנו בוואטסאפ',en:'Sending failed. Please message us on WhatsApp',fr:'Échec de l’envoi. Écrivez-nous sur WhatsApp',es:'No se pudo enviar. Escríbanos por WhatsApp'})[S.lang]);window.open(waInquiry(),'_blank')}});
 });
 document.addEventListener('input',e=>{
  const t=e.target;
@@ -1673,6 +1676,12 @@ document.addEventListener('keydown',e=>{if(e.key==='Escape')closeModal()});
 
 fromHash();
 }
+</script>
+<script type="module">
+import {initializeApp} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import {getFirestore,collection,addDoc,serverTimestamp} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+const db=getFirestore(initializeApp({apiKey:"AIzaSyBQg7PvR6yxFbU_Lkpd4MvAq88fROldjZ0",authDomain:"yossi-azulay.firebaseapp.com",projectId:"yossi-azulay",storageBucket:"yossi-azulay.firebasestorage.app",messagingSenderId:"884186379961",appId:"1:884186379961:web:9d6559a66c97fc7ead8d68"}));
+window.ydbSaveLead=d=>addDoc(collection(db,'leads'),Object.assign({},d,{status:'new',source:'site',createdAt:serverTimestamp()}));
 </script>
 </body>
 </html>
