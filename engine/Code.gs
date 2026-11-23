@@ -274,7 +274,8 @@ function digestItems_(events) {
       if ((e.ctype === 'abroad' || (e.quote || {}).abroad) && to <= -2 && !e.flightReport) add(e, 'דו״ח טיסה: להפיק במערכת של יקי (רו״ח)', to <= -7);
       const cr = crew_(e);
       const notCoord = cr.filter(c => !c.coord).map(c => c.l);
-      if (notCoord.length && to <= 45 && to >= 0) add(e, 'לתאם צוות: ' + notCoord.join(', '), to <= 14);
+      if (notCoord.length && to <= 60 && to >= 0 && (to === 60 || (60 - to) % 5 === 0 || to <= 14)) add(e, 'לתאם צוות: ' + notCoord.join(', '), to <= 14);
+      if (cr.length && (to === 2 || to === 1) && !(e.sent || {}).crewBrief) add(e, 'לשלוח לצוות הנחיות (שעות, לבוש, שירים): במערכת, לשונית ספקים > הודעת הנחיות לצוות', true);
       const noInv = cr.filter(c => !c.inv || !c.filed).map(c => c.l);
       if (noInv.length && to <= -2) add(e, 'צוות: חשבונית + תיוק חסרים (' + noInv.join(', ') + ')', to <= -7);
     }

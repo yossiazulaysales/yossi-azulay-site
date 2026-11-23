@@ -1310,7 +1310,9 @@ function timeline(e){
   msg(E(1),'תודה + בקשת המלצה','after');
   add(E(2),'חשבוניות ספקים: לתיקייה + להעלות לרו״ח','task',null,(e.suppliers||[]).every(x=>x.inv&&x.acc),'open');
   if(e.quote.abroad||e.ctype==='abroad')add(E(2),'דו״ח טיסה: להפיק במערכת של יקי (רו״ח)','task',null,!!e.flightReport,'open');
-  if(crewOf(e).length){add(E(-45),'לתאם צוות: '+crewOf(e).map(x=>x[1]).join(', '),'task',null,crewCoord(e),'open');add(E(2),'צוות: לקבל חשבוניות ולתייק','task',null,crewDone(e),'open')}
+  if(crewOf(e).length){const cc=crewCoord(e);add(E(-60),'לתאם צוות: '+crewOf(e).map(x=>x[1]).join(', '),'task',null,cc,'open');
+   if(!cc){for(let d=-55;d<=-5;d+=5){if(days(e.date)+d<=0)add(E(d),'תזכורת: הצוות עוד לא תואם','task',null,false,'open')}}
+   add(E(-2),'הנחיות לצוות: שעות, לבוש, שירים, כתובת','msg','crewBrief',!!(e.sent||{}).crewBrief,'sent:crewBrief');add(E(2),'צוות: לקבל חשבוניות ולתייק','task',null,crewDone(e),'open')}
  }
  return it.sort((a,b)=>a.when-b.when);
 }
@@ -1333,7 +1335,7 @@ const kcard=e=>{const ch=checks(e),dn=ch.filter(c=>c[2]).length;return `<div cla
 function pathTab(e){
  const tl=timeline(e),ch=checks(e),dn=ch.filter(c=>c[2]).length,all=dn===ch.length;
  const kindL={msg:'הודעה לשליחה',task:'משימה שלך',check:'בדיקה',event:'אירוע'};
- const row=t=>{const late=!t.done&&t.when<=addD(0);return `<div class="tl ${t.done?'ok':late?'late':''}"><span class="tld">${esc(fdate(t.when))}</span><span class="tli">${t.done?'✓':late?'!':'○'}</span><span class="tlt">${esc(t.label)}<small>${kindL[t.kind]}</small></span>${t.key&&TPL[t.key]?`<button class="btn sm" type="button" data-act="tplSend" data-id="${e.id}" data-k="${t.key}">הודעה</button>`:''}${t.kind==='msg'&&!t.done?`<button class="btn sm pri" type="button" data-act="markSent" data-id="${e.id}" data-k="${t.act.slice(5)}">נשלח</button>`:''}${(t.act==='fu1'||t.act==='fu2')&&!t.done?`<button class="btn sm pri" type="button" data-act="markFu" data-id="${e.id}" data-k="${t.act}">בוצע</button>`:''}${t.act==='call'&&!t.done?`<button class="btn sm pri" type="button" data-act="chk" data-id="${e.id}" data-k="call">בוצע</button>`:''}${t.act==='soundV'&&!t.done?`<button class="btn sm pri" type="button" data-act="chk" data-id="${e.id}" data-k="soundVerified">אומת</button>`:''}</div>`};
+ const row=t=>{const late=!t.done&&t.when<=addD(0);return `<div class="tl ${t.done?'ok':late?'late':''}"><span class="tld">${esc(fdate(t.when))}</span><span class="tli">${t.done?'✓':late?'!':'○'}</span><span class="tlt">${esc(t.label)}<small>${kindL[t.kind]}</small></span>${t.key==='crewBrief'?`<button class="btn sm" type="button" data-act="crewBrief">הודעות לצוות</button>`:''}${t.key&&TPL[t.key]?`<button class="btn sm" type="button" data-act="tplSend" data-id="${e.id}" data-k="${t.key}">הודעה</button>`:''}${t.kind==='msg'&&!t.done?`<button class="btn sm pri" type="button" data-act="markSent" data-id="${e.id}" data-k="${t.act.slice(5)}">נשלח</button>`:''}${(t.act==='fu1'||t.act==='fu2')&&!t.done?`<button class="btn sm pri" type="button" data-act="markFu" data-id="${e.id}" data-k="${t.act}">בוצע</button>`:''}${t.act==='call'&&!t.done?`<button class="btn sm pri" type="button" data-act="chk" data-id="${e.id}" data-k="call">בוצע</button>`:''}${t.act==='soundV'&&!t.done?`<button class="btn sm pri" type="button" data-act="chk" data-id="${e.id}" data-k="soundVerified">אומת</button>`:''}</div>`};
  return `<div class="grid2"><div class="panel"><h2>ציר זמן ומשימות</h2><div class="tlist">${tl.map(row).join('')}</div><p class="muted" style="font-size:13.5px;margin-bottom:0">הודעה לשליחה: הודעה מוכנה בשפת הלקוח, לוחצים "הודעה", שולחים ומסמנים "נשלח". כל מה שלא בוצע בזמן מופיע בלוח הבקרה.</p></div>
  <div class="panel"><h2>צ׳קליסט לסגירה <span class="tag" style="background:${all?'var(--okbg)':'var(--soft)'};color:${all?'var(--ok)':'inherit'}">${dn}/${ch.length}</span></h2>
  <div class="row" style="margin-bottom:10px"><span class="muted">הגברה:</span><div class="radios"><label><input type="radio" name="sb" value="us" data-sb ${e.soundBy==='us'?'checked':''}> דרכנו</label><label><input type="radio" name="sb" value="client" data-sb ${e.soundBy!=='us'?'checked':''}> הלקוח סוגר</label></div>${e.soundBy==='us'?`<input class="inp" placeholder="חברת הגברה" value="${esc(e.soundCompany||'')}" data-f="soundCompany" style="flex:1">`:''}</div>
@@ -1519,7 +1521,12 @@ function evDetail(e){
   <button class="btn" type="button" data-act="openPortalSongs">פתיחת עמוד השירים כמו אצל הלקוח</button></div>`;
  } else if(S.evTab==='costs'){
   const CR=crewOf(e);const ck=(k,f,l)=>{const c=(e.crew||{})[k]||{};return `<label class="row" style="gap:6px"><input type="checkbox" data-crew="${k}" data-crewf="${f}" ${c[f]?'checked':''}> ${l}</label>`};
-  b=`<div class="panel scroll"><h2>תיאום צוות (פנימי, הלקוח לא רואה)</h2>${CR.length?`<table class="t"><thead><tr><th>צוות</th><th>מי / פרטים</th><th>תואם</th><th>התקבלה חשבונית</th><th>תויקה</th></tr></thead><tbody>${CR.map(([k,l])=>`<tr><td><b>${esc(l)}</b></td><td><input class="inp" data-crewn="${k}" value="${esc(((e.crew||{})[k]||{}).name||'')}" placeholder="שם, טלפון, מחיר"></td><td>${ck(k,'coord','תואם')}</td><td>${ck(k,'inv','התקבלה')}</td><td>${ck(k,'filed','תויקה')}</td></tr>`).join('')}</tbody></table>`:`<div class="empty">אין צוות נוסף. בוחרים צוות בלשונית "פרטים" (כנריות, נגנים, מיוסיקידס).</div>`}</div>
+  b=`<div class="panel scroll"><h2>תיאום צוות (פנימי, הלקוח לא רואה)</h2>${CR.length?`<table class="t"><thead><tr><th>צוות</th><th>מי / פרטים</th><th>תואם</th><th>התקבלה חשבונית</th><th>תויקה</th></tr></thead><tbody>${CR.map(([k,l])=>`<tr><td><b>${esc(l)}</b></td><td><input class="inp" data-crewn="${k}" value="${esc(((e.crew||{})[k]||{}).name||'')}" placeholder="שם ומחיר"><input class="inp" data-crewp="${k}" value="${esc(((e.crew||{})[k]||{}).phone||'')}" placeholder="טלפון לוואטסאפ" dir="ltr" style="margin-top:4px"></td><td>${ck(k,'coord','תואם')}</td><td>${ck(k,'inv','התקבלה')}</td><td>${ck(k,'filed','תויקה')}</td></tr>`).join('')}</tbody></table>`:`<div class="empty">אין צוות נוסף. בוחרים צוות בלשונית "פרטים" (כנריות, נגנים, מיוסיקידס).</div>`}
+  ${CR.length?`<div class="hr"></div><h3 class="lh">הנחיות לצוות (נשלחות יומיים לפני)</h3><div class="fields">
+   <label>שעת הגעה לצוות<input class="inp" type="time" data-f="crewCall" value="${esc(e.crewCall||'')}"></label>
+   <label>לבוש<input class="inp" data-f="crewDress" value="${esc(e.crewDress||'')}" placeholder="לדוגמה: שחור אלגנטי"></label>
+   <label class="wide">הערות לצוות<input class="inp" data-f="crewNotes" value="${esc(e.crewNotes||'')}" placeholder="חניה, כניסה לאמנים, איש קשר במקום…"></label></div>
+   <div class="row" style="margin-top:12px"><button class="btn pri" type="button" data-act="crewBrief">הודעת הנחיות לצוות</button>${(e.sent||{}).crewBrief?`<span class="tag" style="background:var(--okbg);color:var(--ok)">נשלח ✓</span>`:''}</div>`:''}</div>
   <div class="panel scroll"><h2>ספקים והוצאות (פנימי, הלקוח לא רואה)</h2><table class="t"><thead><tr><th>ספק</th><th>תפקיד</th><th class="n">עלות</th><th>חשבונית בתיקייה</th><th>הועלתה לרו״ח</th></tr></thead><tbody>${e.suppliers.map((x,i)=>`<tr><td><b>${esc(x.name)}</b></td><td>${esc(x.role)}</td><td class="n">${money(x.cost)}</td><td><label class="row" style="gap:6px"><input type="checkbox" data-sup="${i}" ${x.inv?'checked':''}> ${x.inv?'התקבלה':'חסרה'}</label></td><td><label class="row" style="gap:6px"><input type="checkbox" data-supacc="${i}" ${x.acc?'checked':''}> ${x.acc?'הועלתה':'לא'}</label></td></tr>`).join('')||'<tr><td colspan="5" class="empty">אין ספקים</td></tr>'}</tbody></table>
   <div class="row" style="margin-top:10px"><input class="inp" id="supn" placeholder="שם ספק"><input class="inp" id="supr" placeholder="תפקיד"><input class="inp" id="supc" type="number" placeholder="עלות" style="width:110px"><button class="btn" type="button" data-act="addSup">＋ הוספה</button></div></div>`;
  } else {
@@ -1559,6 +1566,17 @@ const TEAMS={yossi:'יוסי אזולאי',canaries:'יוסי + כנריות',ki
 const crewOf=e=>{const t=e.team==='yossi+band'?'band':e.team;const L=[];if(t==='canaries'||t==='kidscan')L.push(['canaries','כנריות']);if(t==='kids'||t==='kidscan')L.push(['kids','להקת מיוסיקידס']);if(t==='band')L.push(['band','נגנים']);if((e.extraMusicians||'').trim())L.push(['extra','נגנים נוספים: '+e.extraMusicians.trim()]);return L};
 const crewDone=e=>crewOf(e).every(([k])=>{const c=(e.crew||{})[k]||{};return c.coord&&c.inv&&c.filed});
 const crewCoord=e=>crewOf(e).every(([k])=>((e.crew||{})[k]||{}).coord);
+function crewBriefText(e,name){
+ const d=e.doc||{},f=e.eventForm||{};const dt=e.date?new Date(e.date+'T12:00').toLocaleDateString('he-IL',{weekday:'long',day:'numeric',month:'long'}):'';
+ const songs=(e.songs||[]).filter(m=>m.list&&m.list.length).map(m=>{const mn=typeof m.m==='string'?m.m:(m.m.he||m.m.en||'');return '• '+mn+': '+m.list.map(sid=>{const so=SONGS.find(x=>x.id===sid);return so?so.t:sid}).join(', ')+(m.note?' ('+m.note+')':'')});
+ const L=[`היי ${name||''},`.replace(' ,',','),`תזכורת להופעה עם יוסי אזולאי:`,'',
+  `📅 ${dt}`,`📍 ${[e.venue,e.city].filter(Boolean).join(', ')}`,
+  e.crewCall?`⏰ הגעה: ${e.crewCall}`:'',(d.showTime||f.chuppah)?`🎤 ${e.etype==='wedding'?'חופה':'מופע'}: ${d.showTime||f.chuppah}`:'',
+  e.crewDress?`👔 לבוש: ${e.crewDress}`:'',
+  songs.length?'🎵 שירים:\n'+songs.join('\n'):'🎵 רשימת השירים תישלח בנפרד',
+  e.showManager?`📞 מנהל מופע: ${e.showManager}`:'',e.crewNotes?`📝 ${e.crewNotes}`:'','','תודה!'];
+ return L.filter((x,i)=>x!==''||i===2||i===L.length-2).join('\n');
+}
 const teamLine=e=>{const b=TEAMS[e.team==='yossi+band'?'band':e.team]||TEAMS.yossi;return [b==='אחר'?'יוסי אזולאי':b,e.extraMusicians,'מנהל מופע'].filter(Boolean).join(' + ')};
 const NATURE={wedding:['כניסה לחופה','חתונה'],aliyah:['עלייה לתורה','בר מצווה'],tefillin:['הנחת תפילין','בר מצווה'],henna:['מופע אוריינטלי','חינה'],other:['','']};
 function docD(e){
@@ -1695,7 +1713,8 @@ const ACT={
  closeModal:()=>closeModal(),
  tplSend:t=>{const e=ev(t.dataset.id);waModal(e,tplText(t.dataset.k,e,e.lang),TPL[t.dataset.k].t)},
  tplCopy:t=>{const e=ev(t.dataset.id);$('#mbox').dataset.text='';const txt=tplText(t.dataset.k,e,t.dataset.l);try{navigator.clipboard.writeText(txt).then(()=>toast('הועתק'),()=>toast('ההעתקה נחסמה בתצוגה הזו'))}catch(_){toast('ההעתקה נחסמה בתצוגה הזו')}},
- markSent:t=>{const e=ev(t.dataset.id);(e.sent||(e.sent={}))[t.dataset.k]=new Date().toISOString().slice(0,10);log(e,'הודעה נשלחה: '+t.dataset.k);render();toast('סומן כנשלח')},
+ crewBrief:()=>{const e=ev(S.ev);const CR=crewOf(e);const rows=CR.map(([k,l])=>{const c=(e.crew||{})[k]||{};const nm=(c.name||'').split(/[,·]/)[0].trim();const txt=crewBriefText(e,nm);return `<div class="aitem" style="display:block"><b>${esc(l)}${c.name?' · '+esc(c.name):''}</b><div class="bub out" style="max-width:100%;white-space:pre-wrap;margin:8px 0">${esc(txt)}</div>${c.phone?`<a class="btn wa sm" target="_blank" rel="noopener" href="${waLink(c.phone,txt)}">וואטסאפ</a>`:'<span class="muted" style="font-size:13px">אין טלפון: מוסיפים בטבלת הצוות</span>'}</div>`}).join('');openModal(`<h2 style="font-size:24px;margin-bottom:10px">הנחיות לצוות</h2><p class="muted" style="margin-top:0;font-size:14px">נבנה מפרטי האירוע, טופס האירוע ורשימת השירים.</p><div class="alist">${rows}</div><div class="row" style="margin-top:12px;gap:8px"><button class="btn pri" type="button" data-act="markSent" data-id="${e.id}" data-k="crewBrief">סימון כנשלח</button><button class="btn" type="button" data-act="closeModal">סגירה</button></div>`)},
+ markSent:t=>{const e=ev(t.dataset.id);(e.sent||(e.sent={}))[t.dataset.k]=new Date().toISOString().slice(0,10);log(e,'הודעה נשלחה: '+t.dataset.k);closeModal();render();toast('סומן כנשלח')},
  markFu:t=>{const e=ev(t.dataset.id);e[t.dataset.k]=true;log(e,t.dataset.k==='fu1'?'פולו-אפ ראשון בוצע':'פולו-אפ שני בוצע');render();toast('נרשם ביומן הפעילות')},
  chk:t=>{const e=ev(t.dataset.id);e[t.dataset.k]=true;log(e,'סומן: '+t.dataset.k);render()},
  lost:t=>{const e=ev(t.dataset.id);e.status=e.ctype==='producer'?'irrelevant':'nurture';log(e,e.ctype==='producer'?'סומן לא רלוונטי':'סומן לא סגר');render();toast(e.ctype==='producer'?'סומן לא רלוונטי':'עבר לסטטוס "לא סגר". הלקוח נשאר במאגר')},
@@ -1741,6 +1760,7 @@ document.addEventListener('input',e=>{
  const t=e.target;
  if(t.id==='evsearch'){S.filter=t.value;const pos=t.selectionStart;render();const n=$('#evsearch');n.focus();n.setSelectionRange(pos,pos);return}
  if(t.id==='songsearch'){const f=t.value.toLowerCase();$('#songgrid').innerHTML=songCards(SONGS.filter(s=>s.t.toLowerCase().includes(f)||s.tag.includes(f)));return}
+ if(t.dataset.crewp!==undefined&&S.ev){const x=ev(S.ev);const c=(x.crew||(x.crew={}));(c[t.dataset.crewp]||(c[t.dataset.crewp]={})).phone=t.value;return}
  if(t.dataset.crewn!==undefined&&S.ev){const x=ev(S.ev);const c=(x.crew||(x.crew={}));(c[t.dataset.crewn]||(c[t.dataset.crewn]={})).name=t.value;return}
  if(t.dataset.set!==undefined){SET()[t.dataset.set]=t.value.trim();window.__settingsSaved=false;window.__saveSettings&&window.__saveSettings();return}
  if(t.id==='pk'){const lang=S.plang||ev(S.portalEv).lang;$('#pklist').innerHTML=pickList(t.value.toLowerCase(),+$('#mbox').dataset.i,T[lang].p);return}
