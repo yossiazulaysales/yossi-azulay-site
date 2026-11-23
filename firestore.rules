@@ -1,0 +1,42 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    function isAdmin() {
+      return request.auth != null
+        && request.auth.token.email_verified == true
+        && request.auth.token.email in ['yossiazulaysales@gmail.com'];
+    }
+
+    // Website inquiry form: anyone may create a new inquiry (nothing else).
+    match /leads/{id} {
+      allow create: if request.resource.data.keys().hasOnly(['name','names','phone','email','etype','date','loc','heard','notes','lang','source','status','createdAt'])
+        && request.resource.data.status == 'new'
+        && request.resource.data.source == 'site'
+        && request.resource.data.createdAt == request.time
+        && request.resource.data.get('name', '').size() < 200
+        && request.resource.data.get('names', '').size() < 200
+        && request.resource.data.get('phone', '').size() < 60
+        && request.resource.data.get('email', '').size() < 200
+        && request.resource.data.get('notes', '').size() < 4000;
+      allow read, update, delete: if isAdmin();
+    }
+
+    // Client personal area: whoever holds the secret link can read that one
+    // document and may only write their own answers (resp + respAt).
+    match /portal/{token} {
+      allow get: if true;
+      allow list, create, delete: if isAdmin();
+      allow update: if isAdmin() || (
+        request.resource.data.diff(resource.data).affectedKeys().hasOnly(['resp', 'respAt'])
+        && request.resource.data.respAt == request.time
+        && request.resource.data.resp.get('sigImg', '').size() < 300000
+      );
+    }
+
+    // Everything else (events, settings, engine): the office only.
+    match /{document=**} {
+      allow read, write: if isAdmin();
+    }
+  }
+}

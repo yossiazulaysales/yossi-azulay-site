@@ -37,7 +37,7 @@ img{max-width:100%}
 
 /* demo bar */
 #crmbar{position:sticky;top:0;z-index:50;display:flex;gap:12px;align-items:center;padding:8px max(2vw,12px);background:#140e0a;color:#efe6da;font-size:14px}#crmbar button{border:0;background:var(--metal);color:#1d140f;border-radius:999px;padding:6px 14px;font-weight:500;cursor:pointer}#crmbar span{opacity:.7}
-#crmbar[hidden]{display:none}#gate:empty{display:none}#gate{position:fixed;inset:0;z-index:400;background:#f3ede3;display:grid;place-items:center;font-family:Heebo,sans-serif}#gate .gbox{text-align:center;max-width:420px;padding:40px 28px;background:#fbf8f2;border:1px solid #e1d9cb;border-radius:4px}#gate img{height:64px}#gate h2{font:500 26px "Frank Ruhl Libre",serif;margin:12px 0 6px}#gate p{color:#7a6a5c;margin:0 0 22px}#gate button{background:var(--metal);border:0;color:#1d140f;font-weight:500;padding:12px 26px;border-radius:2px;cursor:pointer;min-height:46px;font:inherit}#gate .err{color:#8b2c22;margin-top:14px;font-size:14px}
+#crmbar[hidden]{display:none}.docwrap{position:relative;width:100%;overflow:hidden;border-radius:4px;box-shadow:0 1px 0 var(--line),0 10px 30px rgba(43,33,28,.08);background:#fff}.docframe{border:0;width:210mm;height:594mm;transform-origin:top right;display:block}[dir=ltr] .docframe{transform-origin:top left}#gate:empty{display:none}#gate{position:fixed;inset:0;z-index:400;background:#f3ede3;display:grid;place-items:center;font-family:Heebo,sans-serif}#gate .gbox{text-align:center;max-width:420px;padding:40px 28px;background:#fbf8f2;border:1px solid #e1d9cb;border-radius:4px}#gate img{height:64px}#gate h2{font:500 26px "Frank Ruhl Libre",serif;margin:12px 0 6px}#gate p{color:#7a6a5c;margin:0 0 22px}#gate button{background:var(--metal);border:0;color:#1d140f;font-weight:500;padding:12px 26px;border-radius:2px;cursor:pointer;min-height:46px;font:inherit}#gate .err{color:#8b2c22;margin-top:14px;font-size:14px}
 #demobar{position:sticky;top:0;z-index:50;display:flex;gap:6px;align-items:center;flex-wrap:wrap;padding:8px max(2vw,12px);background:#140e0a;color:#efe6da;border-bottom:1px solid #3a2d23;font-size:14px;font-weight:400}
 #demobar b{font-weight:500;margin-inline-end:6px;color:var(--gold2)}
 #demobar button{border:1px solid #4a3a2e;background:transparent;color:#efe6da;border-radius:999px;padding:6px 14px;min-height:34px}
@@ -574,6 +574,7 @@ table.t tr.click:hover td{background:var(--soft)}
 const TODAY = (()=>{const t=new Date();t.setHours(12,0,0,0);return t})();
 const LOC = {he:'he-IL',en:'en-GB',fr:'fr-FR',es:'es-ES'};
 const PHONE = '+972-54-977-7758';
+window.SETTINGS=window.SETTINGS||{};const SET=()=>window.SETTINGS;
 const WA = 'https://wa.me/972549777758';
 
 const ETYPES = {
@@ -1064,14 +1065,15 @@ function siteView(){
  </div>`;
 }
 
+const Q_HOLD={he:'התאריך שמור עבורכם שבעה ימים ממועד ההצעה.',en:'The date is held for you for seven days from the quotation date.',fr:'La date est réservée pour vous sept jours à compter du devis.',es:'La fecha queda reservada siete días desde el presupuesto.'};
 const PF={
- he:{eform:'פרטי האירוע',up:'העלאת אסמכתה',refOk:'האסמכתה התקבלה ונשמרה בתיקייה שלכם',refWait:'אסמכתה התקבלה · ממתין לאישור',refNote:'חשוב: מקדמה או תשלום בלי אסמכתה לא נרשמים כמשולמים. אחרי ההעברה, העלו כאן צילום או קובץ של האסמכתה.',dep48:'תוך 48 שעות מהחתימה',
+ he:{eform:'פרטי האירוע',approvedT:'תודה! ההצעה אושרה. טופס ההזמנה לחתימה יופיע כאן בהמשך',signedT:'תודה! טופס ההזמנה נחתם. השלב הבא: מקדמה',uploading:'מעלה את הקובץ…',upFail:'ההעלאה לא הצליחה. אפשר לשלוח את האסמכתה בוואטסאפ.',quoteWait:'הצעת המחיר בהכנה ותופיע כאן בקרוב.',orderWait:'טופס ההזמנה לחתימה יופיע כאן אחרי אישור ההצעה.',payCard:'תשלום באשראי',refManual:'אפשר גם לשלוח את האסמכתה בוואטסאפ',acctName:'שם החשבון',bankL:'בנק',branchL:'סניף',acctL:'חשבון',approveQ:'אישור הצעת המחיר',signNow:'חתימה על טופס ההזמנה',up:'העלאת אסמכתה',refOk:'האסמכתה התקבלה ונשמרה בתיקייה שלכם',refWait:'אסמכתה התקבלה · ממתין לאישור',refNote:'חשוב: מקדמה או תשלום בלי אסמכתה לא נרשמים כמשולמים. אחרי ההעברה, העלו כאן צילום או קובץ של האסמכתה.',dep48:'תוך 48 שעות מהחתימה',
   ef_s:'כדי שהכול יהיה מוכן, אשרו לנו את פרטי האירוע. הטופס נסגר 30 יום לפני האירוע.',arrive:'שעת הגעת האורחים',chuppah:'שעת החופה',guests:'כמות אורחים משוערת',hall:'גודל האולם',hallO:['קטן','בינוני','גדול','שני אולמות'],place:'מיקום החופה',placeO:['באולם','באמפי','על המים','בגן','אחר'],sound:'הגברה',soundO:['דרך יוסי אזולאי','סגרנו בעצמנו חברת הגברה'],soundC:'שם ומספר של חברת ההגברה',notes:'הערות',confirm:'אנחנו מאשרים את פרטי האירוע ואת השירים שבחרנו, ונעביר את יתרת התשלום עד 5 ימים לפני האירוע.',submit:'אישור ושליחה',done:'טופס האירוע אושר. תודה!',songsLink:'לבחירת השירים'},
- en:{eform:'Event details',up:'Upload confirmation',refOk:'Your transfer confirmation was received and saved to your folder',refWait:'Confirmation received · awaiting approval',refNote:'Important: a deposit or payment without a transfer confirmation is not recorded as paid. After transferring, upload a photo or file of the confirmation here.',dep48:'within 48 hours of signing',
+ en:{eform:'Event details',approvedT:'Thank you! The quotation is approved. The agreement to sign will appear here',signedT:'Thank you! The agreement is signed. Next step: the advance payment',uploading:'Uploading…',upFail:'The upload did not work. You can send the confirmation on WhatsApp.',quoteWait:'Your quotation is being prepared and will appear here soon.',orderWait:'The agreement to sign will appear here after the quotation is approved.',payCard:'Pay by card',refManual:'You can also send the confirmation on WhatsApp',acctName:'Account name',bankL:'Bank',branchL:'Branch',acctL:'Account',approveQ:'Approve the quotation',signNow:'Sign the agreement',up:'Upload confirmation',refOk:'Your transfer confirmation was received and saved to your folder',refWait:'Confirmation received · awaiting approval',refNote:'Important: a deposit or payment without a transfer confirmation is not recorded as paid. After transferring, upload a photo or file of the confirmation here.',dep48:'within 48 hours of signing',
   ef_s:'To have everything ready, please confirm your event details. The form closes 30 days before the event.',arrive:'Guests arrival time',chuppah:'Chuppah time',guests:'Estimated number of guests',hall:'Venue size',hallO:['Small','Medium','Large','Two halls'],place:'Chuppah location',placeO:['Indoors','Amphitheatre','By the water','Garden','Other'],sound:'Sound',soundO:['Through Yossi Azulay','We booked a sound company'],soundC:'Sound company name and number',notes:'Notes',confirm:'We confirm the event details and the songs we chose, and will transfer the balance up to 5 days before the event.',submit:'Confirm and send',done:'Your event form is confirmed. Thank you!',songsLink:'Choose songs'},
- fr:{eform:'Détails de l’événement',up:'Déposer le justificatif',refOk:'Votre justificatif a bien été reçu et enregistré',refWait:'Justificatif reçu · en attente de validation',refNote:'Important : un acompte ou un paiement sans justificatif n’est pas enregistré comme payé. Après le virement, déposez ici une photo ou un fichier du justificatif.',dep48:'sous 48 heures après la signature',
+ fr:{eform:'Détails de l’événement',approvedT:'Merci ! Le devis est validé. Le contrat à signer apparaîtra ici',signedT:'Merci ! Le contrat est signé. Prochaine étape : l’acompte',uploading:'Envoi en cours…',upFail:'L’envoi n’a pas fonctionné. Vous pouvez envoyer le justificatif sur WhatsApp.',quoteWait:'Votre devis est en préparation et apparaîtra ici bientôt.',orderWait:'Le contrat à signer apparaîtra ici après validation du devis.',payCard:'Payer par carte',refManual:'Vous pouvez aussi envoyer le justificatif sur WhatsApp',acctName:'Titulaire',bankL:'Banque',branchL:'Agence',acctL:'Compte',approveQ:'Valider le devis',signNow:'Signer le contrat',up:'Déposer le justificatif',refOk:'Votre justificatif a bien été reçu et enregistré',refWait:'Justificatif reçu · en attente de validation',refNote:'Important : un acompte ou un paiement sans justificatif n’est pas enregistré comme payé. Après le virement, déposez ici une photo ou un fichier du justificatif.',dep48:'sous 48 heures après la signature',
   ef_s:'Pour que tout soit prêt, merci de confirmer les détails de votre événement. Le formulaire se clôt 30 jours avant l’événement.',arrive:'Arrivée des invités',chuppah:'Heure de la houppa',guests:'Nombre d’invités estimé',hall:'Taille de la salle',hallO:['Petite','Moyenne','Grande','Deux salles'],place:'Emplacement de la houppa',placeO:['En salle','Amphithéâtre','Au bord de l’eau','Jardin','Autre'],sound:'Sonorisation',soundO:['Par Yossi Azulay','Nous avons réservé une société'],soundC:'Nom et numéro de la société de sonorisation',notes:'Remarques',confirm:'Nous confirmons les détails de l’événement et les chants choisis, et réglerons le solde au plus tard 5 jours avant l’événement.',submit:'Confirmer et envoyer',done:'Votre fiche événement est confirmée. Merci !',songsLink:'Choisir les chants'},
- es:{eform:'Detalles del evento',up:'Subir comprobante',refOk:'Recibimos su comprobante y quedó guardado en su carpeta',refWait:'Comprobante recibido · pendiente de aprobación',refNote:'Importante: una seña o un pago sin comprobante no se registra como pagado. Tras la transferencia, suban aquí una foto o un archivo del comprobante.',dep48:'en las 48 horas siguientes a la firma',
+ es:{eform:'Detalles del evento',approvedT:'¡Gracias! El presupuesto está aprobado. El contrato a firmar aparecerá aquí',signedT:'¡Gracias! El contrato está firmado. Siguiente paso: la seña',uploading:'Subiendo…',upFail:'No se pudo subir. Pueden enviar el comprobante por WhatsApp.',quoteWait:'Su presupuesto se está preparando y aparecerá aquí pronto.',orderWait:'El contrato a firmar aparecerá aquí después de aprobar el presupuesto.',payCard:'Pagar con tarjeta',refManual:'También pueden enviar el comprobante por WhatsApp',acctName:'Titular',bankL:'Banco',branchL:'Sucursal',acctL:'Cuenta',approveQ:'Aprobar el presupuesto',signNow:'Firmar el contrato',up:'Subir comprobante',refOk:'Recibimos su comprobante y quedó guardado en su carpeta',refWait:'Comprobante recibido · pendiente de aprobación',refNote:'Importante: una seña o un pago sin comprobante no se registra como pagado. Tras la transferencia, suban aquí una foto o un archivo del comprobante.',dep48:'en las 48 horas siguientes a la firma',
   ef_s:'Para tenerlo todo listo, confirmen los detalles del evento. El formulario se cierra 30 días antes del evento.',arrive:'Llegada de los invitados',chuppah:'Hora de la jupá',guests:'Número estimado de invitados',hall:'Tamaño del salón',hallO:['Pequeño','Mediano','Grande','Dos salones'],place:'Ubicación de la jupá',placeO:['En el salón','Anfiteatro','Junto al agua','Jardín','Otro'],sound:'Sonido',soundO:['A través de Yossi Azulay','Contratamos una empresa de sonido'],soundC:'Nombre y número de la empresa de sonido',notes:'Notas',confirm:'Confirmamos los detalles del evento y las canciones elegidas, y transferiremos el saldo hasta 5 días antes del evento.',submit:'Confirmar y enviar',done:'Su formulario del evento está confirmado. ¡Gracias!',songsLink:'Elegir canciones'}};
 /* ================= PORTAL ================= */
 function portalStepIndex(e){
@@ -1127,40 +1129,22 @@ function portalView(){
  const pdone={quote:si>=1||!!e.quoteApproved,contract:e.contract==='signed',pay:e.pay.deposit.received,eform:!!(e.eventForm&&e.eventForm.ok),songs:!!e.songsFinal};
  const nextKey=['quote','contract','deposit','songs','done'][si];
  let body='';
+ const PX=PF[lang];const ST=SET();
+ const frame=kind=>`<div class="docwrap"><iframe class="docframe" title="${kind==='quote'?esc(p.steps[0]):esc(p.contract)}" srcdoc="${esc(docHtml(e,kind))}"></iframe></div><div style="margin-top:8px"><button class="btn sm" type="button" data-act="docFull" data-k="${kind}">${lang==='he'?'פתיחה במסך מלא / הורדה':'Open full screen / download'}</button></div>`;
  if(S.ptab==='quote'){
-  const Q=QT[lang];const place=[e.city,e.country].filter(Boolean).join(', ');
-  body=`<div class="card letter"><div class="row" style="border-bottom:1px solid var(--line);padding-bottom:10px;margin-bottom:18px"><span class="disp sp" style="font-size:18px;letter-spacing:.18em">YOSSI AZULAY</span><span class="muted" style="font-size:14px">${esc(Q.qno)} ${esc(e.quoteNo)} · ${esc(dfmt('2026-11-22',lang))}</span></div>
-  <h2 style="font-size:clamp(28px,4vw,40px)">${esc(L(ETYPES[e.etype],lang))}</h2><p class="muted" style="margin:6px 0 18px">${esc(place)} · ${esc(dfmt(e.date,lang))}</p>
-  <p style="margin:0"><span class="muted">${esc(Q.prep)}</span><br><b>${esc(e.client)}</b>${e.producer?`<br>${esc(e.producer)}`:''}</p>
-  <p style="max-width:62ch">${esc(Q.dear(e.couple||e.client))}<br>${esc(Q.intro(L(ETYPES[e.etype],lang),place,dfmt(e.date,lang)))}</p>
-  <h3 class="lh">${esc(Q.cer_t)}</h3><p style="max-width:62ch">${esc(Q.cer)}</p>
-  <h3 class="lh">${esc(Q.fee_t)}</h3>
-  <div class="row" style="align-items:baseline"><span class="disp" style="font-size:clamp(34px,5vw,48px)">${money(tt.total,c,lang)}</span>${tt.vat?`<span class="muted">${esc(p.vat)} ${esc(({he:'כלול',en:'included',fr:'incluse',es:'incluido'})[lang])}</span>`:''}</div>
-  <p class="muted" style="margin-top:4px">${esc(e.quote.abroad?Q.fee_abroad:Q.fee_il)}</p>
-  <div class="scroll"><table class="qtable"><thead><tr><th>${esc(p.item)}</th><th class="n">${esc(p.amount)}</th></tr></thead><tbody>
-  ${tt.lines.map(l=>`<tr><td>${esc(l.n)}</td><td class="n">${money(l.a,c,lang)}</td></tr>`).join('')}
-  ${e.quote.sound==='spec'?`<tr><td>${esc(L(SOUND,lang))}</td><td class="n muted">${esc(p.sound_spec)}</td></tr>`:''}
-  ${tt.vat?`<tr><td>${esc(p.sub)}</td><td class="n">${money(tt.sub,c,lang)}</td></tr><tr><td>${esc(p.vat)}</td><td class="n">${money(tt.vat,c,lang)}</td></tr>`:(e.quote.abroad?`<tr><td class="muted">${esc(p.vat_abroad)}</td><td></td></tr>`:'')}
-  <tr class="tot"><td>${esc(p.total)}</td><td class="n">${money(tt.total,c,lang)}</td></tr></tbody></table></div>
-  ${e.quote.abroad?`<h3 class="lh">${esc(Q.trav_t)}</h3><ul style="margin:0;padding-inline-start:20px">${EXP.filter(x=>e.quote.exp[x.id]).map(x=>`<li>${esc(L(x,lang))}${x.id==='hotel'?` · ${esc(Q.nights(e.quote.nights))}`:''}</li>`).join('')}</ul><p class="muted">${esc(Q.trav_n)}</p>`:''}
-  <h3 class="lh">${esc(Q.snd_t)}</h3><p style="max-width:62ch">${esc(e.quote.sound==='paid'?Q.snd_paid:Q.snd_spec)}</p>
-  <h3 class="lh">${esc(Q.res_t)}</h3><p style="max-width:62ch">${esc(Q.res)}</p>
-  <h3 class="lh">${esc(Q.conf_t)}</h3><p style="max-width:62ch">${esc(Q.conf(e.quote.depositPct))}</p>
-  <p>${esc(Q.sign)}<br><b>${lang==='he'?'איתמר לשנסקי':'Itamar Lashansky'}</b><br><span class="muted">${esc(Q.role)} · ${PHONE} · yossiazulaysales@gmail.com</span></p>
-  <div class="row" style="margin-top:18px">${e.quoteApproved||si>0?`<span class="tag" style="background:var(--okbg);color:var(--ok)">✓ ${esc(p.approved)}</span>`:`<button class="btn pri" type="button" data-act="approveQuote">${esc(p.approve)}</button>`}</div></div>`;
+  body=e.quoteNo&&window.YDOC?`${frame('quote')}<div class="card" style="margin-top:14px;display:flex;gap:12px;align-items:center;flex-wrap:wrap">${e.quoteApproved||si>0?`<span class="tag" style="background:var(--okbg);color:var(--ok);font-size:15px;padding:8px 12px">✓ ${esc(p.approved)}</span>`:`<button class="btn pri" type="button" data-act="approveQuote">${esc(PX.approveQ)}</button><span class="muted" style="font-size:14px">${esc(Q_HOLD[lang])}</span>`}</div>`
+   :`<div class="card"><p style="margin:0">${esc(PX.quoteWait)}</p></div>`;
  } else if(S.ptab==='contract'){
   const signed=e.contract==='signed';
-  body=`<div class="card contract"><div class="row"><h2 class="sp" style="font-size:26px">${esc(p.contract)}</h2><span class="muted" style="font-family:Assistant">${esc(e.contractNo?'#'+e.contractNo:'')}</span></div>
-  <p class="muted" style="font-family:Assistant;font-size:14px;margin:4px 0 0">${lang==='he'?`יוסי אזולאי · עוסק מורשה ${BIZ_NO}`:`Yossi Azulay · Licensed Dealer No. ${BIZ_NO}`} · ${lang==='he'?'הזמנה':'Order no.'} ${esc(e.contractNo||'—')}</p>
-  ${lang==='fr'||lang==='es'?`<p class="card" style="font-family:Assistant;font-size:15px;background:var(--warnbg);border-color:transparent;margin:12px 0">${lang==='fr'?'La version française du contrat sera ajoutée après validation juridique. La version anglaise ci-dessous fait foi.':'La versión en español del contrato se añadirá tras la revisión legal. La versión en inglés a continuación es la vinculante.'}</p>`:''}
-  <ol>${contractClauses(e,lang).map(x=>`<li>${esc(x)}</li>`).join('')}</ol>
-  <p class="muted" style="font-family:Assistant;font-size:14px">${lang==='he'?'תקציר הסעיפים מהחוזה של יוסי. בגרסה האמיתית יופיע הנוסח המלא.':'Summary of Yossi’s contract clauses. The full wording appears in the live version.'}</p>
-  <div style="font-family:Assistant">${signed?`<div class="tag" style="background:var(--okbg);color:var(--ok);font-size:15px;padding:8px 12px">✓ ${esc(p.signed)} ${e.signedAt?'· '+esc(e.signedAt):''}</div>${e.sigImg?`<img alt="" src="${e.sigImg}" style="max-height:90px;display:block;margin-top:10px;background:#fff;border-radius:8px">`:''}`:
-   `<p style="font-weight:600;margin:10px 0 6px">${esc(p.sign_here)}</p><canvas class="sigbox" id="sig"></canvas><div class="row" style="margin-top:10px"><button class="btn" type="button" data-act="sigClear">${esc(p.clear)}</button><button class="btn pri" type="button" data-act="sign">${esc(p.sign)}</button></div>`}</div></div>`;
+  body=e.contractNo&&window.YDOC?`${frame('order')}<div class="card" style="margin-top:14px">${signed?`<div class="tag" style="background:var(--okbg);color:var(--ok);font-size:15px;padding:8px 12px">✓ ${esc(p.signed)} ${e.signedAt?'· '+esc(e.signedAt):''}</div>${e.sigImg?`<img alt="" src="${e.sigImg}" style="max-height:90px;display:block;margin-top:10px;background:#fff;border-radius:8px">`:''}`:
+   `<h3 style="font-size:20px;margin:0 0 6px">${esc(PX.signNow)}</h3><p class="muted" style="margin:0 0 8px;font-size:14px">${esc(p.sign_here)}</p><canvas class="sigbox" id="sig"></canvas><div class="row" style="margin-top:10px"><button class="btn" type="button" data-act="sigClear">${esc(p.clear)}</button><button class="btn pri" type="button" data-act="sign">${esc(p.sign)}</button></div>`}</div>`
+   :`<div class="card"><p style="margin:0">${esc(PX.orderWait)}</p></div>`;
  } else if(S.ptab==='pay'){
   const rows=[['deposit',p.deposit,tt.dep,P2.dep48],['balance',p.balance,tt.bal,p.due_event]];if(e.quote.abroad&&e.quote.flights)rows.push(['flights',p.flights,e.quote.flights,p.due_fl]);
-  body=`<div class="grid2"><div class="card"><h2 style="font-size:24px;margin-bottom:10px">${esc(p.pay_t)}</h2><div class="scroll"><table class="qtable"><tbody>${rows.map(r=>`<tr><td><b>${esc(r[1])}</b><br><small class="muted">${esc(r[3])}</small></td><td class="n">${money(r[2],c,lang)}</td><td class="n">${e.pay[r[0]].received?`<span class="tag" style="background:var(--okbg);color:var(--ok)">${esc(p.paid)}</span>`:e.pay[r[0]].ref?`<span class="tag" style="background:var(--accbg);color:var(--acc)">${esc(P2.refWait)}</span>`:`<label class="btn sm" style="cursor:pointer"><input type="file" accept="image/*,application/pdf" data-ref="${r[0]}" style="display:none">${esc(P2.up)}</label>`}</td></tr>`).join('')}</tbody></table></div><p class="card" style="margin:14px 0 0;background:var(--warnbg);border-color:transparent;font-size:15px">${esc(P2.refNote)}</p></div>
-  <div class="card"><h3 style="font-size:20px;margin-bottom:8px">${esc(p.bank)}</h3><p style="margin:0 0 4px">יוסי אזולאי · עוסק מורשה ${BIZ_NO}</p><p class="muted" style="margin:0">בנק 00 · סניף 000 · חשבון 000000 <small>(פרטי דמה)</small></p><div class="hr"></div><h3 style="font-size:20px;margin-bottom:8px">${esc(p.card)}</h3><button class="btn pri" type="button" data-act="cardDemo">${esc(p.card)} · ${money(tt.dep,c,lang)}</button><p class="muted" style="font-size:14px">${esc(p.card_n)}</p></div></div>`;
+  const bank=ST.bankAccount?`<p style="margin:0 0 4px"><b>${esc(ST.accountName||'יוסי אזולאי')}</b> · ${lang==='he'?'עוסק מורשה':'VAT No.'} ${BIZ_NO}</p><p style="margin:0" dir="ltr" class="${lang==='he'?'':''}">${esc(PX.bankL)} ${esc(ST.bankName||'')} · ${esc(PX.branchL)} ${esc(ST.bankBranch||'')} · ${esc(PX.acctL)} ${esc(ST.bankAccount)}</p>${ST.iban&&lang!=='he'?`<p style="margin:4px 0 0" dir="ltr">IBAN ${esc(ST.iban)}${ST.swift?' · SWIFT '+esc(ST.swift):''}</p>`:''}`:`<p class="muted" style="margin:0">${esc(lang==='he'?'פרטי החשבון יישלחו אליכם בהודעה.':'Bank details will be sent to you in a message.')}</p>`;
+  const wa=`https://wa.me/${PHONE.replace(/\D/g,'')}`;
+  body=`<div class="grid2"><div class="card"><h2 style="font-size:24px;margin-bottom:10px">${esc(p.pay_t)}</h2><div class="scroll"><table class="qtable"><tbody>${rows.map(r=>`<tr><td><b>${esc(r[1])}</b><br><small class="muted">${esc(r[3])}</small></td><td class="n">${money(r[2],c,lang)}</td><td class="n">${e.pay[r[0]].received?`<span class="tag" style="background:var(--okbg);color:var(--ok)">${esc(p.paid)}</span>`:e.pay[r[0]].ref?`<span class="tag" style="background:var(--accbg);color:var(--acc)">${esc(P2.refWait)}</span>`:`<label class="btn sm" style="cursor:pointer"><input type="file" accept="image/*,application/pdf" data-ref="${r[0]}" style="display:none">${esc(P2.up)}</label>`}</td></tr>`).join('')}</tbody></table></div><p class="muted" style="font-size:14px;margin-bottom:0">${esc(P2.refNote)} <a href="${wa}" target="_blank" rel="noopener">${esc(PX.refManual)}</a></p></div>
+  <div class="card"><h3 style="font-size:20px;margin-bottom:8px">${esc(p.bank)}</h3>${bank}${ST.payLink?`<div class="hr"></div><a class="btn pri" href="${esc(ST.payLink)}" target="_blank" rel="noopener">${esc(PX.payCard)}</a>`:''}</div></div>`;
  } else if(S.ptab==='eform'){
   const f=e.eventForm||{};const op=(arr,v)=>arr.map(o=>`<option ${o===v?'selected':''}>${esc(o)}</option>`).join('');
   body=f.ok?`<div class="card"><h2 style="font-size:26px">${esc(P2.eform)}</h2><p class="tag" style="background:var(--okbg);color:var(--ok);font-size:15px;padding:8px 12px;margin-top:10px">✓ ${esc(P2.done)}</p></div>`:
@@ -1187,7 +1171,7 @@ function portalView(){
  }
  return `<div class="portal"><div class="phead"><div class="row">
   <div class="sp"><img src="logo-full-dark.png" alt="Yossi Azulay" style="height:64px;width:auto;display:block;margin-bottom:10px"><h1>${esc(p.hello)}, ${esc(e.couple||e.client)}</h1><div class="meta">${esc(L(ETYPES[e.etype],lang))} · ${esc(dfmt(e.date,lang,{weekday:'long',day:'numeric',month:'long',year:'numeric'}))} · ${esc([e.venue,e.city].filter(Boolean).join(', '))}</div></div>
-  <label class="muted" style="color:#e3d3bd;font-size:13px">לקוח בהדגמה<br><select id="pev" style="background:#3a1a28;color:#fff;border:1px solid #6a4555;border-radius:8px;padding:6px">${EVENTS.map(x=>`<option value="${x.id}" ${x.id===e.id?'selected':''}>${esc(x.client)}</option>`).join('')}</select></label>
+  ${window.__PORTAL?'':`<label class="muted" style="color:#e3d3bd;font-size:13px">לקוח (תצוגה מקדימה)<br><select id="pev" style="background:#3a1a28;color:#fff;border:1px solid #6a4555;border-radius:8px;padding:6px">${EVENTS.map(x=>`<option value="${x.id}" ${x.id===e.id?'selected':''}>${esc(x.client)}</option>`).join('')}</select></label>`}
   <div class="langs" role="group" aria-label="Language">${['he','en','fr','es'].map(l=>`<button type="button" data-plang="${l}" aria-pressed="${l===lang}">${({he:'עב',en:'EN',fr:'FR',es:'ES'})[l]}</button>`).join('')}</div></div>
   <div class="ptrack">${tabs.map((k,i)=>`<button type="button" data-ptab="${k}" class="${pdone[k]?'done':''}" aria-current="${S.ptab===k}"><i>${pdone[k]?'✓':i+1}</i>${esc(tabLbl[k])}</button>`).join('')}</div></div>
   <div class="pbody"><div class="card" style="margin-bottom:16px;display:flex;gap:12px;align-items:center;background:var(--accbg);border-color:transparent"><b>${esc(p.next)}</b><span>${esc(p.nexts[nextKey])}</span></div>${body}</div></div>`;
@@ -1353,16 +1337,15 @@ function pathTab(e){
  <button class="btn ${all?'pri':''}" type="button" data-act="closeFinal" data-id="${e.id}" ${all?'':'disabled'} style="margin-top:12px;width:100%">${e.status==='closed'?'האירוע סגור סופית ✓':all?'סגירה סופית של האירוע':'סגירה סופית תיפתח כשכל הסעיפים מסומנים'}</button></div></div>`;
 }
 function docsTab(e){
- const f=[];const nm=e.client.replace(/[^\p{L}\p{N} &]/gu,'').trim();
- if(e.quoteSentDays!=null||stIdx(e)>=3)f.push(['הצעת מחיר',`${e.quoteNo} · הצעת מחיר · ${nm}.pdf`]);
- if(e.contract==='signed')f.push(['חוזה חתום',`${e.contractNo} · חוזה חתום · ${nm}.pdf`]);
- for(const [k,l] of [['deposit','מקדמה'],['balance','יתרה'],['flights','טיסות']]){const p=e.pay[k];if(p.ref)f.push([`אסמכתה · ${l}`,p.ref]);if(p.receipt&&p.receipt!=='pending')f.push([`קבלה · ${l}`,`קבלה ${p.receipt} · ${nm}.pdf`])}
- if(e.eventForm&&e.eventForm.ok)f.push(['טופס אירוע',`טופס אירוע · ${nm}.pdf`]);
- if(e.songsFinal)f.push(['סט-ליסט',`סט-ליסט · ${nm}.pdf`]);
- for(const s of e.suppliers||[])if(s.inv)f.push([`חשבונית ספק · ${s.role}`,`${s.name} · ${s.role}.pdf`]);
- return `<div class="panel"><div class="row"><h2 class="sp">תיקיית לקוח · ${esc(e.clientNo)}</h2><span class="muted" style="font-size:14px">גיבוי: ‎/Yossi Azulay/Clients/${esc(e.clientNo)} ${esc(nm)}/</span></div>
- ${f.length?`<div class="scroll"><table class="t"><thead><tr><th>סוג</th><th>קובץ</th><th>במערכת</th><th>בתיקייה במחשב</th></tr></thead><tbody>${f.map(x=>`<tr><td>${esc(x[0])}</td><td>${esc(x[1])}</td><td><span class="tag" style="background:var(--okbg);color:var(--ok)">✓</span></td><td><span class="tag" style="background:var(--okbg);color:var(--ok)">✓</span></td></tr>`).join('')}</tbody></table></div>`:'<div class="empty">עדיין אין מסמכים</div>'}
- <p class="muted" style="font-size:13.5px;margin-bottom:0">כל מסמך שנוצר או מועלה נשמר פעמיים: במערכת, ובתיקייה מסודרת לפי מספר לקוח במחשב שהגדרתם.</p></div>`;
+ const en=(window.ENGINE||{})[e.id]||{};const files=(en.files||[]).slice().reverse();
+ const KL={ref:'אסמכתה',receipt:'קבלה',contract:'חוזה',quote:'הצעת מחיר',supplier:'חשבונית ספק',other:'קובץ'};
+ const gen=[];if(e.quoteNo)gen.push(['quote','הצעת מחיר '+e.quoteNo]);if(e.contractNo)gen.push(['order','טופס הזמנה '+e.contractNo+(e.contract==='signed'?' · נחתם':'')]);
+ const can=!!window.__upload&&!!SET().uploadUrl;
+ return `<div class="panel"><div class="row"><h2 class="sp">תיקיית הלקוח</h2>${en.folderUrl?`<a class="btn" href="${esc(en.folderUrl)}" target="_blank" rel="noopener">פתיחה בדרייב</a>`:''}</div>
+ ${gen.length?`<h3 class="lh" style="margin-top:6px">מסמכים מהמערכת</h3><div class="alist">${gen.map(g=>`<div class="aitem"><div class="t"><b>${esc(g[1])}</b><small>נוצר מהנתונים של האירוע, תמיד מעודכן</small></div><button class="btn sm" type="button" data-act="docOpen" data-k="${g[0]==='order'?'order':'quote'}">פתיחה (PDF)</button></div>`).join('')}${e.sigImg?`<div class="aitem"><div class="t"><b>חתימת הלקוח</b><small>${esc(e.signedAt||'')}</small></div><img alt="" src="${e.sigImg}" style="max-height:44px;background:#fff;border-radius:6px"></div>`:''}</div>`:''}
+ <h3 class="lh">קבצים</h3>
+ ${files.length?`<div class="scroll"><table class="t"><thead><tr><th>סוג</th><th>קובץ</th><th>הועלה ע״י</th><th>תאריך</th></tr></thead><tbody>${files.map(x=>`<tr><td>${esc(KL[x.kind]||'קובץ')}</td><td><a href="${esc(x.url)}" target="_blank" rel="noopener">${esc(x.name)}</a></td><td>${x.by==='client'?'הלקוח':'מנהל'}</td><td>${esc(dshortRaw(String(x.at||'').slice(0,10)))}</td></tr>`).join('')}</tbody></table></div>`:'<div class="empty">עדיין אין קבצים</div>'}
+ <div class="row" style="margin-top:14px;gap:8px;flex-wrap:wrap">${can?`<label class="btn" style="cursor:pointer"><input type="file" id="admUp" style="display:none">העלאת קובץ</label><select id="admUpK" class="inp" style="width:auto">${Object.entries(KL).map(([k,v])=>`<option value="${k}">${v}</option>`).join('')}</select>`:`<span class="muted" style="font-size:14px">העלאת קבצים תיפתח כשמנוע האוטומציות יחובר (הגדרות > מנוע האוטומציות).</span>`}</div></div>`;
 }
 function eformTab(e){
  const f=e.eventForm;
@@ -1384,13 +1367,13 @@ function aClients(){
 }
 const lostBtns=e=>stIdx(e)>=0&&stIdx(e)<5?`<button class="btn sm" type="button" data-act="lost" data-id="${e.id}">${e.ctype==='producer'?'לא רלוונטי':'לא סגר'}</button><button class="btn sm" type="button" data-act="taken" data-id="${e.id}">תאריך תפוס</button>`:'';
 const NAV_ALL=[['dash','לוח בקרה',IC.dash],['inbox','פניות נכנסות',IC.inbox],['board','לוח פניות',IC.board],['events','כל האירועים',IC.list],['cal','יומן',IC.cal],['money','תשלומים וקבלות',IC.money],['clients','לקוחות ומפיקים',IC.people],['songs','ספריית שירים',IC.music],['templates','תבניות הודעות',IC.inbox],['auto','אוטומציות',IC.bolt],['settings','הגדרות',IC.gear]];
-const NAV=NAV_ALL.filter(n=>!['inbox','songs','auto','settings'].includes(n[0]));
+const NAV=NAV_ALL.filter(n=>!['inbox','songs','auto'].includes(n[0]));
 function adminView(){
  document.documentElement.lang='he';document.documentElement.dir='rtl';
  const pend=EVENTS.reduce((n,e)=>n+['deposit','balance','flights'].filter(k=>e.pay[k].received&&e.pay[k].receipt==='pending').length,0);
  const badges={inbox:INBOX.filter(t=>t.msgs[t.msgs.length-1].d==='in').length,money:pend,board:EVENTS.filter(e=>e.status==='lead').length,dash:dueTasks().length};
  let main='';
- if(['inbox','songs','auto','settings'].includes(S.admin))S.admin='dash';
+ if(['inbox','songs','auto'].includes(S.admin))S.admin='dash';
  if(S.ev)main=evDetail(ev(S.ev));
  else main=({dash:aDash,inbox:aInbox,board:aBoard,events:aEvents,cal:aCal,money:aMoney,clients:aClients,songs:aSongs,templates:aTemplates,auto:aAuto,settings:aSettings})[S.admin]();
  return `<div class="admin"><aside class="rail"><div class="logo"><img src="logo-full-dark.png" alt="Yossi Azulay" style="width:150px;height:auto;display:block"><small style="margin-top:8px">מערכת ניהול</small></div>
@@ -1467,17 +1450,23 @@ function aAuto(){
  ${groups.map(g=>`<div class="panel" style="padding:0;margin-bottom:14px"><h2 style="padding:14px 14px 0">${g}</h2>${AUTOS.map((a,i)=>a.g!==g?'':`<div class="rule"><div class="t"><span class="when">${esc(a.w)}</span><small>← ${esc(a.a)}</small></div><input type="checkbox" class="toggle" data-auto="${i}" ${a.on?'checked':''} aria-label="הפעלה"></div>`).join('')}</div>`).join('')}`;
 }
 function aSettings(){
- return `<div class="mhead"><h1>הגדרות</h1></div>
- <div class="grid2"><div class="panel"><h2>פרטי העסק</h2><div class="fields" style="grid-template-columns:minmax(0,1fr) minmax(0,1fr)">
-  <label>שם העסק<input class="inp" value="יוסי אזולאי"></label><label>מעמד<input class="inp" value="עוסק מורשה"></label>
-  <label>מספר עוסק<input class="inp" value="${BIZ_NO}"></label><label>מנהל ונציג<input class="inp" value="איתמר לשנסקי"></label>
-  <label class="wide">פרטי חשבון להעברה<input class="inp" value="בנק 00 · סניף 000 · חשבון 000000 (דמה)"></label>
-  <label>מספר חוזה הבא<input class="inp" value="${nextContract()}"></label><label>מקדמה ברירת מחדל<input class="inp" value="25% בארץ · 50% בחו״ל"></label>
-  <label>מערכת קבלות<input class="inp" value="YAZ-APP (ידני, ללא API)"></label><label>יומן<input class="inp" value="Google Calendar ✓"></label></div></div>
- <div class="panel"><h2>מחירון בסיס ותוספות</h2><p class="muted" style="margin-top:0;font-size:14px">מחירי דמה. כל מחיר ניתן לשינוי בכל הצעה.</p>
-  ${[...BASES,...ADDONS,SOUND].map(x=>`<div class="row" style="padding:6px 0;border-bottom:1px solid var(--line)"><span class="sp">${esc(x.he)}</span><b>${money(x.price)}</b></div>`).join('')}
-  <div class="hr"></div><h2>גיבויים</h2><div class="alist"><div class="aitem"><div class="t"><b>גיבוי מלא אוטומטי</b><small>כל יום ראשון ב-03:00 · כל הנתונים + כל המסמכים</small></div><span class="tag" style="background:var(--okbg);color:var(--ok)">פעיל</span></div><div class="aitem"><div class="t"><b>יעד</b><small>Dropbox / Yossi Azulay / Backups · וגם עותק בתיקייה במחשב</small></div></div><div class="aitem"><div class="t"><b>כל מסמך שנוצר</b><small>נשמר מיד גם בתיקיית הלקוח: Clients / C-1001 שם הלקוח /</small></div></div></div><button class="btn pri" type="button" data-act="backupNow" style="margin-top:10px">גיבוי עכשיו</button>
-  <div class="hr"></div><h2>משתמשים</h2><div class="aitem"><div class="t"><b>יוסי אזולאי</b><small>בעלים · הכול</small></div></div><div class="aitem" style="margin-top:6px"><div class="t"><b>איתמר לשנסקי</b><small>מנהל · הכול</small></div></div></div></div>`;
+ const st=SET();const f=(k,label,opt={})=>`<label${opt.wide?' class="wide"':''}>${label}<input class="inp" data-set="${k}" value="${esc(st[k]||'')}"${opt.ltr?' dir="ltr"':''} placeholder="${esc(opt.ph||'')}"></label>`;
+ const eng=st.uploadUrl?'<span class="tag" style="background:var(--okbg);color:var(--ok)">מחובר</span>':'<span class="tag" style="background:var(--warnbg);color:var(--warn)">עוד לא מחובר</span>';
+ return `<div class="mhead"><h1>הגדרות</h1><span class="muted" style="font-size:14px">${window.__settingsSaved?'נשמר ✓':'כל שינוי נשמר לבד'}</span></div>
+ <div class="grid2"><div class="panel"><h2>פרטי חשבון למקדמה</h2><p class="muted" style="margin-top:0;font-size:14px">מופיעים ללקוח באזור האישי, בלשונית התשלומים.</p>
+  <div class="fields" style="grid-template-columns:minmax(0,1fr) minmax(0,1fr)">
+  ${f('accountName','שם בעל החשבון',{ph:'יוסי אזולאי'})}${f('bankName','בנק',{ph:'לדוגמה: לאומי (10)'})}
+  ${f('bankBranch','סניף')}${f('bankAccount','מספר חשבון',{ltr:true})}
+  ${f('iban','IBAN (ללקוחות מחו״ל)',{ltr:true})}${f('swift','SWIFT / BIC',{ltr:true})}
+  ${f('payLink','קישור לתשלום באשראי (לא חובה)',{wide:true,ltr:true,ph:'https://…'})}</div></div>
+ <div class="panel"><h2>פרטי העסק</h2><div class="alist">
+  <div class="aitem"><div class="t"><b>יוסי אזולאי · עוסק מורשה ${BIZ_NO}</b><small>מופיע בכל המסמכים</small></div></div>
+  <div class="aitem"><div class="t"><b>מספור</b><small>הצעת המחיר הבאה: ${nextQuote()} · טופס ההזמנה הבא: ${nextContract()}</small></div></div>
+  <div class="aitem"><div class="t"><b>מקדמה ברירת מחדל</b><small>25% בארץ · 50% בחו״ל (אפשר לשנות בכל אירוע)</small></div></div>
+  <div class="aitem"><div class="t"><b>קבלות</b><small>YAZ, ידני. המערכת מזכירה ושומרת את מספר הקבלה</small></div></div></div>
+  <div class="hr"></div><h2>מנוע האוטומציות ${eng}</h2>
+  <p class="muted" style="margin-top:0;font-size:14px">יומן גוגל, תיקיות לקוח בדרייב, העלאת קבצים, סיכום בוקר במייל וגיבוי שבועי.</p>
+  <div class="fields" style="grid-template-columns:minmax(0,1fr)">${f('uploadUrl','כתובת המנוע (Web App)',{ltr:true,ph:'https://script.google.com/macros/s/…/exec'})}</div></div></div>`;
 }
 const nextContract=()=>String(Math.max(202701,...EVENTS.map(e=>+e.contractNo||0).filter(n=>n>=202700&&n<300000))+1);
 const nextQuote=()=>String(Math.max(52700,...EVENTS.map(e=>+e.quoteNo||0).filter(n=>n>=52700&&n<100000))+1);
@@ -1528,7 +1517,7 @@ function evDetail(e){
   b=`<div class="panel">${(e.log||[]).map(l=>`<div class="aitem" style="margin-bottom:6px"><div class="t">${esc(l.t)}</div><small class="muted">${esc(l.at)}</small></div>`).join('')}<div class="aitem"><div class="t">הפנייה נפתחה · מקור: ${SRC[e.source]}</div></div></div>`;
  }
  return `<div class="mhead"><button class="btn sm" type="button" data-act="back">→ חזרה</button><h1>${esc(e.client)}</h1><span class="muted">${esc(e.clientNo)}</span>${stChip(e.status)}${ctChip(e.ctype)}${lostBtns(e)}
-  <a class="btn wa" href="https://wa.me/${e.phone.replace(/\D/g,'').replace(/^0/,'972')}">וואטסאפ</a><button class="btn" type="button" data-act="openPortal">האזור האישי של הלקוח</button></div>
+  <a class="btn wa" href="https://wa.me/${e.phone.replace(/\D/g,'').replace(/^0/,'972')}">וואטסאפ</a><button class="btn" type="button" data-act="sharePortal">קישור לאזור האישי</button><button class="btn" type="button" data-act="openPortal">תצוגה מקדימה: האזור האישי של הלקוח</button></div>
  <div class="muted">${esc(L(ETYPES[e.etype],'he'))} · ${esc(dfmt(e.date,'he',{weekday:'long',day:'numeric',month:'long',year:'numeric'}))} · ${esc([e.venue,e.city,e.country].filter(Boolean).join(', '))} · ${money(tt.total,e.quote.cur)}</div>
  <div class="tabs">${tabs.map(([k,l])=>`<button type="button" data-evtab="${k}" aria-current="${S.evTab===k}">${l}</button>`).join('')}</div>${b}`;
 }
@@ -1538,10 +1527,10 @@ function qsum(e){const tt=totals(e.quote);const c=e.quote.cur;return `<div class
 function render(){
  {const cb=document.getElementById('crmbar');if(cb)cb.hidden=S.view!=='portal';}
  $('#app').innerHTML=S.view==='site'?siteView():S.view==='portal'?portalView():adminView();
- if(S.view==='portal'&&S.ptab==='contract')initSig();
+ if(S.view==='portal'){if(S.ptab==='contract'&&document.getElementById('sig'))initSig();fitDocs()}
 }
 function go(v){if(location.hash!=='#'+v)location.hash=v;else{S.view=v;render()}window.scrollTo(0,0)}
-function fromHash(){const h=location.hash.slice(1);if(false){}else{S.view=h==='portal'?'portal':'admin'}render()}
+function fromHash(){const h=location.hash.slice(1);S.view=window.__PORTAL?'portal':(h==='portal'?'portal':'admin');render()}
 window.addEventListener('hashchange',fromHash);
 
 /* signature */
@@ -1636,6 +1625,8 @@ function docMark(e,kind){
  else{if(e.contract!=='signed')e.contract='sent';e.contractSentDays=0;delete e.contractSentOn;if(stIdx(e)<3)e.status='contract';log(e,'טופס הזמנה '+e.contractNo+' נשלח')}
  closeModal();render();toast('נרשם כנשלח');
 }
+function fitDocs(){document.querySelectorAll('.docwrap').forEach(w=>{const f=w.querySelector('.docframe');if(!f)return;const px=793.7,sc=Math.min(1,w.clientWidth/px);f.style.transform=`scale(${sc})`;const n=(f.contentDocument&&f.contentDocument.querySelectorAll('.pg').length)||2;w.style.height=(1122.5*n*sc)+'px';f.style.height=(1122.5*n)+'px';f.onload=()=>fitDocs()})}
+window.addEventListener('resize',()=>{if(S.view==='portal')fitDocs()});
 function waLink(phone,text){return `https://wa.me/${String(phone).replace(/\D/g,'').replace(/^0/,'972')}?text=${encodeURIComponent(text)}`}
 function waModal(e,text,title){openModal(`<h2 style="font-size:24px;margin-bottom:10px">${esc(title)}</h2><div class="bub out" style="max-width:100%">${esc(text)}</div><div class="row" style="margin-top:14px"><a class="btn wa" href="${waLink(e.phone,text)}">פתיחה בוואטסאפ</a><button class="btn" type="button" data-act="copyText">העתקה</button><button class="btn" type="button" data-act="closeModal">סגירה</button></div><p class="muted" style="font-size:13px">בגרסה האמיתית אפשר לשלוח ישירות דרך WhatsApp Business בלי לצאת מהמערכת.</p>`);$('#mbox').dataset.text=text}
 
@@ -1648,10 +1639,9 @@ const ACT={
  formReset:()=>{S.formDone=false;S.fstep=1;S.fdata={};render()},
  prodAgain:()=>{S.prodDone=false;render()},
  fBack:()=>{saveStep();S.fstep--;render()},
- approveQuote:()=>{const e=ev(S.portalEv);e.quoteApproved=true;if(!e.contractNo)e.contractNo=nextContract();e.contract='sent';e.contractSentDays=0;e.status='contract';log(e,'הלקוח אישר את ההצעה באזור האישי; חוזה נוצר ונשלח');S.ptab='contract';render();toast('אוטומציה: ההצעה אושרה, החוזה נוצר עם מספר '+e.contractNo+' ונשלח לחתימה')},
+ approveQuote:()=>{const e=ev(S.portalEv);e.quoteApproved=true;e.quoteApprovedAt=new Date().toISOString().slice(0,10);log(e,'הלקוח אישר את הצעת המחיר באזור האישי');S.ptab='contract';render();toast(PF[S.plang||e.lang].approvedT)},
  sigClear:()=>initSig(),
- sign:()=>{const e=ev(S.portalEv);if(!S.sig){toast(T[S.plang||e.lang].p.sign_here);return}e.sigImg=$('#sig').toDataURL();e.contract='signed';e.signedAt=new Date().toLocaleDateString('he-IL');e.quoteApproved=true;if(!e.contractNo)e.contractNo=nextContract();e.status='deposit';e.contractSentDays=e.contractSentDays??0;log(e,'החוזה נחתם דיגיטלית');S.ptab='pay';render();toast('אוטומציה: החוזה נחתם, נשלחה בקשת מקדמה ופרטי חשבון, הסטטוס עבר ל"מקדמה"')},
- cardDemo:()=>{const e=ev(S.portalEv);if(!e.pay.deposit.received){e.pay.deposit={received:true,method:'אשראי',date:'2026-11-22',receipt:'pending',ref:'אישור תשלום אשראי.pdf'};e.status='booked';log(e,'מקדמה שולמה באשראי');render();toast('בהדגמה: המקדמה "שולמה", האירוע סגור, ונוצרה משימה להפקת קבלה')}else toast('המקדמה כבר שולמה')},
+ sign:()=>{const e=ev(S.portalEv);if(!S.sig){toast(T[S.plang||e.lang].p.sign_here);return}e.sigImg=$('#sig').toDataURL('image/png');e.contract='signed';e.signedAt=new Date().toLocaleDateString('he-IL');e.quoteApproved=true;if(stIdx(e)<4)e.status='deposit';e.contractSentDays=e.contractSentDays??0;log(e,'טופס ההזמנה נחתם דיגיטלית באזור האישי');S.ptab='pay';render();toast(PF[S.plang||e.lang].signedT)},
  pickSong:t=>{const i=+t.dataset.i;const lang=S.plang||ev(S.portalEv).lang;const p=T[lang].p;openModal(`<div class="row" style="margin-bottom:10px"><h2 class="sp" style="font-size:24px">${esc(p.add_s)}</h2><button class="btn sm" type="button" data-act="closeModal">${esc(p.close)}</button></div><input class="inp" id="pk" placeholder="${esc(p.search)}" style="width:100%;margin-bottom:10px;border:1px solid var(--line);border-radius:10px;padding:10px;background:var(--panel)"><div id="pklist" class="songs" style="grid-template-columns:minmax(0,1fr)">${pickList('',i,p)}</div><div class="hr"></div><div class="row"><input class="inp" id="free" placeholder="${esc(p.free)}" style="flex:1;border:1px solid var(--line);border-radius:10px;padding:10px;background:var(--panel)"><button class="btn pri" type="button" data-act="addFree" data-i="${i}">${esc(p.pick)}</button></div>`);$('#mbox').dataset.i=i;$('#pk').focus()},
  choose:t=>{const e=ev(S.portalEv);e.songs[+t.dataset.i].list.push(t.dataset.s);closeModal();render()},
  addFree:t=>{const v=$('#free').value.trim();if(!v)return;ev(S.portalEv).songs[+t.dataset.i].list.push(v);closeModal();render()},
@@ -1667,6 +1657,12 @@ const ACT={
  producerLead:()=>{const th=INBOX.find(x=>x.id===S.thread);const src=EVENTS.find(e=>e.producer===th.producer);const e=newEvent({client:th.producer,producer:th.producer,ctype:'producer',source:'producer',phone:src.phone,email:src.email,date:'2027-03-03',hours:'חופה 19:30',venue:'גני התערוכה',city:'תל אביב',status:'checking',notes:th.msgs[0].t});log(e,'פנייה חדשה על כרטיס המפיק');S.ev=e.id;S.evTab='path';render();toast('פנייה נפתחה על כרטיס '+th.producer+' עם כל פרטי המפיק')},
  prodNew:t=>{const p=t.dataset.p;const src=EVENTS.find(e=>e.producer===p);const e=newEvent({client:p,producer:p,ctype:'producer',source:'producer',phone:src.phone,email:src.email,status:'checking'});log(e,'פנייה חדשה על כרטיס המפיק');S.ev=e.id;S.evTab='path';render()},
  back:()=>{S.ev=null;render()},
+ docFull:t=>{const e=ev(S.portalEv);const w=window.open('','_blank');if(!w)return;w.document.open();w.document.write(docHtml(e,t.dataset.k).replace('</body>','<div class="noprint" style="position:fixed;top:10px;left:50%;transform:translateX(-50%);z-index:9"><button onclick="print()" style="background:#2b211c;color:#f5f0e8;border:0;border-radius:999px;padding:10px 22px;font-size:15px;cursor:pointer">PDF</button></div><style>@media print{.noprint{display:none!important}}</style></body>'));w.document.close()},
+ sharePortal:()=>{const e=ev(S.ev);if(!window.__portalUrl){toast('הקישור יעבוד רק במערכת החיה');return}
+  if(!e.portalToken){const A='abcdefghijkmnopqrstuvwxyzABCDEFGHJKLMNPQRSTUVWXYZ23456789';const r=crypto.getRandomValues(new Uint8Array(24));e.portalToken=[...r].map(x=>A[x%A.length]).join('');log(e,'נוצר קישור לאזור האישי')}
+  const url=window.__portalUrl(e.portalToken);const he=(e.lang||'he')==='he';
+  const txt=he?`שלום ${e.couple||e.client},\nזה הקישור לאזור האישי שלכם, שם אפשר לראות את הצעת המחיר, לחתום על טופס ההזמנה, לעקוב אחרי התשלומים ולבחור שירים:\n${url}\n\nמנהל האמן`:`Hello ${e.couple||e.client},\nHere is the link to your personal area, where you can view the quotation, sign the agreement, follow payments and choose songs:\n${url}\n\nArtist Manager`;
+  render();openModal(`<h2 style="font-size:24px;margin-bottom:10px">קישור לאזור האישי</h2><p class="muted" style="font-size:14px;margin-top:0">כל מי שמחזיק בקישור רואה את האזור האישי של הלקוח הזה בלבד.</p><input class="inp" readonly value="${esc(url)}" dir="ltr" onclick="this.select()"><div class="bub out" style="max-width:100%;white-space:pre-wrap;margin-top:12px">${esc(txt)}</div><div class="row" style="margin-top:12px;gap:8px;flex-wrap:wrap">${e.phone?`<a class="btn wa" target="_blank" rel="noopener" href="${waLink(e.phone,txt)}">וואטסאפ</a>`:''}<a class="btn" target="_blank" rel="noopener" href="https://mail.google.com/mail/?authuser=yossiazulaysales@gmail.com&view=cm&fs=1&to=${encodeURIComponent(e.email||'')}&su=${encodeURIComponent(he?'האזור האישי שלכם – יוסי אזולאי':'Your personal area – Yossi Azulay')}&body=${encodeURIComponent(txt)}">Gmail</a><button class="btn" type="button" onclick="navigator.clipboard.writeText('${url}');this.textContent='הועתק ✓'">העתקת הקישור</button><button class="btn" type="button" data-act="closeModal">סגירה</button></div>`)},
  openPortal:()=>{S.portalEv=S.ev;S.plang=null;S.ptab='quote';go('portal')},
  openPortalSongs:()=>{S.portalEv=S.ev;S.plang=null;S.ptab='songs';go('portal')},
  previewQuote:()=>{S.portalEv=S.ev;S.plang=null;S.ptab='quote';go('portal')},
@@ -1731,6 +1727,7 @@ document.addEventListener('input',e=>{
  const t=e.target;
  if(t.id==='evsearch'){S.filter=t.value;const pos=t.selectionStart;render();const n=$('#evsearch');n.focus();n.setSelectionRange(pos,pos);return}
  if(t.id==='songsearch'){const f=t.value.toLowerCase();$('#songgrid').innerHTML=songCards(SONGS.filter(s=>s.t.toLowerCase().includes(f)||s.tag.includes(f)));return}
+ if(t.dataset.set!==undefined){SET()[t.dataset.set]=t.value.trim();window.__settingsSaved=false;window.__saveSettings&&window.__saveSettings();return}
  if(t.id==='pk'){const lang=S.plang||ev(S.portalEv).lang;$('#pklist').innerHTML=pickList(t.value.toLowerCase(),+$('#mbox').dataset.i,T[lang].p);return}
  if(t.dataset.mname!==undefined){const m=ev(S.portalEv).songs[+t.dataset.mname];const lang=S.plang||ev(S.portalEv).lang;m.m=Object.assign({},m.m,{[lang]:t.value});if(lang==='he')m.m.he=t.value;return}
  if(t.dataset.mnote!==undefined){ev(S.portalEv).songs[+t.dataset.mnote].note=t.value;return}
@@ -1747,7 +1744,10 @@ document.addEventListener('change',e=>{
  if(t.dataset.cf!==undefined){S.cf=t.value;render();return}
  if(t.dataset.chk!==undefined){const x=ev(t.dataset.id);x[t.dataset.chk]=t.checked;log(x,(t.checked?'סומן: ':'בוטל: ')+t.dataset.chk);render();return}
  if(t.dataset.sb!==undefined){const x=ev(S.ev);x.soundBy=t.value;render();return}
- if(t.dataset.ref!==undefined){const x=ev(S.portalEv);if(t.files[0]){x.pay[t.dataset.ref].ref=t.files[0].name;log(x,'הלקוח העלה אסמכתה: '+t.files[0].name);render();toast(PF[S.plang||x.lang].refOk)}return}
+ if(t.id==='admUp'&&t.files[0]&&window.__upload){const x=ev(S.ev);const k=($('#admUpK')||{}).value||'other';toast('מעלה…');window.__upload(t.files[0],k,x.id).then(r=>{log(x,'הועלה קובץ: '+r.name);render();toast('הקובץ נשמר בתיקיית הלקוח')}).catch(err=>toast('ההעלאה נכשלה: '+(err.message||err)));return}
+ if(t.dataset.ref!==undefined){const x=ev(S.portalEv);const f=t.files[0];const k=t.dataset.ref;const PL=PF[S.plang||x.lang];if(!f)return;
+  if(window.__upload){toast(PL.uploading);window.__upload(f,'ref',x.id).then(r=>{x.pay[k].ref=r.name;x.pay[k].refUrl=r.url;log(x,'הלקוח העלה אסמכתה: '+r.name);render();toast(PL.refOk)}).catch(err=>toast(PL.upFail+' '+(err.message||err)))}
+  else{x.pay[k].ref=f.name;log(x,'אסמכתה: '+f.name+' (הקובץ עצמו נשלח בנפרד)');render();toast(PL.refOk)}return}
  if(t.id==='pev'){S.portalEv=t.value;S.plang=null;S.ptab='quote';render();return}
  if(t.dataset.auto!==undefined){AUTOS[+t.dataset.auto].on=t.checked;toast(t.checked?'האוטומציה הופעלה':'האוטומציה כובתה');return}
  if(t.dataset.pf!==undefined){S.payFilter=t.value;render();return}
@@ -1808,7 +1808,29 @@ function fromStore(o){
 }
 
 /* ---------- saving: any change to an event is written to Firestore ---------- */
-const lastSaved = {};
+const lastSaved = {}, lastPortal = {};
+/* ---------- client portal: what the client may see ---------- */
+const SAFE = ['id','status','client','couple','producer','ctype','etype','date','venue','city','country','lang','phone','email','quoteNo','quoteDate','contractNo','contractDate',
+  'doc','quote','quoteApproved','quoteApprovedAt','contract','sigImg','signedAt','eventForm','songs','songsFinal','soundBy','hours'];
+function clientSafe(e){
+  const o = {}; for (const k of SAFE) if (e[k] !== undefined) o[k] = e[k];
+  o.pay = {}; for (const k of ['deposit','balance','flights']) { const x = (e.pay||{})[k]||{}; o.pay[k] = {received: !!x.received, ref: x.ref||'', refUrl: x.refUrl||''}; }
+  return JSON.parse(JSON.stringify(o));
+}
+function publicSettings(){ const S = window.SETTINGS||{}; const o = {}; for (const k of ['accountName','bankName','bankBranch','bankAccount','iban','swift','payLink','uploadUrl']) if (S[k]) o[k] = S[k]; return o; }
+window.__portalUrl = t => new URL('portal.html#' + t, location.href).href;
+/* ---------- client answers from the portal -> the event ---------- */
+function applyResp(e, r){
+  let ch = [];
+  if (r.quoteApproved && !e.quoteApproved) { e.quoteApproved = true; e.quoteApprovedAt = r.quoteApprovedAt || ''; ch.push('הלקוח אישר את הצעת המחיר'); }
+  if (r.signed && e.contract !== 'signed' && e.contractNo) { e.contract = 'signed'; e.sigImg = r.sigImg || ''; e.signedAt = r.signedAt || ''; if (['lead','checking','quote','contract'].includes(e.status)) e.status = 'deposit'; ch.push('הלקוח חתם על טופס ההזמנה'); }
+  if (r.eventForm && r.eventForm.ok && JSON.stringify(r.eventForm) !== JSON.stringify(e.eventForm||null)) { e.eventForm = r.eventForm; ch.push('הלקוח מילא את טופס האירוע'); }
+  if (r.songs && JSON.stringify(r.songs) !== JSON.stringify(e.songs||null)) { e.songs = r.songs; ch.push('הלקוח עדכן שירים'); }
+  if (r.songsFinal && !e.songsFinal) { e.songsFinal = true; ch.push('הלקוח שמר רשימת שירים סופית'); }
+  for (const k of ['deposit','balance','flights']) { const x = (r.refs||{})[k]; if (x && x.name && e.pay[k] && !e.pay[k].ref) { e.pay[k].ref = x.name; e.pay[k].refUrl = x.url||''; ch.push('הלקוח העלה אסמכתה (' + ({deposit:'מקדמה',balance:'יתרה',flights:'טיסות'})[k] + ')'); } }
+  ch.forEach(t => C.log(e, t + ' (אזור אישי)'));
+  return ch;
+}
 let saveTimer = null, saving = false, started = false;
 async function saveAll(){
   if (!started || saving) return;
@@ -1821,6 +1843,13 @@ async function saveAll(){
       await setDoc(doc(db, 'events', e.id), {
         data: j, client: o.client || '', status: o.status || '', date: o.date || '', updatedAt: serverTimestamp()
       });
+    }
+    for (const e of C.EVENTS) {
+      if (!e.portalToken) continue;
+      const pj = JSON.stringify({d: clientSafe(e), s: publicSettings()});
+      if (lastPortal[e.id] === pj) continue;
+      lastPortal[e.id] = pj;
+      await setDoc(doc(db, 'portal', e.portalToken), {eventId: e.id, data: JSON.stringify(clientSafe(e)), settings: publicSettings(), updatedAt: serverTimestamp()}, {merge: true});
     }
   } catch (err) {
     console.error(err); C.toast('שמירה נכשלה: ' + (err.code || err.message) + ' · בדקו חיבור לאינטרנט');
@@ -1858,6 +1887,21 @@ async function claimLead(id, l){
   C.toast('פנייה חדשה מהאתר: ' + (l.name || ''));
 }
 
+/* ---------- settings ---------- */
+let setTimer = null;
+window.__saveSettings = () => { clearTimeout(setTimer); setTimer = setTimeout(async () => {
+  try { await setDoc(doc(db, 'settings', 'main'), Object.assign({}, window.SETTINGS, {updatedAt: serverTimestamp()})); window.__settingsSaved = true;
+    for (const k in lastPortal) delete lastPortal[k]; scheduleSave(); }
+  catch (err) { C.toast('שמירת ההגדרות נכשלה: ' + (err.code || err.message)); } }, 800); };
+/* ---------- file upload through the automation engine ---------- */
+const b64 = f => new Promise((ok, no) => { const r = new FileReader(); r.onload = () => ok(String(r.result).split(',')[1]); r.onerror = no; r.readAsDataURL(f); });
+window.__upload = async (file, kind, eventId) => {
+  const url = (window.SETTINGS||{}).uploadUrl; if (!url) throw new Error('המנוע עוד לא מחובר');
+  if (file.size > 15*1024*1024) throw new Error('הקובץ גדול מ-15MB');
+  const idToken = await auth.currentUser.getIdToken();
+  const res = await fetch(url, {method: 'POST', headers: {'Content-Type': 'text/plain;charset=utf-8'}, body: JSON.stringify({auth: {idToken}, eventId, kind, name: file.name, mime: file.type, data: await b64(file)})});
+  const j = await res.json(); if (!j.ok) throw new Error(j.error || 'שגיאה'); return j.file;
+};
 /* ---------- login gate ---------- */
 function showGate(msg){
   gate.innerHTML = `<div class="gbox"><img src="logo-mark.png" alt=""><h2>מערכת ניהול</h2><p>כניסה עם חשבון הגוגל של יוסי</p>
@@ -1894,6 +1938,14 @@ onAuthStateChanged(auth, user => {
     if (first) { first = false; started = true; gate.innerHTML = ''; C.fromHash(); }
     else origRender();
   }, err => showGate('שגיאה בטעינת הנתונים: ' + (err.code || err.message)));
+  onSnapshot(doc(db, 'settings', 'main'), d => { if (d.metadata.hasPendingWrites) return; Object.assign(window.SETTINGS, d.data()||{}); if (started && !(C.S.view==='admin' && C.S.admin==='settings')) origRender(); });
+  onSnapshot(collection(db, 'engine'), snap => { window.ENGINE = window.ENGINE || {}; snap.forEach(d => window.ENGINE[d.id] = d.data()); if (started) origRender(); }, () => {});
+  onSnapshot(collection(db, 'portal'), snap => {
+    let any = [];
+    snap.forEach(d => { const x = d.data(); if (!x.resp || !x.eventId) return; const e = C.EVENTS.find(v => v.id === x.eventId); if (!e) return;
+      const sig = JSON.stringify(x.resp); if (e.portalSeen === sig) return; e.portalSeen = sig; any = any.concat(applyResp(e, x.resp).map(t => e.client + ': ' + t)); });
+    if (any.length) { origRender(); saveAll(); C.toast(any[0] + (any.length > 1 ? ' (+' + (any.length-1) + ')' : '')); }
+  }, () => {});
   unsubL = onSnapshot(query(collection(db, 'leads'), where('status', '==', 'new')), snap => {
     snap.docs.forEach(d => claimLead(d.id, d.data()).catch(err => console.error('lead', err)));
   });
