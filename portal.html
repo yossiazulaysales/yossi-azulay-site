@@ -640,7 +640,24 @@ function newEventRaw(){return {contractNo:'',quoteNo:'',client:'',couple:'',ctyp
 function pay(o={}){return Object.assign({deposit:{received:false,method:'',date:'',receipt:null},balance:{received:false,method:'',date:'',receipt:null},flights:{received:false,method:'',date:'',receipt:null}},o)}
 
 const EVENTS = [];
-const INBOX = [];
+const INBOX_DEMO = true; // הדמיה: עד שיחוברו וואטסאפ ואינסטגרם דרך Meta
+const INBOX = [
+ {id:'t1',ch:'whatsapp',name:'שירן כהן',lang:'he',msgs:[
+  {d:'in',t:'היי, ראינו את יוסי בחתונה של חברים ביוני והתאהבנו 😍 אנחנו מתחתנים ב-14.5.27 באחוזת שרונה. הוא פנוי?',at:'09:12'},
+  {d:'out',t:'שלום! תודה שפנית ליוסי אזולאי 🎶 כדי שנבדוק זמינות ונכין הצעה, נשמח שתמלא/י את הטופס הקצר: yossi-azulay.com/he/form',at:'09:12',auto:true},
+  {d:'in',t:'מילאתי! יש אפשרות גם לכנר?',at:'09:40'}]},
+ {id:'t2',ch:'instagram',name:'Léa & Jonathan',lang:'fr',msgs:[
+  {d:'in',t:'Bonjour ! Nous nous marions à Paris le 3 septembre 2027. Est-ce que Yossi chante à l’étranger ?',at:'אתמול 21:05'},
+  {d:'out',t:'Bonjour ! Merci d’avoir contacté Yossi Azulay 🎶 Pour vérifier la disponibilité et préparer un devis, merci de remplir ce court formulaire : yossi-azulay.com/fr/form',at:'אתמול 21:05',auto:true}]},
+ {id:'t3',ch:'email',name:'Rachel Goldberg',lang:'en',msgs:[
+  {d:'in',t:'Hi, we are planning our son’s Bar Mitzvah at the Kotel on March 2027 (tefillin). Could you send availability and prices? Thanks, Rachel',at:'אתמול 14:30'}]},
+ {id:'t4',ch:'whatsapp',name:'אבי – הפקות אור',lang:'he',producer:'אבי – הפקות אור',msgs:[
+  {d:'in',t:'יוסי אחי, יש לי חתונה ב-22.4.27 בגני התערוכה, חופה + כניסה. תשריין לי?',at:'שלשום 18:20'},
+  {d:'out',t:'היי אבי, בודק זמינות וחוזר אליך היום 🙏',at:'שלשום 18:45'}]},
+ {id:'t5',ch:'instagram',name:'מורן ודניאל',lang:'he',msgs:[
+  {d:'in',t:'כמה עולה כניסה לחופה עם מקהלת ילדים?',at:'לפני 3 ימים'},
+  {d:'out',t:'שלום! תודה שפנית ליוסי אזולאי 🎶 כדי שנבדוק זמינות ונכין הצעה, נשמח שתמלא/י את הטופס הקצר: yossi-azulay.com/he/form',at:'לפני 3 ימים',auto:true}]}
+];
 const AUTOS = [
  {g:'פנייה',on:true,w:'הודעה נכנסת בוואטסאפ, אינסטגרם או מייל',a:'תשובה בשפת הפונה עם קישור לטופס הפנייה (לקוח או מפיק)'},
  {g:'פנייה',on:true,w:'טופס פנייה מולא',a:'הלקוח מקבל מייל תודה עם סרטונים; אתה מקבל מייל "פנייה חדשה"; נפתח כרטיס עם מספר לקוח ואירוע "אופציה" ביומן גוגל'},
@@ -1361,13 +1378,13 @@ function aClients(){
 }
 const lostBtns=e=>stIdx(e)>=0&&stIdx(e)<5?`<button class="btn sm" type="button" data-act="lost" data-id="${e.id}">${e.ctype==='producer'?'לא רלוונטי':'לא סגר'}</button><button class="btn sm" type="button" data-act="taken" data-id="${e.id}">תאריך תפוס</button>`:'';
 const NAV_ALL=[['dash','לוח בקרה',IC.dash],['inbox','פניות נכנסות',IC.inbox],['board','לוח פניות',IC.board],['events','כל האירועים',IC.list],['cal','יומן',IC.cal],['money','תשלומים וקבלות',IC.money],['clients','לקוחות ומפיקים',IC.people],['songs','ספריית שירים',IC.music],['templates','תבניות הודעות',IC.inbox],['auto','אוטומציות',IC.bolt],['settings','הגדרות',IC.gear]];
-const NAV=NAV_ALL.filter(n=>!['inbox','auto'].includes(n[0]));
+const NAV=NAV_ALL.filter(n=>!['auto'].includes(n[0]));
 function adminView(){
  document.documentElement.lang='he';document.documentElement.dir='rtl';
  const pend=EVENTS.reduce((n,e)=>n+['deposit','balance','flights'].filter(k=>e.pay[k].received&&e.pay[k].receipt==='pending').length,0);
  const badges={inbox:INBOX.filter(t=>t.msgs[t.msgs.length-1].d==='in').length,money:pend,board:EVENTS.filter(e=>e.status==='lead').length,dash:dueTasks().length};
  let main='';
- if(['inbox','auto'].includes(S.admin))S.admin='dash';
+ if(['auto'].includes(S.admin))S.admin='dash';
  if(S.ev)main=evDetail(ev(S.ev));
  else main=({dash:aDash,inbox:aInbox,board:aBoard,events:aEvents,cal:aCal,money:aMoney,clients:aClients,songs:aSongs,templates:aTemplates,auto:aAuto,settings:aSettings})[S.admin]();
  return `<div class="admin"><aside class="rail"><div class="logo"><img src="logo-full-dark.png" alt="Yossi Azulay" style="width:150px;height:auto;display:block"><small style="margin-top:8px">מערכת ניהול</small></div>
@@ -1394,12 +1411,12 @@ function aDash(){
 }
 function aInbox(){
  const th=INBOX.find(x=>x.id===S.thread)||INBOX[0];
- return `<div class="mhead"><h1>פניות נכנסות</h1><span class="muted">וואטסאפ · אינסטגרם · מייל · טופס האתר, במקום אחד</span></div>
- <div class="chat"><div class="threads">${INBOX.map(x=>`<button type="button" class="thread" data-thread="${x.id}" aria-current="${x.id===th.id}">${chIcon(x.ch)}<span style="flex:1"><b>${esc(x.name)}</b>${x.producer?' <span class="tag" style="background:#fff3cf;color:#8a6200">מפיק</span>':''}<small>${esc(x.msgs[x.msgs.length-1].t)}</small></span></button>`).join('')}</div>
+ return `<div class="mhead"><h1>פניות נכנסות</h1><span class="muted">וואטסאפ · אינסטגרם · מייל · טופס האתר, במקום אחד</span></div>${INBOX_DEMO?`<div class="card" style="margin-bottom:12px;border:1px dashed #c9a227;background:#fff8e1;color:#5c4400"><b>הדמיה</b> · ההודעות כאן לדוגמה בלבד. אחרי החיבור לוואטסאפ ולאינסטגרם יופיעו כאן ההודעות האמיתיות, והכפתורים יפתחו כרטיס לקוח אמיתי.</div>`:''}
+ <div class="chat"><div class="threads">${INBOX.map(x=>`<button type="button" class="thread" data-thread="${x.id}" aria-current="${x.id===th.id}">${chIcon(x.ch)}<span style="flex:1"><b>${esc(x.name)}</b>${x.producer?' <span class="tag" style="background:#fff3cf;color:#8a6200">מפיק</span>':''}<small dir="auto" style="text-align:start">${esc(x.msgs[x.msgs.length-1].t)}</small></span></button>`).join('')}</div>
  <div class="conv"><div class="row" style="padding:12px;border-bottom:1px solid var(--line)">${chIcon(th.ch).replace('<svg','<svg width="22" height="22"')}<b>${esc(th.name)}</b><span class="tag" style="background:var(--soft)">שפה: ${({he:'עברית',en:'אנגלית',fr:'צרפתית',es:'ספרדית'})[th.lang]}</span></div>
- <div class="msgs">${th.msgs.map(m=>`<div class="bub ${m.d}${m.auto?' auto':''}">${esc(m.t)}<small>${m.auto?'אוטומטי · ':''}${esc(m.at)}</small></div>`).join('')}</div>
+ <div class="msgs">${th.msgs.map(m=>`<div dir="auto" class="bub ${m.d}${m.auto?' auto':''}">${esc(m.t)}<small>${m.auto?'אוטומטי · ':''}${esc(m.at)}</small></div>`).join('')}</div>
  <div class="convbar">${th.producer?`<button class="btn pri" type="button" data-act="producerLead">＋ פנייה חדשה על כרטיס ${esc(th.producer)}</button>`:`<button class="btn wa" type="button" data-act="sendForm">שליחת טופס פרטים (${({he:'עברית',en:'English',fr:'Français',es:'Español'})[th.lang]})</button><button class="btn pri" type="button" data-act="threadLead">＋ יצירת פנייה</button>`}</div></div></div>
- <p class="muted" style="font-size:14px">בגרסה האמיתית: חיבור ל-WhatsApp Business ולאינסטגרם, והתשובה הראשונה יוצאת אוטומטית.</p>`;
+ <p class="muted" style="font-size:14px">בגרסה האמיתית: חיבור ל-WhatsApp Business ולאינסטגרם, והתשובה הראשונה יוצאת אוטומטית בשפת הפונה.</p>`;
 }
 function aEvents(){
  const f=S.filter.toLowerCase();
@@ -1672,9 +1689,9 @@ const ACT={
  mAdd:t=>{const lang=S.plang||ev(S.portalEv).lang;const k=+t.dataset.k;const name=k<0?T[lang].p.add_m:EXTRA_MOMENTS[lang][k];ev(S.portalEv).songs.push({m:{[lang]:name,he:name},list:[],note:''});render()},
  saveSongs:()=>{const e=ev(S.portalEv);e.songsFinal=true;log(e,'הלקוח שמר רשימת שירים סופית');render();toast(T[S.plang||e.lang].p.saved)},
  newLead:()=>{const e=newEvent({client:'פנייה חדשה',source:'phone'});log(e,'נפתחה ידנית');S.ev=e.id;S.evTab='path';render()},
- sendForm:()=>{const th=INBOX.find(x=>x.id===S.thread);th.msgs.push({d:'out',t:formText[th.lang],at:'עכשיו',auto:true});render();toast('הטופס נשלח בשפת הפונה. כשימולא, תיפתח פנייה לבד')},
- threadLead:()=>{const th=INBOX.find(x=>x.id===S.thread);const e=newEvent({client:th.name,source:th.ch,lang:th.lang,ctype:th.lang==='he'?'private':'abroad',quote:q('chuppah',th.lang==='he'?{}:{cur:'EUR',abroad:true,soundPrice:0}),notes:th.msgs[0].t,country:th.lang==='he'?'ישראל':''});log(e,'נוצרה מהודעה ב'+SRC[th.ch]);S.ev=e.id;S.evTab='path';render();toast('נפתחה פנייה ונוצר אירוע "אופציה" ביומן גוגל')},
- producerLead:()=>{const th=INBOX.find(x=>x.id===S.thread);const src=EVENTS.find(e=>e.producer===th.producer);const e=newEvent({client:th.producer,producer:th.producer,ctype:'producer',source:'producer',phone:src.phone,email:src.email,date:'2027-03-03',hours:'חופה 19:30',venue:'גני התערוכה',city:'תל אביב',status:'checking',notes:th.msgs[0].t});log(e,'פנייה חדשה על כרטיס המפיק');S.ev=e.id;S.evTab='path';render();toast('פנייה נפתחה על כרטיס '+th.producer+' עם כל פרטי המפיק')},
+ sendForm:()=>{const th=INBOX.find(x=>x.id===S.thread)||INBOX[0];th.msgs.push({d:'out',t:formText[th.lang],at:'עכשיו',auto:true});render();toast('הטופס נשלח בשפת הפונה. כשימולא, תיפתח פנייה לבד')},
+ threadLead:()=>{if(INBOX_DEMO){toast('הדמיה: אחרי החיבור, הכפתור הזה יפתח כרטיס לקוח עם כל פרטי השיחה');return}const th=INBOX.find(x=>x.id===S.thread);const e=newEvent({client:th.name,source:th.ch,lang:th.lang,ctype:th.lang==='he'?'private':'abroad',quote:q('chuppah',th.lang==='he'?{}:{cur:'EUR',abroad:true,soundPrice:0}),notes:th.msgs[0].t,country:th.lang==='he'?'ישראל':''});log(e,'נוצרה מהודעה ב'+SRC[th.ch]);S.ev=e.id;S.evTab='path';render();toast('נפתחה פנייה ונוצר אירוע "אופציה" ביומן גוגל')},
+ producerLead:()=>{if(INBOX_DEMO){toast('הדמיה: אחרי החיבור, הכפתור הזה יפתח פנייה חדשה על כרטיס המפיק');return}const th=INBOX.find(x=>x.id===S.thread);const src=EVENTS.find(e=>e.producer===th.producer);const e=newEvent({client:th.producer,producer:th.producer,ctype:'producer',source:'producer',phone:src.phone,email:src.email,date:'2027-03-03',hours:'חופה 19:30',venue:'גני התערוכה',city:'תל אביב',status:'checking',notes:th.msgs[0].t});log(e,'פנייה חדשה על כרטיס המפיק');S.ev=e.id;S.evTab='path';render();toast('פנייה נפתחה על כרטיס '+th.producer+' עם כל פרטי המפיק')},
  prodNew:t=>{const p=t.dataset.p;const src=EVENTS.find(e=>e.producer===p);const e=newEvent({client:p,producer:p,ctype:'producer',source:'producer',phone:src.phone,email:src.email,status:'checking'});log(e,'פנייה חדשה על כרטיס המפיק');S.ev=e.id;S.evTab='path';render()},
  back:()=>{S.ev=null;render()},
  docFull:t=>{const e=ev(S.portalEv);const w=window.open('','_blank');if(!w)return;w.document.open();w.document.write(docHtml(e,t.dataset.k).replace('</body>','<div class="noprint" style="position:fixed;top:10px;left:50%;transform:translateX(-50%);z-index:9"><button onclick="print()" style="background:#2b211c;color:#f5f0e8;border:0;border-radius:999px;padding:10px 22px;font-size:15px;cursor:pointer">PDF</button></div><style>@media print{.noprint{display:none!important}}</style></body>'));w.document.close()},
