@@ -637,15 +637,20 @@ table.t tr.click:hover td{background:var(--soft)}
 .brand:hover .lwrap::after,.brand:hover .wm{animation-duration:1.4s;animation-delay:0s}
 @media (prefers-reduced-motion:reduce){.hero.intro .hwin .hdoor{display:none!important}.brand .lwrap::after,.brand .wm,.hnav a,.snav a{animation:none!important}}
 
-/* gallery: Yossi sitting on the windowsill, legs over the sill */
-.gwin{height:auto;width:100%;max-width:380px;aspect-ratio:4/5.2;margin:0 auto clamp(48px,6vw,72px)}
+/* gallery: chuppah photo in the window */
+.gwin{height:auto;width:100%;max-width:380px;aspect-ratio:4/5.2;margin:0 auto clamp(36px,5vw,56px)}
 .gwin::before{display:none}
-.gwin .reveal{position:relative}
-.gwin .hpane{background:linear-gradient(180deg,#b5a08b 0%,#ae9984 55%,#a48e78 82%,#9a836d 100%)}
-.gwin .hpane .person,.gwin .hlegs .person{position:absolute;top:0;left:1.8%;width:90.9%!important;height:auto!important;object-fit:contain!important;margin-top:8.5%;max-width:none;transform:none!important;animation:none!important}
-.gwin .hlegs{position:absolute;left:9px;right:9px;top:9px;bottom:0;z-index:6;pointer-events:none}
-.gwin .hlegs .person{-webkit-mask:linear-gradient(180deg,transparent 72.5%,#000 74.5%);mask:linear-gradient(180deg,transparent 72.5%,#000 74.5%);filter:drop-shadow(0 14px 10px rgba(35,24,18,.38)) drop-shadow(0 3px 2px rgba(35,24,18,.25))}
+.gwin .hpane img{object-position:62% 30%}
 @media (max-width:640px){.gwin{max-width:300px}}
+/* home: Yossi sitting on the windowsill, lower body over the sill */
+.swin .reveal{position:relative}
+.swin .hpane{background:linear-gradient(180deg,#b6a18c 0%,#b19c87 60%,#ad9883 100%)}
+.swin .hpane .person,.swin .hlegs .person{position:absolute;top:0;left:3%;width:90.9%!important;height:auto!important;object-fit:contain!important;margin-top:14%;max-width:none;transform:none!important;animation:none!important}
+.swin .hlegs{position:absolute;left:9px;right:9px;top:9px;bottom:0;z-index:6;pointer-events:none}
+.swin .hlegs .person{-webkit-mask:linear-gradient(180deg,transparent 72%,#000 74%);mask:linear-gradient(180deg,transparent 72%,#000 74%);filter:drop-shadow(0 5px 4px rgba(35,24,18,.22))}
+.hero.intro .swin .hlegs{animation:hUp .8s cubic-bezier(.2,.7,.2,1) 2.05s both}
+.hero .swin{margin-bottom:clamp(40px,6vw,64px)}
+
 </style>
 </head>
 <body>
@@ -1021,7 +1026,7 @@ function siteView(){
   <div class="htext"><h1 class="tagline">${lang==='he'?'קולה של הנשמה היהודית, ברחבי תבל':'<bdi dir="ltr">Jewish Singer, Worldwide</bdi>'}</h1><p class="sub">${esc(x.intro)}</p>
    <div class="facts">${x.facts.map(f=>`<div><b>${esc(f[0])}</b><span>${esc(f[1])}</span></div>`).join('')}</div>
    <a class="lnk cap" href="#site-videos" data-page="videos">${esc(x.gallery)} <span class="ar">${arrow}</span></a></div>
-  <figure class="hwin"><div class="reveal"><div class="hpane"><i class="hdoor l" aria-hidden="true"></i><i class="hdoor r" aria-hidden="true"></i><i class="hshine" aria-hidden="true"></i><img src="hero-yossi.jpg" alt="${lang==='he'?'יוסי אזולאי שר בחופה':'Yossi Azulay singing at a chuppah'}" width="880" height="1134"></div></div><div class="hsill"></div></figure></section>
+  <figure class="hwin swin"><div class="reveal"><div class="hpane"><i class="hdoor l" aria-hidden="true"></i><i class="hdoor r" aria-hidden="true"></i><i class="hshine" aria-hidden="true"></i><img class="person" src="yossi-cutout.webp" alt="${lang==='he'?'יוסי אזולאי':'Yossi Azulay'}" width="760" height="1153"></div><div class="hlegs" aria-hidden="true"><img class="person" src="yossi-cutout.webp" alt=""></div></div><div class="hsill"></div></figure></section>
   <div class="endcta"><span>${esc(x.endq)}</span><a class="btn-gold cap" href="#site-booking" data-page="booking">${esc(t.check)}</a></div>`;
  } else if(pg==='producer'){
   const P=PRD[lang];const prods=[...new Set(EVENTS.filter(e=>e.producer).map(e=>e.producer))];
@@ -1062,7 +1067,7 @@ function siteView(){
   const G=GL[lang];let pi=0;
   const tiles=GITEMS.map((it,i)=>it.v?`<button class="gt gv" type="button" data-act="galOpen" data-i="${i}" aria-label="${esc(it.v[lang])}"><img src="gallery/${it.p}" alt="" loading="lazy"><span class="gplay" aria-hidden="true"></span><span class="gcap">${esc(it.v[lang])}</span></button>`:`<button class="gt${it.tall?' gtall':''}" type="button" data-act="galOpen" data-i="${i}" aria-label="${esc(G.photo)} ${++pi}"><img src="gallery/${it.p}" alt="" loading="lazy"></button>`).join('');
   body=`<section class="page galp"><div class="inner">
-  <figure class="hwin gwin"><div class="reveal"><div class="hpane"><img class="person" src="yossi-cutout.webp" alt="${lang==='he'?'יוסי אזולאי':'Yossi Azulay'}" width="760" height="1153"></div><div class="hlegs" aria-hidden="true"><img class="person" src="yossi-cutout.webp" alt=""></div></div><div class="hsill"></div></figure>
+  <figure class="hwin gwin"><div class="reveal"><div class="hpane"><img src="hero-yossi.jpg" alt="${lang==='he'?'יוסי אזולאי שר בחופה':'Yossi Azulay singing at a chuppah'}" width="880" height="1134"></div></div><div class="hsill"></div></figure>
   <div class="ghead"><div><div class="no cap"><i></i>${esc(x.galleryN)}</div><h2>${esc(G.t)}</h2></div>
   <div class="gfil" role="tablist">${['all','vid','pic'].map(k=>`<button type="button" class="cap${GF===k?' on':''}" data-act="galF" data-k="${k}" role="tab" aria-selected="${GF===k}">${esc(G[k])}</button>`).join('')}</div></div>
   <div class="ggrid f-${GF}">${tiles}</div>
