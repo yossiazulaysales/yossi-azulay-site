@@ -747,6 +747,7 @@ es:{snd_t:'Sonido',snd_spec:'El cliente se compromete a proporcionar escenario y
 
 /* ================= STATE ================= */
 const S = {view:'site',page:'home',fstep:1,fdata:{},lang:'he',formDone:false,admin:'dash',ev:null,evTab:'details',portalEv:'E1',plang:null,ptab:'quote',thread:'T1',calY:2026,calM:11,filter:'',payFilter:'pending',sig:false};
+{const ql=new URLSearchParams(location.search).get('lang');if(['he','en','fr','es'].includes(ql))S.lang=ql}
 
 /* ================= HELPERS ================= */
 const $ = s=>document.querySelector(s);

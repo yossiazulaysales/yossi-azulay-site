@@ -1,0 +1,12 @@
+<!DOCTYPE html><html lang="he"><head><meta charset="utf-8"><meta name="robots" content="noindex"><title>Yossi Azulay</title>
+<script>
+(function(){
+  var p=location.pathname.replace(/\/+$/,'').toLowerCase(), m;
+  if((m=p.match(/^\/(he|en|fr|es)\/form$/))) return location.replace('/?lang='+m[1]+'#site-booking');
+  if(p==='/form'||p==='/booking') return location.replace('/#site-booking');
+  if(p==='/producer') return location.replace('/#site-booking');
+  if(p==='/music') return location.replace('/wmusic/');
+  if((m=location.pathname.match(/^\/p\/([A-Za-z0-9_-]+)$/))) return location.replace('/portal.html#'+m[1]);
+  location.replace('/');
+})();
+</script></head><body><a href="/">Yossi Azulay</a></body></html>

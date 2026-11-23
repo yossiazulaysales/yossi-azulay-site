@@ -1,0 +1,15 @@
+DNS of yossi-azulay.com at Wix before the switch to GitHub Pages (23.11.2026)
+To roll back to the old Wix site, restore these values in Wix > Domains > Manage DNS records.
+
+A     yossi-azulay.com        185.230.63.171
+A     yossi-azulay.com        185.230.63.186
+A     yossi-azulay.com        185.230.63.107
+CNAME m.yossi-azulay.com      www218.wixdns.net
+CNAME mail.yossi-azulay.com   mail2.zeweb.co.il   (email - do not touch)
+CNAME www.yossi-azulay.com    cdn3.wixdns.net
+MX    yossi-azulay.com        mail2.zeweb.co.il  priority 10   (email - do not touch)
+NS    ns4.wixdns.net, ns5.wixdns.net
+
+New values (GitHub Pages):
+A     yossi-azulay.com        185.199.108.153 / 185.199.109.153 / 185.199.110.153 / 185.199.111.153
+CNAME www.yossi-azulay.com    yossiazulaysales.github.io
