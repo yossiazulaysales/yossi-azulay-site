@@ -310,7 +310,7 @@ form.f{display:grid;gap:22px;color:#231812}
 .alb .cplay{position:absolute;bottom:14px;inset-inline-end:14px;width:36px!important;height:36px!important;border-radius:50%;border:1px solid #c9a46c;color:#e6cc9c;font-size:12px!important;display:grid;place-items:center}
 .alb b{font-family:"Cormorant Garamond","Frank Ruhl Libre",serif!important;font-weight:400!important;font-size:20px!important;line-height:1.3!important;color:#231812}
 .alb>span{font-size:14px!important;color:#7a6a5c!important;min-height:1.4em}
-.albmore{margin-top:40px}
+.albmore{margin-top:40px;display:flex;gap:18px 44px;flex-wrap:wrap}
 @media (max-width:1000px){.albums{grid-template-columns:repeat(3,minmax(0,1fr))!important}}
 @media (max-width:640px){.albums{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:26px 16px!important}}
 
@@ -1058,7 +1058,7 @@ function siteView(){
   body=`<section class="page"><div class="inner">
   <div class="no cap"><i></i>${esc(x.albums)}</div><h2>${esc(x.alb_t)}</h2>
   <div class="albums">${ALBUMS.map(a=>a.soon?`<div class="alb soon"><div class="cover"><img src="logo-mark-dark.png" alt="" width="420" height="308"><span class="cs">Coming soon</span></div><b>${esc(a[lang]||a.en)}</b><span>${esc(({he:'בקרוב',en:'Coming soon',fr:'Bientôt',es:'Próximamente'})[lang])}</span></div>`:`<a class="alb" href="${a.u}"><div class="cover"><img class="art" src="${a.c}" alt="${esc(a.en)}" width="720" height="720" loading="lazy"><span class="cplay" aria-hidden="true">▶</span></div><b>${esc(lang==='he'?a.he:a.en)}</b><span>${[a.y,a.note?(a.note[lang]||a.note.en):''].filter(Boolean).join(' · ')||'&nbsp;'}</span></a>`).join('')}</div>
-  <div class="albmore"><a class="lnk cap" href="https://open.spotify.com/artist/0ervBY5UeqTk1YOatn1Re7">${esc(x.spotify)} <span class="ar">${arrow}</span></a></div></div></div></section>`;
+  <div class="albmore"><a class="lnk cap" href="https://music.apple.com/il/artist/yossi-azulay/544512336">${esc(({he:'להאזנה ב-Apple Music',en:'Listen on Apple Music',fr:'Écouter sur Apple Music',es:'Escuchar en Apple Music'})[lang])} <span class="ar">${arrow}</span></a><a class="lnk cap" href="https://music.youtube.com/search?q=Yossi%20Azulay">${esc(({he:'להאזנה ב-YouTube Music',en:'Listen on YouTube Music',fr:'Écouter sur YouTube Music',es:'Escuchar en YouTube Music'})[lang])} <span class="ar">${arrow}</span></a></div></div></div></section>`;
  } else if(pg==='ceremonies'){
   body=`<section class="page dark"><div class="inner">
   <div class="cergrid"><div class="spot">${spotArt()}</div>
