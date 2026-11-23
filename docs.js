@@ -59,11 +59,22 @@ ul{margin:0 0 4mm;padding-inline-start:5mm}li{margin:0 0 .6mm}
 .t2{font-size:19pt;font-weight:400;margin:0 0 3mm;color:#2b211c}
 .sigs{position:absolute;bottom:0;left:0;right:0;display:flex;justify-content:space-between;gap:20mm;font-size:10pt;color:#6d4c3d}
 .sigs div{flex:1;border-top:.7pt solid #8f7b6d;padding-top:1.6mm;text-align:center}
+.white,.white .pg{background:#fff}
+.hdl{position:absolute;top:9mm;left:23mm;right:23mm;height:34mm}
+.hdl img{position:absolute;left:50%;top:0;transform:translateX(-50%);width:46mm}
+.hdl .mt2{position:absolute;right:0;top:2mm;font-size:8.6pt;line-height:1.6;color:#806b5e;text-align:right;direction:rtl}
+.body.bl{top:44mm}
+.white .ag{line-height:1.37}.white .ag li,.white .ag p{margin-bottom:1.5mm}
+.ag .fill{text-decoration:underline;text-underline-offset:2px}
+.fee b.fill{color:#8a6a4f;text-decoration:none}
 .box{border:.7pt solid #d8ccbe;padding:3mm 4mm;margin:0 0 3mm;background:#f8f4ee}
 </style>`;
 
 const shell=(lang,title,pages,fontCss)=>`<!DOCTYPE html><html lang="${lang}" dir="${lang==='he'?'rtl':'ltr'}"><head><meta charset="utf-8"><title>${esc(title)}</title>${CSS(lang,fontCss)}</head><body>${pages.join('')}</body></html>`;
 const page=(inner,n,N,right)=>`<section class="pg"><div class="hd"><span class="wm">YOSSI AZULAY</span><span class="hn">${right||''}</span></div><div class="body">${inner}</div><div class="ft"><span>YOSSI AZULAY MANAGEMENT &nbsp;/&nbsp; VAT NO. ${BIZ}</span><span>${n} &nbsp;/&nbsp; ${N}</span></div></section>`;
+
+const logoUrl=()=>{try{return new URL('doc-logo.png',location.href).href}catch(_){return 'doc-logo.png'}};
+const pageL=(inner,n,N,meta,logo)=>`<section class="pg"><div class="hdl"><img src="${esc(logo||logoUrl())}" alt="Yossi Azulay"><div class="mt2">${meta}</div></div><div class="body bl">${inner}</div><div class="ft"><span>YOSSI AZULAY MANAGEMENT &nbsp;/&nbsp; VAT NO. ${BIZ}</span><span>${n} &nbsp;/&nbsp; ${N}</span></div></section>`;
 
 /* ---------------- texts ---------------- */
 const ET={
@@ -124,9 +135,9 @@ function quote(d,fontCss){
 /* ---------------- agreement / order form ---------------- */
 function orderHe(d,fontCss){
  const fee=d.fee?num(d.fee):'';const dep=d.depositPct||25;
- const head=`<div class="meta"><div class="l">בס״ד<br><b>יוסי אזולאי</b> · עוסק מורשה ${BIZ}</div><div class="l" style="text-align:left">הזמנה <b>${esc(d.no||'')}</b><br>${esc(heLong(d.docDate))}</div></div>`;
- const right=`הזמנה ${esc(d.no||'')}`;
- const c1=`${head}<h2 class="t2">הסכם להזמנת הופעה – יוסי אזולאי</h2>
+ const dd=(d.docDate||todayIso()).split('-').reverse().join('.');
+ const meta=`בס״ד<br>יוסי אזולאי · עוסק מורשה ${BIZ}<br>הזמנה מס׳ ${esc(d.no||'')}<br>תאריך: ${dd}`;
+ const c1=`<h2 class="t2" style="text-align:center">הסכם להזמנת הופעה – יוסי אזולאי</h2>
  <div class="ag">
  <p>אני/אנו הח״מ המזמין: ${blank(d.client,60)} ת.ז / ח.פ: ${blank(d.idno,34)}</p>
  <p>רחוב ${blank(d.street,34)} מס׳ ${blank(d.house,10)} יישוב ${blank(d.city,28)} טל׳: ${blank(d.phone2,30)}</p>
@@ -138,7 +149,7 @@ function orderHe(d,fontCss){
  שעת התחלת האירוע: ${blank(d.startTime,16)} &nbsp; שעת המופע: ${blank(d.showTime,16)} &nbsp; שעת סיום: ${blank(d.endTime,16)}<br>
  <u>צוות:</u> ${blank(d.team,60)}<br>
  <u>הערות:</u> ${d.notes?`<b class="fill">${esc(d.notes)}</b>`:''}<br>
- <u><b>התמורה:</b></u> המזמין ישלם לאמן עבור ההופעה, בצירוף מע״מ כדין ובסה״כ סך של ${fee?`<b class="fill">${fee} ₪</b>`:blank('',26)}. (כשכר קבלן עצמאי המספק שירותי בידור).</div></li>
+ <u><b>התמורה:</b></u> המזמין ישלם לאמן עבור ההופעה, בצירוף מע״מ כדין ובסה״כ סך של ${fee?`<span class="fee" style="font-size:inherit;margin:0"><b class="fill">${fee}</b></span> ₪`:blank('',26)}. (כשכר קבלן עצמאי המספק שירותי בידור).</div></li>
  <li><i>2.</i><div><u><b>תנאי תשלום:</b></u> חתימת הסכם זה, תשלום ופירעון המקדמה מהווים תנאי לתוקפו של הסכם זה. ככל והמזמין לא חתם על ההסכם ו/או המקדמה לא תשולם ו/או לא תיפרע, במלואה ובמועדה, לא יהיה להסכם זה שום תוקף.</div></li>
  <li><i>2.1</i><div>המזמין ישלם לאמן <b>מקדמה</b> בשיעור <b>${dep}%</b> מהתמורה במועד חתימת הסכם זה.<br>המזמין ישלם לאמן את יתרת התמורה, כתנאי לקיום ההופעה, <b>עד 5 ימים לפני האירוע,</b> ככל שיתרת התמורה לא שולמה ו/או נפרעה במועדה, האמן יהיה רשאי שלא לקיים את ההופעה, מבלי לגרוע מחובת המזמין לשלם לאמן את מלוא סכום התמורה ולמזמין לא תהיה שום עילת תביעה נגד האמן בגין אי קיום ההופעה.</div></li>
  <li><i>3.</i><div>המזמין מתחייב בזאת לספק לאמן, לצורך ההופעה, תנאים נאותים ומתאימים, לרבות נקודות חשמל תקינות, ולהעמידם לרשות האמן עד ל- 3 שעות טרם מועד האירוע.</div></li>
@@ -147,9 +158,9 @@ function orderHe(d,fontCss){
  <li><i>6.</i><div><u><b>ביטול/שינוי מועד הופעה:</b></u> המזמין רשאי לבטל את תוקפו של הסכם זה, תוך 48 שעות ממועד חתימתו. במקרה כאמור, האמן יחזיר לידי המזמין את סכום המקדמה ששולם לידיו ונפרע, ככל ששולם ונפרע.</div></li>
  <li><i>6.1</i><div>ככל שהמזמין יבטל את הזמנת ההופעה עד ל- 30 ימים טרם מועד ההופעה המוזמן, ישלם המזמין לאמן פיצוי מוסכם וקבוע מראש, ללא הוכחת נזק, בסך מחצית מסכום התמורה שנקבעה עבור ההופעה כאמור לעיל.</div></li>
  <li><i>6.2</i><div>ככל שהמזמין יבטל את הזמנת ההופעה במועד שהוא פחות מ- 30 ימים טרם מועד ההופעה המוזמן, ישלם המזמין לאמן פיצוי מוסכם וקבוע מראש, ללא הוכחת נזק, בסך מלוא סכום התמורה בגין ההזמנה.</div></li>
+ <li><i>7.</i><div>במקרה בו, מכל סיבה שהיא, שאינה תלויה באמן, יחול עיכוב בתחילת ההופעה של למעלה מ- 60 דקות מהמועד שהוזמן כאמור לעיל, רשאי האמן, על פי שיקול דעתו, שלא לקיים את ההופעה, מבלי לגרוע מחובת המזמין לשלם לאמן את מלוא התמורה דלעיל.</div></li>
  </ol></div>`;
  const c2=`<div class="ag"><ol>
- <li><i>7.</i><div>במקרה בו, מכל סיבה שהיא, שאינה תלויה באמן, יחול עיכוב בתחילת ההופעה של למעלה מ- 60 דקות מהמועד שהוזמן כאמור לעיל, רשאי האמן, על פי שיקול דעתו, שלא לקיים את ההופעה, מבלי לגרוע מחובת המזמין לשלם לאמן את מלוא התמורה דלעיל.</div></li>
  <li><i>8.</i><div>איחור של האמן עד ל- 20 דקות מהמועד שהוזמן לעיל, מכל סיבה שהיא, בין אם התקיימה ההופעה ובין אם לא התקיימה, לא יחשב כהפרה של התחייבויות האמן והמזמין ישלם לאמן את מלוא התמורה הנקובה לעיל. במקרה בו האמן איחר להופעה בפרק זמן של למעלה מ- 20 דקות כאמור והמזמין <b>הסכים</b> להופעתו באיחור, ישלם המזמין לאמן את מלוא התמורה הנקובה לעיל ולא תהיה לו כל טענה ו/או דרישה ו/או תביעה נגד האמן.</div></li>
  <li><i>9.</i><div>במקרה של כוח עליון, לרבות מלחמה, מצב חירום, גיוס האמן, שביתה ו/או השבתה שתמנע הגעה ו/או את קיום ההופעה, מחלת האמן, אבל, לרבות אבל לאומי, פגעי טבע, חוסר אפשרות לנוע בכבישים, צווים, מצב כוננות ו/או כל פעולה או מעשה או מחדל שאינם מאפשרים את קיום הופעה תקינה ואינם תלויים באמן ו/או שאינם בשליטתו, האמן יהא פטור ממילוי התחייבויותיו לקיום הופעה במועד שהוזמן כמפורט לעיל. במקרה כאמור, האמן יחזיר למזמין את התמורה ששילם לידיו עבור ההופעה, ככל ששילם ולמזמין לא תהיה שום טענה ו/או דרישה ו/או תביעה נגד האמן והוא לא יהיה זכאי לשום פיצוי מכל סוג שהוא.</div></li>
  <li><i>10.</i><div><b>ביטול או דחיית הופעה עקב נסיבות חירום</b><br>לנוכח הניסיון שנצבר בישראל ובעולם באשר לשינויים במצב הביטחוני, הבריאותי ובהנחיות הרשויות, מוסכם כי ביטול ההופעה או שינוי מועדה עקב נסיבות אלה ייעשו רק ככל שהנחיות מחייבות של הרשויות המוסמכות, לרבות <b>פיקוד העורף</b>, מונעות את קיום ההופעה במתכונת המוסכמת, או בהסכמה מראש ובכתב של שני הצדדים. חשש או שיקול דעת של המזמין בלבד לא יקנו זכות לביטול או לדחייה כאמור.<br><br>
@@ -161,9 +172,9 @@ function orderHe(d,fontCss){
  <li><i>12.</i><div>במקרה בו המזמין יפר הוראה מהוראות הסכם זה, ישלם המזמין לאמן, עם דרישה, את מלוא התמורה המפורטת לעיל. מובהר ומוסכם כי הסכומים ומועדי התשלומים כמפורט לעיל הם תנאים יסודיים ומהותיים בהסכם זה. לכל תשלום שלא יפרע במועד הקבוע בהסכם זה תתווסף ריבית חריגה כמקובל בבנק לאומי לישראל, מהמועד שנקבע לתשלום ועד הפירעון המלא בפועל בנוסף לכל סעד אחר העומד לזכות האמן.</div></li>
  <li><i>13.</i><div>הסכם זה מהווה את כל המוסכם בין הצדדים ומבטל כל הסכם, זיכרון דברים, מצג, התחייבות, הבנה וכד׳ קודמים שבין האמן למזמין, בעל-פה ו/או בכתב, כל שינוי ו/או תיקון בהסכם זה יעשה בכתב.</div></li>
  <li><i>14.</i><div>מוסכם בזאת כי כל מחלוקת בין הצדדים תידון בבית המשפט המוסמך בת״א לו מקנים הצדדים סמכות שיפוט בלעדית.</div></li>
- </ol><p style="margin-top:4mm">בברכה,<br>מנהל האמן</p></div>`;
- const sig=`<div class="sigs"><div>המזמין</div><div>מנהל האמן</div></div>`;
- return shell('he',`הזמנה ${d.no||''} · ${d.client||''}`,[page(c1+sig,1,2,''),page(c2+sig,2,2,right)],fontCss);
+ </ol><p style="margin-top:3mm">בברכה,<br>מנהל האמן</p></div>`;
+ const sig=`<div class="sigs"><div>חתימת המזמין</div><div>מנהל האמן</div></div>`;
+ return shell('he',`הזמנה ${d.no||''} · ${d.client||''}`,[pageL(c1,1,2,meta,d.logo),pageL(c2+sig,2,2,meta,d.logo)],fontCss).replace('<body>','<body class="white">');
 }
 
 function orderEn(d,fontCss){

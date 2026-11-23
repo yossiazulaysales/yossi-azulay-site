@@ -1480,7 +1480,7 @@ function aSettings(){
   <div class="hr"></div><h2>גיבויים</h2><div class="alist"><div class="aitem"><div class="t"><b>גיבוי מלא אוטומטי</b><small>כל יום ראשון ב-03:00 · כל הנתונים + כל המסמכים</small></div><span class="tag" style="background:var(--okbg);color:var(--ok)">פעיל</span></div><div class="aitem"><div class="t"><b>יעד</b><small>Dropbox / Yossi Azulay / Backups · וגם עותק בתיקייה במחשב</small></div></div><div class="aitem"><div class="t"><b>כל מסמך שנוצר</b><small>נשמר מיד גם בתיקיית הלקוח: Clients / C-1001 שם הלקוח /</small></div></div></div><button class="btn pri" type="button" data-act="backupNow" style="margin-top:10px">גיבוי עכשיו</button>
   <div class="hr"></div><h2>משתמשים</h2><div class="aitem"><div class="t"><b>יוסי אזולאי</b><small>בעלים · הכול</small></div></div><div class="aitem" style="margin-top:6px"><div class="t"><b>איתמר לשנסקי</b><small>מנהל · הכול</small></div></div></div></div>`;
 }
-const nextContract=()=>String(Math.max(202700,...EVENTS.map(e=>+e.contractNo||0).filter(n=>n>=202700&&n<300000))+1);
+const nextContract=()=>String(Math.max(202701,...EVENTS.map(e=>+e.contractNo||0).filter(n=>n>=202700&&n<300000))+1);
 const nextQuote=()=>String(Math.max(52700,...EVENTS.map(e=>+e.quoteNo||0).filter(n=>n>=52700&&n<100000))+1);
 
 function evDetail(e){
