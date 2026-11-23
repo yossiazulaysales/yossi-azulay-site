@@ -1299,7 +1299,7 @@ function timeline(e){
   add(E(2),'חשבוניות ספקים: לתיקייה + להעלות לרו״ח','task',null,(e.suppliers||[]).every(x=>x.inv&&x.acc),'open');
   if(e.quote.abroad||e.ctype==='abroad')add(E(2),'דו״ח טיסה: להפיק במערכת של יקי (רו״ח)','task',null,!!e.flightReport,'open');
   if(crewOf(e).length){const cc=crewCoord(e);add(E(-60),'לתאם צוות: '+crewOf(e).map(x=>x[1]).join(', '),'task',null,cc,'open');
-   if(!cc){for(let d=-55;d<=-5;d+=5){if(days(e.date)+d<=0)add(E(d),'תזכורת: הצוות עוד לא תואם','task',null,false,'open')}}
+   if(!cc){let ld=0;for(let d=-55;d<=-5;d+=5){if(days(e.date)+d<=0)ld=d}if(ld)add(E(ld),'תזכורת: הצוות עוד לא תואם','task',null,false,'open')}
    add(E(-2),'הנחיות לצוות: שעות, לבוש, שירים, כתובת','msg','crewBrief',!!(e.sent||{}).crewBrief,'sent:crewBrief');add(E(2),'צוות: לקבל חשבוניות ולתייק','task',null,crewDone(e),'open')}
  }
  return it.sort((a,b)=>a.when-b.when);
