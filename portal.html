@@ -1349,7 +1349,7 @@ function docsTab(e){
 }
 function eformTab(e){
  const f=e.eventForm;
- if(!f)return `<div class="panel"><div class="empty">הלקוח עוד לא מילא את טופס האירוע.<br>הוא נשלח אוטומטית 30 יום לפני האירוע.<br><br><button class="btn wa" type="button" data-act="tplSend" data-id="${e.id}" data-k="eventForm">שליחה עכשיו</button></div></div>`;
+ if(!f)return `<div class="panel"><div class="empty">הלקוח עוד לא מילא את טופס האירוע.<br>הוא נמצא באזור האישי של הלקוח. כדאי להזכיר לו כ-30 יום לפני האירוע.<br><br><button class="btn wa" type="button" data-act="tplSend" data-id="${e.id}" data-k="eventForm">שליחה עכשיו</button></div></div>`;
  return `<div class="panel"><div class="row"><h2 class="sp">טופס אירוע</h2>${f.ok?'<span class="tag" style="background:var(--okbg);color:var(--ok)">אושר ונחתם על ידי הלקוח</span>':'<span class="tag" style="background:var(--warnbg);color:var(--warn)">טיוטה</span>'}</div>
  <div class="fields">${[['הגעת אורחים',f.arrive],['שעת חופה',f.chuppah],['כמות אורחים',f.guests],['גודל אולם',f.hall],['מיקום החופה',f.place],['הגברה',f.sound],['איש קשר הגברה',f.soundContact],['הערות',f.notes]].map(([l,v])=>`<label>${l}<input class="inp" value="${esc(v||'')}" disabled></label>`).join('')}</div></div>`;
 }
@@ -1719,7 +1719,7 @@ document.addEventListener('click',e=>{
 });
 function saveStep(){const f=$('#intake');if(!f)return;const fd=new FormData(f);for(const [k,v] of fd.entries())S.fdata[k]=v}
 document.addEventListener('submit',e=>{
- if(e.target.id==='eform'){e.preventDefault();const fd=new FormData(e.target);const x=ev(S.portalEv);if(!fd.get('ok')){toast(PF[S.plang||x.lang].confirm);return}x.eventForm=Object.fromEntries(fd.entries());x.eventForm.ok=true;if(stIdx(x)>=5&&stIdx(x)<7)x.status='ready';log(x,'הלקוח אישר את טופס האירוע');render();toast('אוטומציה: טופס האירוע נשמר בתיקיית הלקוח, והסטטוס עבר ל״טופס אירוע אושר״');return}
+ if(e.target.id==='eform'){e.preventDefault();const fd=new FormData(e.target);const x=ev(S.portalEv);if(!fd.get('ok')){toast(PF[S.plang||x.lang].confirm);return}x.eventForm=Object.fromEntries(fd.entries());x.eventForm.ok=true;if(stIdx(x)>=5&&stIdx(x)<7)x.status='ready';log(x,'הלקוח אישר את טופס האירוע');render();toast(PF[S.plang||x.lang].done);return}
  if(e.target.id==='producerForm'){e.preventDefault();return producerSubmit(e.target)}
  if(e.target.id!=='intake')return;e.preventDefault();saveStep();const d=S.fdata,t=T[S.lang];
  const need={1:['date','loc'],2:['phone','email'],3:['heard']}[S.fstep];
