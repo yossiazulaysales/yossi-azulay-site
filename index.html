@@ -563,6 +563,18 @@ table.t tr.click:hover td{background:var(--soft)}
  #demobar .note{display:none}
  table.t{font-size:13.5px}
 }
+.musicpg{background:linear-gradient(90deg,rgba(20,13,9,.93) 0%,rgba(20,13,9,.82) 55%,rgba(20,13,9,.6) 100%),url(about-yossi.jpg) right center/cover no-repeat}
+.musicpg h2{font-family:"Frank Ruhl Libre",serif;color:#e9d6b0}.musicpg .sub2{font-family:Cinzel,serif;font-size:.55em;letter-spacing:.12em;color:#c9b18a;margin-inline-start:10px}
+.mplayer{display:flex;gap:18px;align-items:center;background:rgba(0,0,0,.35);padding:16px;margin:18px 0 10px;max-width:780px}
+.mcover{width:140px;height:140px;object-fit:cover;flex:none}.mnow{flex:1;min-width:0;display:grid;gap:3px;direction:ltr;text-align:left}
+.mnow b{font-weight:400;font-size:18px;color:#f3e7d3}.mnow small{color:#bfae95}
+.mctl{display:flex;align-items:center;gap:10px;margin-top:8px}.mctl button{background:none;border:0;color:#efe6da;font-size:18px;cursor:pointer;min-width:36px;min-height:36px}
+.mctl .mplay{background:#e9d6b0;color:#231812;border-radius:999px;width:42px;height:42px;font-size:15px}.mtime{font-size:13px;color:#bfae95;margin-inline-start:6px}
+#mseek{width:100%;accent-color:#d9c29a}
+.mlist{list-style:none;margin:0;padding:0;max-width:780px}.mlist li{border-bottom:1px solid rgba(233,214,176,.14)}
+.mlist button{display:flex;gap:14px;width:100%;background:none;border:0;color:#e6dccb;padding:11px 8px;text-align:left;cursor:pointer;font:inherit;font-size:14.5px}
+.mlist button:hover,.mlist button.on{background:rgba(233,214,176,.08);color:#fff}.mlist .n{width:24px;color:#a89478}.mlist .t{flex:1}.mlist .l{color:#a89478}
+@media (max-width:640px){.mcover{width:84px;height:84px}.mplayer{gap:12px;padding:12px}}
 </style>
 </head>
 <body>
@@ -920,7 +932,7 @@ function galShow(i){const lang=S.lang;GI=i;const it=GITEMS[i],G=GL[lang];let lb=
 function galStep(d){const ix=galIdx();let k=ix.indexOf(GI);k=(k+d+ix.length)%ix.length;galShow(ix[k])}
 function galClose(){const lb=document.getElementById('glb');if(!lb)return;lb.className='';lb.innerHTML='';document.body.style.overflow='';GI=-1}
 document.addEventListener('keydown',e=>{if(GI<0)return;if(e.key==='Escape')galClose();else if(e.key==='ArrowLeft')galStep(S.lang==='he'?1:-1);else if(e.key==='ArrowRight')galStep(S.lang==='he'?-1:1)});
-const PAGES=['home','ceremonies','albums','videos','about','booking','producer'];
+const PAGES=['home','ceremonies','albums','videos','about','booking','producer','music'];
 function setPage(pg){S.page=pg;S.view='site';const h=pg==='home'?'site':'site-'+pg;if(location.hash!=='#'+h)location.hash=h;else render();window.scrollTo(0,0)}
 function siteView(){
  const t=T[S.lang],lang=S.lang,x=SX[lang],pg=S.page||'home';
@@ -949,6 +961,18 @@ function siteView(){
    <div class="two"><label for="ppn">${esc(P.pn)}<input id="ppn" name="pn"></label><label for="ppp">${esc(P.pp)}<input id="ppp" name="pp" dir="ltr"></label></div>
    <label for="pno">${esc(P.notes)}<textarea id="pno" name="notes" rows="2"></textarea></label>
    <div><button class="btn-gold cap" type="submit">${esc(P.send)}</button></div></form>`}</div></section>`;
+ } else if(pg==='music'){
+  const M=window.MUSIC;const cur=MP.i;const tr=M&&M.tracks[cur];
+  body=`<section class="page dark musicpg"><div class="inner">
+  <div class="mhd"><div class="no cap" style="color:#d9c29a"><i></i>${lang==='he'?'רפרטואר':'Repertoire'}</div><h2>${lang==='he'?'חתונות':'Weddings'} <span class="sub2">${lang==='he'?'Weddings':'חתונות'}</span></h2></div>
+  ${!M?`<p class="lead">${lang==='he'?'טוען…':'Loading…'}</p>`:`<div class="mplayer">
+   <img class="mcover" src="gallery/g01.jpg" alt="" width="160" height="160">
+   <div class="mnow"><small>Yossi Azulay</small><b>${esc(tr?tr.t:'')}</b><small>${lang==='he'?'טקס החופה':'Wedding ceremony'}</small>
+    <div class="mctl"><button type="button" data-act="mPrev" aria-label="${lang==='he'?'הקודם':'Previous'}">⏮</button><button type="button" class="mplay" data-act="mToggle" aria-label="${MP.playing?'Pause':'Play'}">${MP.playing?'❚❚':'▶'}</button><button type="button" data-act="mNext" aria-label="${lang==='he'?'הבא':'Next'}">⏭</button>
+    <span class="mtime" id="mtime">0:00 / ${tr?tr.len:''}</span></div>
+    <input type="range" id="mseek" min="0" max="1000" value="0" aria-label="seek" dir="ltr"></div></div>
+  <ol class="mlist" dir="ltr">${M.tracks.map((t,i)=>`<li><button type="button" data-act="mPick" data-i="${i}" class="${i===cur?'on':''}"><span class="n">${i+1}</span><span class="t">Yossi Azulay – ${esc(t.t)}</span><span class="l">${t.len}</span></button></li>`).join('')}</ol>`}
+  </div></section>`;
  } else if(pg==='albums'){
   body=`<section class="page"><div class="inner">
   <div class="no cap"><i></i>${esc(x.albums)}</div><h2>${esc(x.alb_t)}</h2>
@@ -1525,6 +1549,7 @@ function qsum(e){const tt=totals(e.quote);const c=e.quote.cur;return `<div class
 
 /* ================= RENDER ================= */
 function render(){
+ if(S.view==='site'&&S.page==='music')mLoad();
  document.querySelectorAll('#demobar [data-go]').forEach(b=>b.setAttribute('aria-pressed',b.dataset.go===S.view));
  $('#app').innerHTML=S.view==='site'?siteView():S.view==='portal'?portalView():adminView();
  if(S.view==='portal'&&S.ptab==='contract')initSig();
@@ -1547,7 +1572,17 @@ const formText={he:'שלום! תודה שפנית ליוסי אזולאי 🎶 �
 function waLink(phone,text){return `https://wa.me/${String(phone).replace(/\D/g,'').replace(/^0/,'972')}?text=${encodeURIComponent(text)}`}
 function waModal(e,text,title){openModal(`<h2 style="font-size:24px;margin-bottom:10px">${esc(title)}</h2><div class="bub out" style="max-width:100%">${esc(text)}</div><div class="row" style="margin-top:14px"><a class="btn wa" href="${waLink(e.phone,text)}">פתיחה בוואטסאפ</a><button class="btn" type="button" data-act="copyText">העתקה</button><button class="btn" type="button" data-act="closeModal">סגירה</button></div><p class="muted" style="font-size:13px">בגרסה האמיתית אפשר לשלוח ישירות דרך WhatsApp Business בלי לצאת מהמערכת.</p>`);$('#mbox').dataset.text=text}
 
+const MP={i:0,playing:false};window.MUSIC=null;
+const AUD=new Audio();AUD.preload='none';
+function mLoad(){if(window.MUSIC||window.__mLoading)return;window.__mLoading=1;fetch('music/tracks.json').then(r=>r.json()).then(j=>{window.MUSIC=j;if(S.page==='music')render()}).catch(()=>{window.__mLoading=0})}
+function mSet(i,play){const M=window.MUSIC;if(!M)return;MP.i=(i+M.tracks.length)%M.tracks.length;AUD.src=M.tracks[MP.i].f;if(play){AUD.play().catch(()=>{});MP.playing=true}render()}
+AUD.addEventListener('ended',()=>mSet(MP.i+1,true));
+AUD.addEventListener('timeupdate',()=>{const t=document.getElementById('mtime'),r=document.getElementById('mseek');if(!t||!AUD.duration)return;const f=s=>Math.floor(s/60)+':'+String(Math.floor(s%60)).padStart(2,'0');t.textContent=f(AUD.currentTime)+' / '+f(AUD.duration);r.value=Math.round(AUD.currentTime/AUD.duration*1000)});
+document.addEventListener('input',e=>{if(e.target.id==='mseek'&&AUD.duration)AUD.currentTime=e.target.value/1000*AUD.duration});
 const ACT={
+ mToggle:()=>{if(!AUD.src){mSet(MP.i,true);return}if(AUD.paused){AUD.play().catch(()=>{});MP.playing=true}else{AUD.pause();MP.playing=false}render()},
+ mNext:()=>mSet(MP.i+1,true),mPrev:()=>mSet(MP.i-1,true),
+ mPick:t=>mSet(+t.dataset.i,true),
  galF:a=>{GF=a.dataset.k;document.querySelectorAll('.gfil button').forEach(b=>{const on=b.dataset.k===GF;b.classList.toggle('on',on);b.setAttribute('aria-selected',on)});const g=document.querySelector('.ggrid');if(g)g.className='ggrid f-'+GF},
  galOpen:a=>galShow(+a.dataset.i),
  formReset:()=>{S.formDone=false;S.fstep=1;S.fdata={};render()},

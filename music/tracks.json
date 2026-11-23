@@ -1,0 +1,204 @@
+{
+ "title": {
+  "he": "חתונות",
+  "en": "Weddings"
+ },
+ "tracks": [
+  {
+   "t": "Boei Kala (Evita – Don't Cry For Me Argentina)",
+   "f": "music/01-boei-kala-evita-don-t-cry-for-me-argenti.mp3",
+   "len": "4:47",
+   "note": ""
+  },
+  {
+   "t": "The Lion King – Circle Of Life",
+   "f": "music/02-the-lion-king-circle-of-life.mp3",
+   "len": "1:41",
+   "note": "קטע מקוצר"
+  },
+  {
+   "t": "Boey Beshalom (Time to Say Goodbye)",
+   "f": "music/03-boey-beshalom-time-to-say-goodbye.mp3",
+   "len": "4:11",
+   "note": ""
+  },
+  {
+   "t": "Boi Kala (Hallelujah – Leonard Cohen)",
+   "f": "music/04-boi-kala-hallelujah-leonard-cohen.mp3",
+   "len": "5:13",
+   "note": ""
+  },
+  {
+   "t": "Boei Kala vs Shallow",
+   "f": "music/05-boei-kala-vs-shallow.mp3",
+   "len": "1:33",
+   "note": "קטע מקוצר"
+  },
+  {
+   "t": "O Sole Mio Hebrew (Od Ishama + Boei Beshalom)",
+   "f": "music/06-o-sole-mio-hebrew-od-ishama-boei-beshalo.mp3",
+   "len": "4:03",
+   "note": ""
+  },
+  {
+   "t": "Eshet Chayil",
+   "f": "music/07-eshet-chayil.mp3",
+   "len": "4:49",
+   "note": ""
+  },
+  {
+   "t": "Im Eshkachech Yerushalayim",
+   "f": "music/08-im-eshkachech-yerushalayim.mp3",
+   "len": "4:20",
+   "note": ""
+  },
+  {
+   "t": "Ana Be-Koach",
+   "f": "music/09-ana-be-koach.mp3",
+   "len": "5:05",
+   "note": ""
+  },
+  {
+   "t": "You Raised Me Up (Hebrew)",
+   "f": "music/10-you-raised-me-up-hebrew.mp3",
+   "len": "4:41",
+   "note": ""
+  },
+  {
+   "t": "Mehera (Kol Sason)",
+   "f": "music/11-mehera-kol-sason.mp3",
+   "len": "4:18",
+   "note": ""
+  },
+  {
+   "t": "Vezakeni",
+   "f": "music/12-vezakeni.mp3",
+   "len": "4:48",
+   "note": ""
+  },
+  {
+   "t": "Mi Adir",
+   "f": "music/13-mi-adir.mp3",
+   "len": "4:41",
+   "note": ""
+  },
+  {
+   "t": "Bereshit",
+   "f": "music/14-bereshit.mp3",
+   "len": "4:24",
+   "note": ""
+  },
+  {
+   "t": "Tfila (Shmor Na)",
+   "f": "music/15-tfila-shmor-na.mp3",
+   "len": "3:53",
+   "note": ""
+  },
+  {
+   "t": "Melech Malchei Hamelachim",
+   "f": "music/16-melech-malchei-hamelachim.mp3",
+   "len": "4:22",
+   "note": ""
+  },
+  {
+   "t": "Adon Olam Kendji (Les Yeux de la Mama)",
+   "f": "music/17-adon-olam-kendji-les-yeux-de-la-mama.mp3",
+   "len": "3:28",
+   "note": ""
+  },
+  {
+   "t": "Amen",
+   "f": "music/18-amen.mp3",
+   "len": "3:37",
+   "note": ""
+  },
+  {
+   "t": "Birkat Hakohanim",
+   "f": "music/19-birkat-hakohanim.mp3",
+   "len": "4:37",
+   "note": ""
+  },
+  {
+   "t": "Boey Beshalom (Nights in White Satin)",
+   "f": "music/20-boey-beshalom-nights-in-white-satin.mp3",
+   "len": "5:41",
+   "note": ""
+  },
+  {
+   "t": "Ein Od Milvado",
+   "f": "music/21-ein-od-milvado.mp3",
+   "len": "4:21",
+   "note": ""
+  },
+  {
+   "t": "El Adon",
+   "f": "music/22-el-adon.mp3",
+   "len": "4:26",
+   "note": "גרסה בלי פתיח"
+  },
+  {
+   "t": "Nishba",
+   "f": "music/23-nishba.mp3",
+   "len": "4:40",
+   "note": ""
+  },
+  {
+   "t": "Rachem",
+   "f": "music/24-rachem.mp3",
+   "len": "4:00",
+   "note": ""
+  },
+  {
+   "t": "Vehi She-Amda",
+   "f": "music/25-vehi-she-amda.mp3",
+   "len": "5:10",
+   "note": ""
+  },
+  {
+   "t": "Yasmin",
+   "f": "music/26-yasmin.mp3",
+   "len": "4:14",
+   "note": ""
+  },
+  {
+   "t": "Yeh Li Chalom",
+   "f": "music/27-yeh-li-chalom.mp3",
+   "len": "4:22",
+   "note": ""
+  },
+  {
+   "t": "Yerushalayim Shel Zahav",
+   "f": "music/28-yerushalayim-shel-zahav.mp3",
+   "len": "5:06",
+   "note": ""
+  },
+  {
+   "t": "Shma Israel",
+   "f": "music/29-shma-israel.mp3",
+   "len": "0:47",
+   "note": ""
+  },
+  {
+   "t": "Shir La-Ma'alot",
+   "f": "music/30-shir-la-ma-alot.mp3",
+   "len": "4:39",
+   "note": ""
+  }
+ ],
+ "missing": [
+  "Adon Olam",
+  "Al Tashlicheni Le'et Zikna",
+  "Katonti",
+  "Ose Shalom Bimromav",
+  "Shalom Aleichem",
+  "Shirat Ha-Navad",
+  "Tfilat Av",
+  "Ve-Ha'er Eineinu",
+  "Tzur Mishelo Achalnu",
+  "Tfilat Haderech",
+  "Erev Shel Shoshanim",
+  "Tfilat Kala",
+  "Yerushalayim Shel Zahav – Piano",
+  "Brit Olam"
+ ]
+}
