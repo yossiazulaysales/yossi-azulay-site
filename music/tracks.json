@@ -125,62 +125,74 @@
    "note": ""
   },
   {
+   "t": "Boi Kala",
+   "f": "music/21-boi-kala.mp3",
+   "len": "5:13",
+   "note": ""
+  },
+  {
    "t": "Ein Od Milvado",
-   "f": "music/21-ein-od-milvado.mp3",
+   "f": "music/22-ein-od-milvado.mp3",
    "len": "4:21",
    "note": ""
   },
   {
    "t": "El Adon",
-   "f": "music/22-el-adon.mp3",
+   "f": "music/23-el-adon.mp3",
    "len": "4:26",
    "note": "גרסה בלי פתיח"
   },
   {
    "t": "Nishba",
-   "f": "music/23-nishba.mp3",
+   "f": "music/24-nishba.mp3",
    "len": "4:40",
    "note": ""
   },
   {
    "t": "Rachem",
-   "f": "music/24-rachem.mp3",
+   "f": "music/25-rachem.mp3",
    "len": "4:00",
    "note": ""
   },
   {
    "t": "Vehi She-Amda",
-   "f": "music/25-vehi-she-amda.mp3",
+   "f": "music/26-vehi-she-amda.mp3",
    "len": "5:10",
    "note": ""
   },
   {
+   "t": "Vezakeni",
+   "f": "music/27-vezakeni.mp3",
+   "len": "4:48",
+   "note": ""
+  },
+  {
    "t": "Yasmin",
-   "f": "music/26-yasmin.mp3",
+   "f": "music/28-yasmin.mp3",
    "len": "4:14",
    "note": ""
   },
   {
    "t": "Yeh Li Chalom",
-   "f": "music/27-yeh-li-chalom.mp3",
+   "f": "music/29-yeh-li-chalom.mp3",
    "len": "4:22",
    "note": ""
   },
   {
    "t": "Yerushalayim Shel Zahav",
-   "f": "music/28-yerushalayim-shel-zahav.mp3",
+   "f": "music/30-yerushalayim-shel-zahav.mp3",
    "len": "5:06",
    "note": ""
   },
   {
    "t": "Shma Israel",
-   "f": "music/29-shma-israel.mp3",
+   "f": "music/31-shma-israel.mp3",
    "len": "0:47",
    "note": ""
   },
   {
    "t": "Shir La-Ma'alot",
-   "f": "music/30-shir-la-ma-alot.mp3",
+   "f": "music/32-shir-la-ma-alot.mp3",
    "len": "4:39",
    "note": ""
   }

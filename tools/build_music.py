@@ -27,6 +27,7 @@ T = [  # (title, file in the Dropbox folder or None if missing, note)
  ("Amen", P+"Amen mix metukan - full.mp3", ""),
  ("Birkat Hakohanim", P+"Birkat Hakohanim - full.mp3", ""),
  ("Boey Beshalom (Nights in White Satin)", P+"Boey beshalon (night's in white satin) final with intro - full.mp3", ""),
+ ("Boi Kala", P+"Boi Kala.mp3", ""),
  ("Ein Od Milvado", P+"Ein od Milvado - full.mp3", ""),
  ("El Adon", P+"El Adon ( No Intro ).mp3", "גרסה בלי פתיח"),
  ("Katonti", None, ""),
@@ -38,6 +39,7 @@ T = [  # (title, file in the Dropbox folder or None if missing, note)
  ("Tfilat Av", None, ""),
  ("Ve-Ha'er Eineinu", None, ""),
  ("Vehi She-Amda", P+"Vehi Sheamda - full.mp3", ""),
+ ("Vezakeni", P+"Vezakeni Final.mp3", ""),
  ("Yasmin", P+"Yasmin 2 - full.mp3", ""),
  ("Yeh Li Chalom", P+"Yeh Li Halom - Final - full.mp3", ""),
  ("Yerushalayim Shel Zahav", P+"Yerushalahaym Shel Zahav (CD) - full.mp3", ""),
@@ -51,7 +53,8 @@ T = [  # (title, file in the Dropbox folder or None if missing, note)
  ("Brit Olam", None, ""),
 ]
 out, missing = [], []
-mdir = root / 'music'; mdir.mkdir(exist_ok=True)
+mdir = root / 'music'
+shutil.rmtree(mdir, ignore_errors=True); mdir.mkdir()
 n = 0
 for t, f, note in T:
     if not f or not (src / f).exists():

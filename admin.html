@@ -623,21 +623,8 @@ const SMAP = Object.fromEntries(STAGES.map(s=>[s[0],s]));
 const CTYPE = {private:['לקוח','#8b4fc2'],abroad:['לקוח חו״ל','#3a6fd8'],producer:['מפיק','#e0a100']};
 const SRC = {whatsapp:'וואטסאפ',instagram:'אינסטגרם',email:'מייל',form:'טופס באתר',producer:'מפיק',phone:'טלפון'};
 
-const SONGS = (()=>{
- const raw = [
- ['שיר המעלות','חופה'],['אנא בכח','חופה'],['צור משלו','חופה'],['אל אדון','חופה'],['והיא שעמדה','חופה'],
- ['אם אשכחך ירושלים','שבירת כוס'],['שלום עליכם','כללי'],['בואי כלה','כניסת כלה'],['תפילת הדרך','כללי'],['אוחילה','חופה'],
- ['עוד ישמע','כניסת חתן'],['לכה דודי','כניסת כלה'],['ידיד נפש','כללי'],['אדון עולם','בר מצווה'],['יברכך','ברכות'],
- ['מי אדיר','כניסת חתן'],['אשת חיל','כניסת כלה'],['ברוך הבא','כניסת חתן'],['כי אשמרה שבת','כללי'],['אבינו מלכנו','חופה'],
- ['הללויה','יציאה'],['ירושלים של זהב','שבירת כוס'],['מזל טוב וסימן טוב','יציאה'],['אחינו כל בית ישראל','כללי'],['אני לדודי','כניסת כלה'],
- ['קול ששון','יציאה'],['דודי לי','כניסת כלה'],['שיר השירים','חופה'],['יבנה המקדש','שבירת כוס'],['מה טובו','בר מצווה'],
- ['ברכת כהנים','ברכות'],['שמע ישראל','בר מצווה'],['אהבת עולם','חופה'],['שלום רב','כללי'],['תורה צוה לנו','בר מצווה'],
- ['ושמחת בחגך','יציאה'],['סימן טוב','יציאה'],['ברכת ההורים','ברכות'],['Bella Ciao – גרסת חופה','כניסת חתן'],['You Raise Me Up / עוד ישמע','כניסת חתן'],
- ['Evita – בואי כלה','כניסת כלה'],['Hallelujah','כניסת כלה'],['Can’t Help Falling in Love','כניסת כלה'],['A Thousand Years','כניסת כלה'],['Perfect','כניסת כלה'],
- ['Canon in D','כניסת כלה'],['La Vie en Rose','כללי'],['Hava Nagila','יציאה'],['Siman Tov','יציאה'],['Hallelujah (Eurovision 1979)','יציאה']];
- let s=7;const r=()=>(s=s*16807%2147483647)/2147483647;
- return raw.map((x,i)=>({id:'S'+(i+1),t:x[0],tag:x[1],len:`${2+Math.floor(r()*3)}:${String(Math.floor(r()*60)).padStart(2,'0')}`}));
-})();
+/* the client song library = the original site's wedding repertoire, same order (built from music/tracks.json) */
+const SONGS = [{"id": "W01", "t": "Boei Kala (Evita – Don't Cry For Me Argentina)", "tag": "חתונות", "len": "4:47", "f": "music/01-boei-kala-evita-don-t-cry-for-me-argenti.mp3"}, {"id": "W02", "t": "The Lion King – Circle Of Life", "tag": "חתונות", "len": "1:41", "f": "music/02-the-lion-king-circle-of-life.mp3"}, {"id": "W03", "t": "Boey Beshalom (Time to Say Goodbye)", "tag": "חתונות", "len": "4:11", "f": "music/03-boey-beshalom-time-to-say-goodbye.mp3"}, {"id": "W04", "t": "Boi Kala (Hallelujah – Leonard Cohen)", "tag": "חתונות", "len": "5:13", "f": "music/04-boi-kala-hallelujah-leonard-cohen.mp3"}, {"id": "W05", "t": "Boei Kala vs Shallow", "tag": "חתונות", "len": "1:33", "f": "music/05-boei-kala-vs-shallow.mp3"}, {"id": "W06", "t": "O Sole Mio Hebrew (Od Ishama + Boei Beshalom)", "tag": "חתונות", "len": "4:03", "f": "music/06-o-sole-mio-hebrew-od-ishama-boei-beshalo.mp3"}, {"id": "W07", "t": "Eshet Chayil", "tag": "חתונות", "len": "4:49", "f": "music/07-eshet-chayil.mp3"}, {"id": "W08", "t": "Im Eshkachech Yerushalayim", "tag": "חתונות", "len": "4:20", "f": "music/08-im-eshkachech-yerushalayim.mp3"}, {"id": "W09", "t": "Ana Be-Koach", "tag": "חתונות", "len": "5:05", "f": "music/09-ana-be-koach.mp3"}, {"id": "W10", "t": "You Raised Me Up (Hebrew)", "tag": "חתונות", "len": "4:41", "f": "music/10-you-raised-me-up-hebrew.mp3"}, {"id": "W11", "t": "Mehera (Kol Sason)", "tag": "חתונות", "len": "4:18", "f": "music/11-mehera-kol-sason.mp3"}, {"id": "W12", "t": "Vezakeni", "tag": "חתונות", "len": "4:48", "f": "music/12-vezakeni.mp3"}, {"id": "W13", "t": "Mi Adir", "tag": "חתונות", "len": "4:41", "f": "music/13-mi-adir.mp3"}, {"id": "W14", "t": "Bereshit", "tag": "חתונות", "len": "4:24", "f": "music/14-bereshit.mp3"}, {"id": "W15", "t": "Tfila (Shmor Na)", "tag": "חתונות", "len": "3:53", "f": "music/15-tfila-shmor-na.mp3"}, {"id": "W16", "t": "Melech Malchei Hamelachim", "tag": "חתונות", "len": "4:22", "f": "music/16-melech-malchei-hamelachim.mp3"}, {"id": "W17", "t": "Adon Olam Kendji (Les Yeux de la Mama)", "tag": "חתונות", "len": "3:28", "f": "music/17-adon-olam-kendji-les-yeux-de-la-mama.mp3"}, {"id": "W18", "t": "Amen", "tag": "חתונות", "len": "3:37", "f": "music/18-amen.mp3"}, {"id": "W19", "t": "Birkat Hakohanim", "tag": "חתונות", "len": "4:37", "f": "music/19-birkat-hakohanim.mp3"}, {"id": "W20", "t": "Boey Beshalom (Nights in White Satin)", "tag": "חתונות", "len": "5:41", "f": "music/20-boey-beshalom-nights-in-white-satin.mp3"}, {"id": "W21", "t": "Boi Kala", "tag": "חתונות", "len": "5:13", "f": "music/21-boi-kala.mp3"}, {"id": "W22", "t": "Ein Od Milvado", "tag": "חתונות", "len": "4:21", "f": "music/22-ein-od-milvado.mp3"}, {"id": "W23", "t": "El Adon", "tag": "חתונות", "len": "4:26", "f": "music/23-el-adon.mp3"}, {"id": "W24", "t": "Nishba", "tag": "חתונות", "len": "4:40", "f": "music/24-nishba.mp3"}, {"id": "W25", "t": "Rachem", "tag": "חתונות", "len": "4:00", "f": "music/25-rachem.mp3"}, {"id": "W26", "t": "Vehi She-Amda", "tag": "חתונות", "len": "5:10", "f": "music/26-vehi-she-amda.mp3"}, {"id": "W27", "t": "Vezakeni", "tag": "חתונות", "len": "4:48", "f": "music/27-vezakeni.mp3"}, {"id": "W28", "t": "Yasmin", "tag": "חתונות", "len": "4:14", "f": "music/28-yasmin.mp3"}, {"id": "W29", "t": "Yeh Li Chalom", "tag": "חתונות", "len": "4:22", "f": "music/29-yeh-li-chalom.mp3"}, {"id": "W30", "t": "Yerushalayim Shel Zahav", "tag": "חתונות", "len": "5:06", "f": "music/30-yerushalayim-shel-zahav.mp3"}, {"id": "W31", "t": "Shma Israel", "tag": "חתונות", "len": "0:47", "f": "music/31-shma-israel.mp3"}, {"id": "W32", "t": "Shir La-Ma'alot", "tag": "חתונות", "len": "4:39", "f": "music/32-shir-la-ma-alot.mp3"}];
 const MOMENTS = {
  wedding:[{he:'כניסת חתן',en:'Groom’s entrance',fr:'Entrée du marié',es:'Entrada del novio'},{he:'כניסת כלה',en:'Bride’s entrance',fr:'Entrée de la mariée',es:'Entrada de la novia'},{he:'תחת החופה',en:'Under the chuppah',fr:'Sous la houppa',es:'Bajo la jupá'},{he:'שבירת הכוס',en:'Breaking the glass',fr:'Bris du verre',es:'Romper la copa'}],
  tefillin:[{he:'כניסה',en:'Entrance',fr:'Entrée',es:'Entrada'},{he:'הנחת תפילין',en:'Laying tefillin',fr:'Pose des téfilines',es:'Colocación de tefilín'},{he:'ברכת ההורים',en:'Parents’ blessing',fr:'Bénédiction des parents',es:'Bendición de los padres'},{he:'סיום',en:'Finale',fr:'Final',es:'Final'}],
@@ -1373,13 +1360,13 @@ function aClients(){
 }
 const lostBtns=e=>stIdx(e)>=0&&stIdx(e)<5?`<button class="btn sm" type="button" data-act="lost" data-id="${e.id}">${e.ctype==='producer'?'לא רלוונטי':'לא סגר'}</button><button class="btn sm" type="button" data-act="taken" data-id="${e.id}">תאריך תפוס</button>`:'';
 const NAV_ALL=[['dash','לוח בקרה',IC.dash],['inbox','פניות נכנסות',IC.inbox],['board','לוח פניות',IC.board],['events','כל האירועים',IC.list],['cal','יומן',IC.cal],['money','תשלומים וקבלות',IC.money],['clients','לקוחות ומפיקים',IC.people],['songs','ספריית שירים',IC.music],['templates','תבניות הודעות',IC.inbox],['auto','אוטומציות',IC.bolt],['settings','הגדרות',IC.gear]];
-const NAV=NAV_ALL.filter(n=>!['inbox','songs','auto'].includes(n[0]));
+const NAV=NAV_ALL.filter(n=>!['inbox','auto'].includes(n[0]));
 function adminView(){
  document.documentElement.lang='he';document.documentElement.dir='rtl';
  const pend=EVENTS.reduce((n,e)=>n+['deposit','balance','flights'].filter(k=>e.pay[k].received&&e.pay[k].receipt==='pending').length,0);
  const badges={inbox:INBOX.filter(t=>t.msgs[t.msgs.length-1].d==='in').length,money:pend,board:EVENTS.filter(e=>e.status==='lead').length,dash:dueTasks().length};
  let main='';
- if(['inbox','songs','auto'].includes(S.admin))S.admin='dash';
+ if(['inbox','auto'].includes(S.admin))S.admin='dash';
  if(S.ev)main=evDetail(ev(S.ev));
  else main=({dash:aDash,inbox:aInbox,board:aBoard,events:aEvents,cal:aCal,money:aMoney,clients:aClients,songs:aSongs,templates:aTemplates,auto:aAuto,settings:aSettings})[S.admin]();
  return `<div class="admin"><aside class="rail"><div class="logo"><img src="logo-full-dark.png" alt="Yossi Azulay" style="width:150px;height:auto;display:block"><small style="margin-top:8px">מערכת ניהול</small></div>
@@ -1444,7 +1431,7 @@ function aMoney(){
  <p class="muted" style="font-size:14px">לYAZ אין כרגע API, אז ההפקה נשארת ידנית: "העתקת פרטים" מכינה את כל מה שצריך להדביק שם. אם יתחבר API, הכפתור יפיק את הקבלה לבד.</p>`;
 }
 function aSongs(){
- return `<div class="mhead"><h1>ספריית שירים</h1><span class="muted">${SONGS.length} שירים (שירי דמה)</span><input class="inp" id="songsearch" placeholder="חיפוש" style="min-width:200px"></div>
+ return `<div class="mhead"><h1>ספריית שירים</h1><span class="muted">${SONGS.length} שירים (הרפרטואר מהאתר)</span><input class="inp" id="songsearch" placeholder="חיפוש" style="min-width:200px"></div>
  <label class="drop" style="display:block;margin-bottom:14px;cursor:pointer"><input type="file" accept="audio/*" multiple id="upl" style="display:none"><b>גררו לכאן קבצי MP3, או לחצו לבחירה</b><br>בגרסה האמיתית הקבצים נשמרים באחסון של המערכת והלקוחות שומעים אותם באזור האישי</label>
  <div class="songs" id="songgrid">${songCards(SONGS)}</div>`;
 }
@@ -1727,7 +1714,7 @@ const ACT={
  calPrev:()=>{S.calM--;if(S.calM<0){S.calM=11;S.calY--}render()},
  calNext:()=>{S.calM++;if(S.calM>11){S.calM=0;S.calY++}render()},
  addSup:()=>{const e=ev(S.ev);const n=$('#supn').value.trim();if(!n)return;e.suppliers.push({name:n,role:$('#supr').value,cost:+$('#supc').value||0,inv:false});render()},
- play:t=>{const id=t.dataset.s;const bar=document.getElementById('bar-'+id);if(!bar)return;document.querySelectorAll('.bar i').forEach(b=>{b.style.transition='none';b.style.width='0'});requestAnimationFrame(()=>{bar.style.transition='width 6s linear';bar.style.width='100%'});toast('השמעת דמה. בגרסה האמיתית נשמע את הקובץ')}
+ play:t=>{const so=SONGS.find(x=>x.id===t.dataset.s);if(!so)return;const A=window.__sAud||(window.__sAud=new Audio());document.querySelectorAll('.play.on').forEach(b=>{b.classList.remove('on');b.textContent='▶'});if(window.__sNow===so.id&&!A.paused){A.pause();return}window.__sNow=so.id;A.src=so.f;A.play().catch(()=>{});t.classList.add('on');t.textContent='❚❚';A.ontimeupdate=()=>{const b=document.getElementById('bar-'+so.id);if(b&&A.duration)b.style.width=(A.currentTime/A.duration*100)+'%'};A.onended=()=>{t.classList.remove('on');t.textContent='▶'}}
 };
 function pickList(f,i,p){return SONGS.filter(s=>!f||s.t.toLowerCase().includes(f)||s.tag.includes(f)).map(s=>`<div class="song"><button class="play" type="button" data-act="play" data-s="${s.id}" aria-label="play">▶</button><div class="t"><b>${esc(s.t)}</b><small>${esc(s.tag)} · ${s.len}</small><div class="bar"><i id="bar-${s.id}"></i></div></div><button class="btn sm pri" type="button" data-act="choose" data-s="${s.id}" data-i="${i}">${esc(p.pick)}</button></div>`).join('')}
 
