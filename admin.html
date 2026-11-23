@@ -1294,40 +1294,39 @@ function checks(e){const p=e.pay,su=e.suppliers||[];return [
 function timeline(e){
  const it=[];const ed=new Date(e.date+'T12:00');const E=n=>{const t=new Date(ed);t.setDate(t.getDate()+n);return t};
  const add=(when,label,kind,key,done,act)=>it.push({when,label,kind,key,done,act});
- const si=stIdx(e),p=e.pay,priv=e.ctype!=='producer';
- add(addD(-(e.ageDays??((e.quoteSentDays??0)+1))),'אימייל תודה + סרטונים ללקוח · התראה אליך על פנייה חדשה','auto','formThanks',true);
+ const si=stIdx(e),p=e.pay,priv=e.ctype!=='producer';const SN=e.sent||{};const msg=(when,label,key,sys)=>add(when,label,'msg',key,!!SN[key]||!!sys,'sent:'+key);
+ msg(addD(-(e.ageDays??((e.quoteSentDays??0)+1))),'הודעת תודה + סרטונים ללקוח','formThanks',si>=2||isSide(e));
  if(e.status==='lead'||e.status==='checking')add(addD(0),'לבדוק זמינות ולחזור ללקוח','task',null,false,'open');
  if(e.quoteSentDays!=null){const s=-e.quoteSentDays;
-  add(addD(s),'הצעת מחיר נשלחה במייל + PDF, נשמרה במערכת ובתיקייה','auto',null,true);
-  add(addD(s),'15 דקות אחרי: וידוא שההצעה התקבלה','auto','quoteCheck',true);
+  add(addD(s),'הצעת מחיר נשלחה'+(e.quoteNo?' ('+e.quoteNo+')':''),'event',null,true);
+  msg(addD(s),'וידוא שההצעה התקבלה','quoteCheck',si>=3||isSide(e));
   add(addD(s+2),'48 שעות: פולו-אפ ראשון (אתה)','task','fu1',!!e.fu1||si>=3||isSide(e),'fu1');
   add(addD(s+7),'שבוע: פולו-אפ שני, ניסיון סגירה (הנחה / נגן מתנה)','task','fu2',!!e.fu2||si>=3||isSide(e),'fu2');
   add(addD(s+7),'שריון התאריך מסתיים','check',null,si>=3||isSide(e));
  }
- if(e.status==='nurture')add(addD(0),'עבר למעקב AI (ניסיוני): רצף הודעות אוטומטי','auto',null,true);
  if(isSide(e)){return it.sort((a,b)=>a.when-b.when)}
  if(e.contract!=='none'){const c=-(e.contractSentDays??0);
-  add(addD(c),'חוזה נשלח לחתימה דיגיטלית','auto',null,true);
+  add(addD(c),'טופס הזמנה נשלח'+(e.contractNo?' ('+e.contractNo+')':''),'event',null,true);
   add(addD(c+2),'48 שעות: מקדמה + אסמכתה בחשבון','check','deposit',p.deposit.received&&!!p.deposit.ref);}
  if(p.deposit.received){const dd=new Date(p.deposit.date+'T12:00');
   add(dd,'קבלה על המקדמה ב-YAZ','task',null,!!p.deposit.receipt&&p.deposit.receipt!=='pending','receipt-deposit');
-  add(dd,'תודה + קבלה + אסמכתה + עקבו אחרינו','auto','booked',true);
+  msg(dd,'תודה + קבלה + עקבו אחרינו','booked');
   if(e.soundBy==='us')add(dd,'לשריין חברת הגברה (הלקוח שילם על הגברה)','task',null,!!e.soundCompany,'sound');
-  const from=Math.max(days(p.deposit.date)+60,1),to=days(e.date)-45;for(let x=from;x<to;x+=60)add(addD(x),'שמירת קשר: הזמנה לאזור האישי ולבחירת שירים','auto','touch',x<=0);
+  const from=Math.max(days(p.deposit.date)+60,1),to=days(e.date)-45;for(let x=from;x<to;x+=60){const k='touch';const kk='touch'+x;add(addD(x),'שמירת קשר: הזמנה לאזור האישי ולבחירת שירים','msg',k,!!SN[kk],'sent:'+kk)}
  }
  if(si>=5||e.contract==='signed'){
   if(e.soundBy!=='us')add(E(-45),'45 יום: אימות הגברה ובמה מול הלקוח','task','soundCheck',!!e.soundVerified,'soundV');
-  add(E(-30),'30 יום: מוזיקה סגורה + טופס אירוע ללקוח','auto','eventForm',days(e.date)<=30);
+  msg(E(-30),'30 יום: מוזיקה סגורה + טופס אירוע ללקוח','eventForm',e.eventForm&&e.eventForm.ok);
   add(E(-28),'שיחת טלפון: מעבר על כל הפרטים','task',null,!!e.call,'call');
-  add(E(-14),'14 יום: תזכורת יתרה (יחד עם טופס האירוע)','auto','balance',days(e.date)<=14);
-  add(E(-5),'5 ימים: יתרה + אסמכתה בחשבון',p.balance.received?'check':'auto',p.balance.received?null:'balanceLate',p.balance.received);
+  msg(E(-14),'14 יום: תזכורת יתרה','balance',p.balance.received);
+  if(p.balance.received)add(E(-5),'5 ימים: יתרה + אסמכתה בחשבון','check',null,true);else msg(E(-5),'5 ימים: יתרה לא התקבלה','balanceLate');
   add(E(0),'האירוע','event',null,days(e.date)<0);
-  add(E(1),'תודה + בקשת המלצה','auto','after',days(e.date)<0);
+  msg(E(1),'תודה + בקשת המלצה','after');
   add(E(2),'חשבוניות ספקים: לתיקייה + להעלות לרו״ח','task',null,(e.suppliers||[]).every(x=>x.inv&&x.acc),'open');
  }
  return it.sort((a,b)=>a.when-b.when);
 }
-function dueTasks(){const out=[];for(const e of EVENTS){for(const t of timeline(e)){if(!t.done&&t.when<=addD(0)&&(t.kind==='task'||t.kind==='check'||t.key==='balanceLate'))out.push({e,t})}}return out}
+function dueTasks(){const out=[];for(const e of EVENTS){for(const t of timeline(e)){if(!t.done&&t.when<=addD(0)&&(t.kind==='task'||t.kind==='check'||t.kind==='msg'))out.push({e,t})}}return out}
 /* ================= ADMIN ================= */
 function attention(){
  const a=[];
@@ -1345,9 +1344,9 @@ function aBoard(){
 const kcard=e=>{const ch=checks(e),dn=ch.filter(c=>c[2]).length;return `<div class="kcard" data-open="${e.id}"><b>${esc(e.client)}</b><small>${esc(L(ETYPES[e.etype],'he'))} · ${dshort(e.date)}</small><div class="row" style="margin-top:6px;gap:6px">${ctChip(e.ctype)}${isSide(e)?stChip(e.status):`<small>${dn}/${ch.length}</small>`}</div></div>`};
 function pathTab(e){
  const tl=timeline(e),ch=checks(e),dn=ch.filter(c=>c[2]).length,all=dn===ch.length;
- const kindL={auto:'אוטומטי',task:'משימה שלך',check:'בדיקה',event:'אירוע'};
- const row=t=>{const late=!t.done&&t.when<=addD(0);return `<div class="tl ${t.done?'ok':late?'late':''}"><span class="tld">${esc(fdate(t.when))}</span><span class="tli">${t.done?'✓':late?'!':'○'}</span><span class="tlt">${esc(t.label)}<small>${kindL[t.kind]}</small></span>${t.key&&TPL[t.key]?`<button class="btn sm" type="button" data-act="tplSend" data-id="${e.id}" data-k="${t.key}">הודעה</button>`:''}${(t.act==='fu1'||t.act==='fu2')&&!t.done?`<button class="btn sm pri" type="button" data-act="markFu" data-id="${e.id}" data-k="${t.act}">בוצע</button>`:''}${t.act==='call'&&!t.done?`<button class="btn sm pri" type="button" data-act="chk" data-id="${e.id}" data-k="call">בוצע</button>`:''}${t.act==='soundV'&&!t.done?`<button class="btn sm pri" type="button" data-act="chk" data-id="${e.id}" data-k="soundVerified">אומת</button>`:''}</div>`};
- return `<div class="grid2"><div class="panel"><h2>ציר זמן ואוטומציות</h2><div class="tlist">${tl.map(row).join('')}</div><p class="muted" style="font-size:13.5px;margin-bottom:0">אוטומטי: נשלח לבד בשפת הלקוח. משימה שלך: מופיעה בלוח הבקרה ביום שלה, עם הודעה מוכנה.</p></div>
+ const kindL={msg:'הודעה לשליחה',task:'משימה שלך',check:'בדיקה',event:'אירוע'};
+ const row=t=>{const late=!t.done&&t.when<=addD(0);return `<div class="tl ${t.done?'ok':late?'late':''}"><span class="tld">${esc(fdate(t.when))}</span><span class="tli">${t.done?'✓':late?'!':'○'}</span><span class="tlt">${esc(t.label)}<small>${kindL[t.kind]}</small></span>${t.key&&TPL[t.key]?`<button class="btn sm" type="button" data-act="tplSend" data-id="${e.id}" data-k="${t.key}">הודעה</button>`:''}${t.kind==='msg'&&!t.done?`<button class="btn sm pri" type="button" data-act="markSent" data-id="${e.id}" data-k="${t.act.slice(5)}">נשלח</button>`:''}${(t.act==='fu1'||t.act==='fu2')&&!t.done?`<button class="btn sm pri" type="button" data-act="markFu" data-id="${e.id}" data-k="${t.act}">בוצע</button>`:''}${t.act==='call'&&!t.done?`<button class="btn sm pri" type="button" data-act="chk" data-id="${e.id}" data-k="call">בוצע</button>`:''}${t.act==='soundV'&&!t.done?`<button class="btn sm pri" type="button" data-act="chk" data-id="${e.id}" data-k="soundVerified">אומת</button>`:''}</div>`};
+ return `<div class="grid2"><div class="panel"><h2>ציר זמן ומשימות</h2><div class="tlist">${tl.map(row).join('')}</div><p class="muted" style="font-size:13.5px;margin-bottom:0">הודעה לשליחה: הודעה מוכנה בשפת הלקוח, לוחצים "הודעה", שולחים ומסמנים "נשלח". כל מה שלא בוצע בזמן מופיע בלוח הבקרה.</p></div>
  <div class="panel"><h2>צ׳קליסט לסגירה <span class="tag" style="background:${all?'var(--okbg)':'var(--soft)'};color:${all?'var(--ok)':'inherit'}">${dn}/${ch.length}</span></h2>
  <div class="row" style="margin-bottom:10px"><span class="muted">הגברה:</span><div class="radios"><label><input type="radio" name="sb" value="us" data-sb ${e.soundBy==='us'?'checked':''}> דרכנו</label><label><input type="radio" name="sb" value="client" data-sb ${e.soundBy!=='us'?'checked':''}> הלקוח סוגר</label></div>${e.soundBy==='us'?`<input class="inp" placeholder="חברת הגברה" value="${esc(e.soundCompany||'')}" data-f="soundCompany" style="flex:1">`:''}</div>
  ${ch.map(c=>`<label class="ck ${c[2]?'ok':''}"><input type="checkbox" ${c[2]?'checked':''} ${c[3]?`data-chk="${c[0]==='sound'?'soundVerified':c[0]}" data-id="${e.id}"`:'disabled'}> <span>${esc(c[1])}</span>${c[3]?'':'<small>מתעדכן לבד</small>'}</label>`).join('')}
@@ -1383,7 +1382,7 @@ function aClients(){
  <div class="panel scroll"><table class="t"><thead><tr><th>מס׳ לקוח</th><th>שם</th><th>סוג</th><th>טלפון</th><th>מייל</th><th>שפה</th><th>אירוע</th><th>סטטוס</th></tr></thead><tbody>${rows.map(e=>`<tr class="click" data-open="${e.id}"><td><b>${esc(e.clientNo)}</b></td><td>${esc(e.client)}</td><td>${ctChip(e.ctype)}</td><td style="direction:ltr;text-align:end;white-space:nowrap">${esc(e.phone)}</td><td>${esc(e.email)}</td><td>${e.lang.toUpperCase()}</td><td style="white-space:nowrap">${dshort(e.date)}</td><td>${stChip(e.status)}</td></tr>`).join('')}</tbody></table></div>
  <p class="muted" style="font-size:14px">כל פנייה מקבלת מספר לקוח קבוע, גם אם לא נסגרה. גם לקוחות שלא סגרו ותאריכים תפוסים נשארים במאגר. בשלב הבא נייבא לכאן את כל הלקוחות מהקבצים ומהמיילים הישנים.</p>`;
 }
-const lostBtns=e=>stIdx(e)>=0&&stIdx(e)<5?`<button class="btn sm" type="button" data-act="lost" data-id="${e.id}">${e.ctype==='producer'?'לא רלוונטי':'לא סגר → מעקב AI'}</button><button class="btn sm" type="button" data-act="taken" data-id="${e.id}">תאריך תפוס</button>`:'';
+const lostBtns=e=>stIdx(e)>=0&&stIdx(e)<5?`<button class="btn sm" type="button" data-act="lost" data-id="${e.id}">${e.ctype==='producer'?'לא רלוונטי':'לא סגר'}</button><button class="btn sm" type="button" data-act="taken" data-id="${e.id}">תאריך תפוס</button>`:'';
 const NAV_ALL=[['dash','לוח בקרה',IC.dash],['inbox','פניות נכנסות',IC.inbox],['board','לוח פניות',IC.board],['events','כל האירועים',IC.list],['cal','יומן',IC.cal],['money','תשלומים וקבלות',IC.money],['clients','לקוחות ומפיקים',IC.people],['songs','ספריית שירים',IC.music],['templates','תבניות הודעות',IC.inbox],['auto','אוטומציות',IC.bolt],['settings','הגדרות',IC.gear]];
 const NAV=NAV_ALL.filter(n=>!['inbox','songs','auto','settings'].includes(n[0]));
 function adminView(){
@@ -1678,7 +1677,7 @@ const ACT={
  songsLink:t=>{const e=ev(t.dataset.id||S.ev);const txt={he:`היי ${e.couple||e.client}! הגיע הזמן לבחור את השירים 🎶 כל הרשימה עם האזנה כאן: yossi-azulay.com/p/${e.id}/songs`,en:`Hi ${e.couple||e.client}! Time to choose your songs 🎶 Listen and pick here: yossi-azulay.com/p/${e.id}/songs`,fr:`Bonjour ${e.couple||e.client} ! C’est le moment de choisir vos chants 🎶 Écoutez et choisissez ici : yossi-azulay.com/p/${e.id}/songs`,es:`¡Hola ${e.couple||e.client}! Es hora de elegir sus canciones 🎶 Escuche y elija aquí: yossi-azulay.com/p/${e.id}/songs`}[e.lang];waModal(e,txt,'קישור לבחירת שירים')},
  payReq:t=>{const e=ev(t.dataset.id);const tt=totals(e.quote,e.lang);const k=t.dataset.k;const amt=k==='deposit'?tt.dep:k==='balance'?tt.bal:e.quote.flights;waModal(e,{he:`שלום ${e.couple||e.client}, תזכורת לתשלום ${({deposit:'המקדמה',balance:'היתרה',flights:'החזר הטיסות'})[k]}: ${money(amt,e.quote.cur,'he')}. פרטי חשבון וקישור לתשלום באשראי: yossi-azulay.com/p/${e.id}/pay`,en:`Hi ${e.couple||e.client}, a reminder for the ${k} payment: ${money(amt,e.quote.cur,'en')}. Bank details and card link: yossi-azulay.com/p/${e.id}/pay`,fr:`Bonjour ${e.couple||e.client}, rappel de paiement : ${money(amt,e.quote.cur,'fr')}. Coordonnées bancaires et paiement par carte : yossi-azulay.com/p/${e.id}/pay`,es:`Hola ${e.couple||e.client}, recordatorio de pago: ${money(amt,e.quote.cur,'es')}. Datos bancarios y pago con tarjeta: yossi-azulay.com/p/${e.id}/pay`}[e.lang],'בקשת תשלום')},
  markPaid:t=>{const e=ev(t.dataset.id);const k=t.dataset.k;const has=e.pay[k].ref;openModal(`<h2 style="font-size:24px;margin-bottom:12px">סימון תשלום שהתקבל</h2><div class="fields" style="grid-template-columns:minmax(0,1fr) minmax(0,1fr)"><label>אמצעי תשלום<select id="pm"><option>העברה</option><option>ביט</option><option>אשראי</option><option>מזומן</option><option>צ׳ק</option></select></label><label>תאריך<input class="inp" type="date" id="pd" value="2026-11-22"></label><label class="wide">אסמכתה ${has?`<span class="tag" style="background:var(--okbg);color:var(--ok)">${esc(has)}</span>`:'<span class="tag" style="background:var(--badbg);color:var(--bad)">חובה</span>'}<input type="file" id="pref" class="inp"></label></div><p class="muted" style="font-size:14px">תשלום בלי אסמכתה לא נרשם כמשולם. האסמכתה נשמרת בתיקיית הלקוח.</p><div class="row" style="margin-top:10px"><button class="btn pri" type="button" data-act="confirmPaid" data-id="${e.id}" data-k="${k}">אישור</button><button class="btn" type="button" data-act="closeModal">ביטול</button></div>`)},
- confirmPaid:t=>{const e=ev(t.dataset.id);const k=t.dataset.k;const f=$('#pref');const ref=e.pay[k].ref||(f&&f.files[0]?f.files[0].name:'');if(!ref){toast('חסרה אסמכתה: תשלום בלי אסמכתה לא נרשם');return}e.pay[k]={received:true,method:$('#pm').value,date:$('#pd').value,receipt:'pending',ref};if(k==='deposit'&&stIdx(e)<5)e.status='booked';log(e,`תשלום ${({deposit:'מקדמה',balance:'יתרה',flights:'טיסות'})[k]} התקבל + אסמכתה`);closeModal();render();toast(k==='deposit'?'אוטומציה: נשלחה ללקוח הודעת תודה עם הקבלה והאסמכתה; נפתחה משימה להפיק קבלה ב-YAZ':'אוטומציה: נפתחה משימה להפיק קבלה ב-YAZ')},
+ confirmPaid:t=>{const e=ev(t.dataset.id);const k=t.dataset.k;const f=$('#pref');const ref=e.pay[k].ref||(f&&f.files[0]?f.files[0].name:'');if(!ref){toast('חסרה אסמכתה: תשלום בלי אסמכתה לא נרשם');return}e.pay[k]={received:true,method:$('#pm').value,date:$('#pd').value,receipt:'pending',ref};if(k==='deposit'&&stIdx(e)<5)e.status='booked';log(e,`תשלום ${({deposit:'מקדמה',balance:'יתרה',flights:'טיסות'})[k]} התקבל + אסמכתה`);closeModal();render();toast('התשלום נרשם. נשאר: להפיק קבלה ב-YAZ ולרשום כאן את מספרה')},
  receiptCopy:t=>{const e=ev(t.dataset.id);const k=t.dataset.k;const tt=totals(e.quote);const p=e.pay[k];const amt=k==='deposit'?tt.dep:k==='balance'?tt.bal:e.quote.flights;const txt=`לקוח: ${e.client}\nמייל: ${e.email}\nטלפון: ${e.phone}\nעבור: ${({deposit:'מקדמה',balance:'יתרה',flights:'החזר טיסות'})[k]} – ${L(ETYPES[e.etype],'he')} ${dshort(e.date)}, חוזה ${e.contractNo}\nסכום: ${money(amt,e.quote.cur)}\nאמצעי תשלום: ${p.method}\nתאריך תשלום: ${dshort(p.date)}`;openModal(`<h2 style="font-size:24px;margin-bottom:10px">פרטים להפקת קבלה ב-YAZ</h2><pre style="white-space:pre-wrap;background:var(--soft);padding:14px;border-radius:10px;font-family:inherit;font-size:15px;margin:0">${esc(txt)}</pre><div class="row" style="margin-top:12px"><button class="btn pri" type="button" data-act="copyText">העתקה</button><a class="btn" href="https://portal.yaz-app.com/">פתיחת YAZ</a><button class="btn" type="button" data-act="closeModal">סגירה</button></div>`);$('#mbox').dataset.text=txt},
  receiptDone:t=>{const e=ev(t.dataset.id);const k=t.dataset.k;openModal(`<h2 style="font-size:24px;margin-bottom:12px">מספר חשבונית מס קבלה</h2><input class="inp" id="rn" value="${80212+Math.floor(Math.random()*40)}" style="width:100%"><div class="row" style="margin-top:14px"><button class="btn pri" type="button" data-act="confirmReceipt" data-id="${e.id}" data-k="${k}">שמירה</button><button class="btn" type="button" data-act="closeModal">ביטול</button></div>`)},
  confirmReceipt:t=>{const e=ev(t.dataset.id);e.pay[t.dataset.k].receipt=$('#rn').value||'—';log(e,'קבלה הופקה: '+e.pay[t.dataset.k].receipt);closeModal();render();toast('הקבלה נרשמה. המשימה נסגרה')},
@@ -1686,14 +1685,15 @@ const ACT={
  closeModal:()=>closeModal(),
  tplSend:t=>{const e=ev(t.dataset.id);waModal(e,tplText(t.dataset.k,e,e.lang),TPL[t.dataset.k].t)},
  tplCopy:t=>{const e=ev(t.dataset.id);$('#mbox').dataset.text='';const txt=tplText(t.dataset.k,e,t.dataset.l);try{navigator.clipboard.writeText(txt).then(()=>toast('הועתק'),()=>toast('ההעתקה נחסמה בתצוגה הזו'))}catch(_){toast('ההעתקה נחסמה בתצוגה הזו')}},
+ markSent:t=>{const e=ev(t.dataset.id);(e.sent||(e.sent={}))[t.dataset.k]=new Date().toISOString().slice(0,10);log(e,'הודעה נשלחה: '+t.dataset.k);render();toast('סומן כנשלח')},
  markFu:t=>{const e=ev(t.dataset.id);e[t.dataset.k]=true;log(e,t.dataset.k==='fu1'?'פולו-אפ ראשון בוצע':'פולו-אפ שני בוצע');render();toast('נרשם ביומן הפעילות')},
  chk:t=>{const e=ev(t.dataset.id);e[t.dataset.k]=true;log(e,'סומן: '+t.dataset.k);render()},
- lost:t=>{const e=ev(t.dataset.id);e.status=e.ctype==='producer'?'irrelevant':'nurture';log(e,e.ctype==='producer'?'סומן לא רלוונטי (מפיק, ללא מעקב)':'עבר למעקב AI ניסיוני');render();toast(e.ctype==='producer'?'מפיק: סומן לא רלוונטי, בלי מעקב אוטומטי':'עבר לסטטוס "לא סגר · מעקב AI". הלקוח נשאר במאגר')},
+ lost:t=>{const e=ev(t.dataset.id);e.status=e.ctype==='producer'?'irrelevant':'nurture';log(e,e.ctype==='producer'?'סומן לא רלוונטי':'סומן לא סגר');render();toast(e.ctype==='producer'?'סומן לא רלוונטי':'עבר לסטטוס "לא סגר". הלקוח נשאר במאגר')},
  taken:t=>{const e=ev(t.dataset.id);e.status='taken';log(e,'התאריך תפוס');render();toast('סומן "תאריך תפוס". הלקוח נשמר במאגר')},
  closeFinal:t=>{const e=ev(t.dataset.id);if(checks(e).some(c=>!c[2]))return;e.status='closed';log(e,'האירוע נסגר סופית');render();toast('האירוע נסגר סופית ✓')},
  csv:()=>{const rows=[['מס׳ לקוח','שם','סוג','טלפון','מייל','שפה','תאריך אירוע','סטטוס'],...EVENTS.map(e=>[e.clientNo,e.client,CTYPE[e.ctype][0],e.phone,e.email,e.lang,e.date,stage(e.status)[1]])];const txt=rows.map(r=>r.map(c=>'"'+String(c).replace(/"/g,'""')+'"').join(',')).join('\n');openModal(`<h2 style="font-size:24px;margin-bottom:10px">ייצוא מאגר לקוחות</h2><pre style="white-space:pre-wrap;background:var(--soft);padding:12px;border-radius:10px;max-height:300px;overflow:auto;font-size:13px">${esc(txt)}</pre><div class="row" style="margin-top:10px"><button class="btn pri" type="button" data-act="copyText">העתקה</button><button class="btn" type="button" data-act="closeModal">סגירה</button></div><p class="muted" style="font-size:13px">במערכת האמיתית: הורדה ישירה כקובץ CSV / Excel.</p>`);$('#mbox').dataset.text=txt},
  backupNow:()=>{const data=JSON.stringify({exported:'2026-11-22',events:EVENTS.length,clients:EVENTS.map(e=>e.clientNo)});toast(`גיבוי נוצר: ${EVENTS.length} אירועים + ${EVENTS.reduce((n,e)=>n+docCount(e),0)} מסמכים → /Yossi Azulay/Backups/2026-11-22`)},
- pdf:()=>toast('בגרסה האמיתית: PDF מעוצב להורדה ולשליחה'),
+ pdf:()=>{S.evTab='quote';render()},
  sample:()=>toast(SX[S.lang].alb_note),
  calPrev:()=>{S.calM--;if(S.calM<0){S.calM=11;S.calY--}render()},
  calNext:()=>{S.calM++;if(S.calM>11){S.calM=0;S.calY++}render()},
@@ -1754,7 +1754,7 @@ document.addEventListener('change',e=>{
  if(t.id==='upl'){toast(`נבחרו ${t.files.length} קבצים. בגרסה האמיתית הם יועלו לספרייה`);return}
  if(!S.ev)return;const ev_=ev(S.ev);
  if(t.dataset.d&&(t.tagName==='SELECT'||t.type==='checkbox')){const o=ev_.doc||(ev_.doc={});const k=t.dataset.d;o[k]=t.type==='checkbox'?t.checked:t.value;if(k==='abroad'){delete o.cur;delete o.depositPct;delete o.lang}if(k==='lang')delete o.team;syncQuote(ev_);render();return}
- if(t.dataset.f&&t.tagName==='SELECT'){const k=t.dataset.f;ev_[k]=k==='hotelApproved'?t.value==='1':t.value;if(k==='status'){log(ev_,'סטטוס שונה ל"'+stage(t.value)[1]+'"');toast('הסטטוס עודכן, וגם ביומן גוגל')}render();return}
+ if(t.dataset.f&&t.tagName==='SELECT'){const k=t.dataset.f;ev_[k]=k==='hotelApproved'?t.value==='1':t.value;if(k==='status'){log(ev_,'סטטוס שונה ל"'+stage(t.value)[1]+'"');toast('הסטטוס עודכן')}render();return}
  if(t.dataset.q==='base'){ev_.quote.base=t.value;ev_.quote.basePrice=BASES.find(b=>b.id===t.value).price;render();return}
  if(t.dataset.q==='cur'){ev_.quote.cur=t.value;render();return}
  if(t.dataset.q==='abroad'){ev_.quote.abroad=t.checked;render();return}
@@ -1763,7 +1763,7 @@ document.addEventListener('change',e=>{
  if(t.dataset.qe){ev_.quote.exp[t.dataset.qe]=t.checked;$('#qsum').innerHTML=qsum(ev_);return}
  if(t.dataset.sup!==undefined){ev_.suppliers[+t.dataset.sup].inv=t.checked;render();return}
  if(t.dataset.supacc!==undefined){ev_.suppliers[+t.dataset.supacc].acc=t.checked;render();return}
- if(t.dataset.f==='date'){toast('התאריך עודכן גם ביומן גוגל')}
+ if(t.dataset.f==='date'){toast('התאריך עודכן')}
 });
 document.addEventListener('keydown',e=>{if(e.key==='Escape')closeModal()});
 
