@@ -1,0 +1,40 @@
+/* Typography demo for yossi-azulay.com, per the typography brief. Active only on html.typo (typo-demo.html). */
+@font-face{font-family:"YA Frank";src:url(fonts/FrankRuhlLibre-Medium.woff2) format("woff2");font-weight:500;font-display:swap}
+@font-face{font-family:"YA Heebo";src:url(fonts/Heebo-Regular.woff2) format("woff2");font-weight:400;font-display:swap}
+@font-face{font-family:"YA Heebo";src:url(fonts/Heebo-Medium.woff2) format("woff2");font-weight:500;font-display:swap}
+@font-face{font-family:"YA Cormorant";src:url(fonts/CormorantGaramond-Medium.woff2) format("woff2");font-weight:500;font-display:swap}
+
+html.typo{--h1:clamp(40px,5.6vw,78px);--h2:clamp(30px,3.4vw,46px);--h3:clamp(20px,1.7vw,24px);--body:clamp(16px,1.15vw,18px);--ui:15px}
+html.typo body{font-family:"YA Heebo",Heebo,Arial,sans-serif;font-weight:400;font-size:var(--body);line-height:1.7}
+
+/* H1: the artist's name on an album cover */
+html.typo .hero .tagline,html.typo h1{font-family:"YA Frank","Frank Ruhl Libre",serif!important;font-weight:500!important;font-size:var(--h1)!important;line-height:1.08!important;letter-spacing:0!important;color:#1f150f;text-wrap:balance;margin:0 0 16px!important}
+html.typo:not([data-lang=he]) .hero .tagline{font-family:"YA Cormorant","Cormorant Garamond",serif!important}
+/* section titles */
+html.typo .page h2{font-family:"YA Frank","Frank Ruhl Libre",serif!important;font-weight:500!important;font-size:var(--h2)!important;line-height:1.2!important;letter-spacing:0!important;text-wrap:balance;margin:0 0 14px!important}
+html.typo .page h2 .sub2{font-family:"YA Cormorant",serif;font-weight:500;letter-spacing:.04em}
+/* subtitles */
+html.typo .page h3{font-family:"YA Heebo",Heebo,sans-serif!important;font-weight:500!important;font-size:var(--h3)!important;line-height:1.35!important;letter-spacing:0!important}
+/* body text: readable at a glance */
+html.typo .htext .sub,html.typo .lead,html.typo .page p{font-family:"YA Heebo",Heebo,sans-serif;font-weight:400;font-size:var(--body)!important;line-height:1.72!important;max-width:560px!important;opacity:1!important;color:#3d2f25;text-wrap:pretty}
+html.typo .htext .sub{margin:0 0 28px!important}
+html.typo .hero .facts b{font-family:"YA Frank",serif;font-weight:500}
+html.typo .hero .facts span{font-family:"YA Heebo",sans-serif;font-size:14px}
+/* menu and buttons */
+html.typo .hnav a,html.typo .snav a,html.typo .btn-gold,html.typo .btn-ghost,html.typo .lnk,html.typo .cap{font-family:"YA Heebo",Heebo,sans-serif!important;font-weight:500!important;font-size:var(--ui)!important;letter-spacing:.01em!important}
+html.typo .hlangs button{font-family:"YA Heebo",sans-serif;font-weight:500}
+html.typo .lnk,html.typo .btn-gold,html.typo .btn-ghost{margin-top:4px}
+/* YOSSI AZULAY in the logo */
+html.typo .brand .wm{font-family:"YA Cormorant","Cormorant Garamond",serif!important;font-weight:500!important;text-transform:uppercase;letter-spacing:.08em!important;padding-inline-start:.08em!important;font-size:25px!important}
+html.typo .brand .hw{font-family:"YA Frank",serif;font-weight:500;letter-spacing:0!important;font-size:15px!important}
+/* dark backgrounds: warm white titles, light readable body, gold only for accents */
+html.typo .page.dark h2,html.typo .page.dark h3{color:#f7efe3}
+html.typo .page.dark p,html.typo .page.dark .lead{color:#e6dccd}
+/* mobile */
+@media (max-width:640px){html.typo{--h1:clamp(38px,10.5vw,46px);--h2:clamp(29px,8vw,35px);--h3:21px;--body:16.5px}html.typo .brand .wm{font-size:20px!important}}
+
+/* demo switch */
+.typo-switch{position:fixed;inset-inline-start:16px;bottom:96px;z-index:99;display:flex;gap:4px;background:#231812;padding:4px;border-radius:999px;box-shadow:0 10px 30px -12px rgba(0,0,0,.6);font:500 13px Heebo,sans-serif}
+.typo-switch button{border:0;background:transparent;color:#d9c29a;padding:8px 14px;border-radius:999px;cursor:pointer;font:inherit}
+.typo-switch button[aria-pressed=true]{background:#d9b77e;color:#231812}
+html.typo .sfoot .cap{font-size:12.5px!important;font-weight:400!important;letter-spacing:.14em!important}
