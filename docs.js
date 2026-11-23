@@ -63,6 +63,7 @@ ul{margin:0 0 4mm;padding-inline-start:5mm}li{margin:0 0 .6mm}
 .hdl{position:absolute;top:9mm;left:23mm;right:23mm;height:34mm}
 .hdl img{position:absolute;left:50%;top:0;transform:translateX(-50%);width:46mm}
 .hdl .mt2{position:absolute;right:0;top:2mm;font-size:8.6pt;line-height:1.6;color:#806b5e;text-align:right;direction:rtl}
+.hdl .mt2.en{right:auto;left:0;text-align:left;direction:ltr}
 .body.bl{top:44mm}
 .white .ag{line-height:1.37}.white .ag li,.white .ag p{margin-bottom:1.5mm}
 .ag .fill{text-decoration:underline;text-underline-offset:2px}
@@ -74,7 +75,7 @@ const shell=(lang,title,pages,fontCss)=>`<!DOCTYPE html><html lang="${lang}" dir
 const page=(inner,n,N,right)=>`<section class="pg"><div class="hd"><span class="wm">YOSSI AZULAY</span><span class="hn">${right||''}</span></div><div class="body">${inner}</div><div class="ft"><span>YOSSI AZULAY MANAGEMENT &nbsp;/&nbsp; VAT NO. ${BIZ}</span><span>${n} &nbsp;/&nbsp; ${N}</span></div></section>`;
 
 const logoUrl=()=>{try{return new URL('doc-logo.png',location.href).href}catch(_){return 'doc-logo.png'}};
-const pageL=(inner,n,N,meta,logo)=>`<section class="pg"><div class="hdl"><img src="${esc(logo||logoUrl())}" alt="Yossi Azulay"><div class="mt2">${meta}</div></div><div class="body bl">${inner}</div><div class="ft"><span>YOSSI AZULAY MANAGEMENT &nbsp;/&nbsp; VAT NO. ${BIZ}</span><span>${n} &nbsp;/&nbsp; ${N}</span></div></section>`;
+const pageL=(inner,n,N,meta,logo,en)=>`<section class="pg"><div class="hdl"><img src="${esc(logo||logoUrl())}" alt="Yossi Azulay"><div class="mt2${en?' en':''}">${meta}</div></div><div class="body bl">${inner}</div><div class="ft"><span>YOSSI AZULAY MANAGEMENT &nbsp;/&nbsp; VAT NO. ${BIZ}</span><span>${n} &nbsp;/&nbsp; ${N}</span></div></section>`;
 
 /* ---------------- texts ---------------- */
 const ET={
@@ -129,7 +130,9 @@ function quote(d,fontCss){
   <div class="lab" style="margin-top:6mm">${esc(t.conL)}</div>${P(t.con(dep))}
   <div class="sign"><div><p style="margin-bottom:3mm">${esc(t.bye)}</p><div style="font-size:12.7pt">${esc(t.mgr)}</div></div><div class="r">${PHONE}<br>${MAIL}<br>${WEB}</div></div>`;
  const right=L==='he'?`<span dir="rtl">הצעת מחיר ${esc(d.no||'')} &nbsp;/&nbsp; ${d2(d.docDate||todayIso())}</span>`:`QUOTATION &nbsp;${esc(d.no||'')} &nbsp;/&nbsp; ${d2(d.docDate||todayIso())}`;
- return shell(L,`${t.qn} ${d.no||''} · ${d.client||''}`,[page(p1,1,2,right),page(p2,2,2,'')],fontCss);
+ const dd=(d.docDate||todayIso()).split('-').reverse().join('.');
+ const meta=L==='he'?`הצעת מחיר מס׳ ${esc(d.no||'')}<br>תאריך: ${dd}`:`Quotation no. ${esc(d.no||'')}<br>Date: ${dd}`;
+ return shell(L,`${t.qn} ${d.no||''} · ${d.client||''}`,[pageL(p1,1,2,meta,d.logo,L!=='he'),pageL(p2,2,2,meta,d.logo,L!=='he')],fontCss).replace('<body>','<body class="white">');
 }
 
 /* ---------------- agreement / order form ---------------- */
@@ -179,10 +182,12 @@ function orderHe(d,fontCss){
 
 function orderEn(d,fontCss){
  const dep=d.depositPct||50;
- const head=`<div class="meta"><div class="l">Bs”d<br><b>Yossi Azulay</b> · Licensed Dealer No. ${BIZ}</div><div class="l" style="text-align:right">Order no. <b>${esc(d.no||'')}</b><br>${esc(enLong(d.docDate))}</div></div>`;
+ const dd=(d.docDate||todayIso()).split('-').reverse().join('.');
+ const meta=`Bs”d<br>Yossi Azulay · Licensed Dealer No. ${BIZ}<br>Order no. ${esc(d.no||'')}<br>Date: ${dd}`;
+ const head='';
  const right=`ORDER &nbsp;${esc(d.no||'')}`;
  const nights=d.nights||2;
- const c1=`${head}<h2 class="t2">Performance Agreement</h2><div class="ag">
+ const c1=`<h2 class="t2" style="text-align:center">Performance Agreement</h2><div class="ag">
  <p>I/We the undersigned (hereinafter: the “Client”): ${blank(d.client,70)}</p>
  <p>Passport no. ${blank(d.idno,36)} Address: ${blank(d.street,70)}</p>
  <p>Country: ${blank(d.country,40)} Mobile: ${blank(d.phone,40)}</p>
@@ -216,7 +221,7 @@ function orderEn(d,fontCss){
  <li><i>4.</i><div>Technical Equipment: The customer commits to provide a stage, lighting, and amplification for the show according to the technical specifications which will be provided by us.</div></li>
  </ol><p style="margin-top:4mm">Regards,<br>The Artist’s Manager</p></div>`;
  const sig=`<div class="sigs"><div>The Client</div><div>The Artist’s Manager</div></div>`;
- return shell('en',`Order ${d.no||''} · ${d.client||''}`,[page(c1+sig,1,2,right),page(c2+sig,2,2,right)],fontCss);
+ return shell('en',`Order ${d.no||''} · ${d.client||''}`,[pageL(c1,1,2,meta,d.logo,true),pageL(c2+sig,2,2,meta,d.logo,true)],fontCss).replace('<body>','<body class="white">');
 }
 const order=(d,f)=>d.lang==='he'?orderHe(d,f):orderEn(d,f);
 const api={quote,order,ET};
