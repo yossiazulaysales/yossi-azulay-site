@@ -17,7 +17,7 @@ const STAGE = {lead:'פנייה חדשה',checking:'בדיקת זמינות',quo
   nurture:'לא סגר',irrelevant:'לא רלוונטי',taken:'תאריך תפוס'};
 const ORDER = ['lead','checking','quote','contract','deposit','booked','prep','ready','done','closed'];
 const SIDE = ['nurture','irrelevant','taken'];
-const ETYPE = {wedding:'חתונה – כניסה לחופה',tefillin:'בר מצווה – הנחת תפילין',aliyah:'בר מצווה – עלייה לתורה',henna:'חינה – מופע מזרחי',other:'אירוע'};
+const ETYPE = {wedding:'חתונה – כניסה לחופה',tefillin:'בר מצווה – הנחת תפילין',aliyah:'בר מצווה – עלייה לתורה',henna:'חינה – מופע אוריינטלי',other:'אירוע'};
 const CUR = {ILS:'₪',EUR:'€',USD:'$'};
 const TEAMS = {yossi:'יוסי אזולאי',canaries:'יוסי + כנריות',kids:'יוסי + מיוסיקידס',band:'יוסי + נגנים','yossi+band':'יוסי + נגנים',kidscan:'יוסי + קידס + כנריות',other:'אחר'};
 const TZ = 'Asia/Jerusalem';
