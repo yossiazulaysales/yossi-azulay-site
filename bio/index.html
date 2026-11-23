@@ -663,6 +663,9 @@ table.t tr.click:hover td{background:var(--soft)}
 .swin .hshine{display:none}
 .hero .swin{margin-bottom:clamp(40px,6vw,64px)}
 
+
+/* phones: picture first, then the text (like the About and Gallery pages); desktop untouched */
+@media (max-width:760px){.page.hero .hwin{order:-1;margin-bottom:clamp(64px,16vw,90px)}.page.hero .htext{order:0}}
 </style>
 <script>window.__START='about';window.__LANG='he'</script>
 </head>
