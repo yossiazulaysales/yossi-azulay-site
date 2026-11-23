@@ -2,23 +2,31 @@ rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
 
+    // Yossi's Google accounts are the only admins
     function isAdmin() {
       return request.auth != null
         && request.auth.token.email_verified == true
-        && request.auth.token.email in ['yossiazulaysales@gmail.com'];
-    }
+        && request.auth.token.email in ['yossiazulaysales@gmail.com']}
 
-    // Website inquiry form: anyone may create a new inquiry (nothing else).
-    match /leads/{id} {
-      allow create: if request.resource.data.keys().hasOnly(['name','names','phone','email','etype','date','loc','heard','notes','lang','source','status','createdAt'])
-        && request.resource.data.status == 'new'
-        && request.resource.data.source == 'site'
-        && request.resource.data.createdAt == request.time
-        && request.resource.data.get('name', '').size() < 200
-        && request.resource.data.get('names', '').size() < 200
-        && request.resource.data.get('phone', '').size() < 60
-        && request.resource.data.get('email', '').size() < 200
-        && request.resource.data.get('notes', '').size() < 4000;
+    function str(v, max) { return v is string && v.size() <= max; }
+
+    // Website inquiry form: anyone may CREATE one lead, nobody but admins may read/change
+    match /leads/{leadId} {
+      allow create: if request.resource.data.keys().hasOnly(
+                        ['lang','etype','date','loc','name','phone','email','heard','names','notes','status','source','createdAt'])
+                    && request.resource.data.status == 'new'
+                    && request.resource.data.source == 'site'
+                    && request.resource.data.createdAt == request.time
+                    && str(request.resource.data.phone, 40) && request.resource.data.phone.size() > 0
+                    && str(request.resource.data.email, 120)
+                    && str(request.resource.data.date, 20)
+                    && str(request.resource.data.loc, 200)
+                    && str(request.resource.data.name, 120)
+                    && str(request.resource.data.heard, 200)
+                    && str(request.resource.data.names, 200)
+                    && str(request.resource.data.notes, 2000)
+                    && str(request.resource.data.etype, 30)
+                    && str(request.resource.data.lang, 5);
       allow read, update, delete: if isAdmin();
     }
 
@@ -34,7 +42,7 @@ service cloud.firestore {
       );
     }
 
-    // Everything else (events, settings, engine): the office only.
+    // Everything else: admins only
     match /{document=**} {
       allow read, write: if isAdmin();
     }
