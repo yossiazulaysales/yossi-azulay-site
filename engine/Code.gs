@@ -19,6 +19,7 @@ const ORDER = ['lead','checking','quote','contract','deposit','booked','prep','r
 const SIDE = ['nurture','irrelevant','taken'];
 const ETYPE = {wedding:'חתונה – כניסה לחופה',tefillin:'בר מצווה – הנחת תפילין',aliyah:'בר מצווה – עלייה לתורה',henna:'חינה – מופע מזרחי',other:'אירוע'};
 const CUR = {ILS:'₪',EUR:'€',USD:'$'};
+const TEAMS = {yossi:'יוסי אזולאי',canaries:'יוסי + כנריות',kids:'יוסי + מיוסיקידס',band:'יוסי + נגנים','yossi+band':'יוסי + נגנים',kidscan:'יוסי + קידס + כנריות',other:'אחר'};
 const TZ = 'Asia/Jerusalem';
 
 /* ================= הפעלה ================= */
@@ -119,7 +120,8 @@ function calText_(e) {
     ['מייל', e.email],
     ['מקום', [e.venue, e.city, e.country].filter(Boolean).join(', ')],
     ['שעות', times],
-    ['צוות', d.team],
+    ['צוות', d.team || [TEAMS[e.team] || '', e.extraMusicians].filter(Boolean).join(' + ')],
+    ['מנהל מופע', e.showManager],
     ['הצעת מחיר מס׳', e.quoteNo],
     ['טופס הזמנה מס׳', e.contractNo],
     ['חוזה', e.contract === 'signed' ? 'חתום' : e.contract === 'sent' ? 'נשלח' : ''],
@@ -128,6 +130,8 @@ function calText_(e) {
     ['חשבונית מקדמה', dep.receipt && dep.receipt !== 'pending' ? dep.receipt : ''],
     ['יתרה', bal.received ? 'התקבלה' + (bal.date ? ' · ' + fmt_(bal.date) : '') : ''],
     ['הגברה', e.sound],
+    ['טיסות', e.flightsInfo],
+    ['מלונות', e.hotelsInfo],
     ['מוסיקה', e.music],
     ['הערות', e.notes],
   ].filter(x => x[1]).map(x => x[0] + ': ' + x[1]);

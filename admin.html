@@ -1491,13 +1491,16 @@ function evDetail(e){
   <label>טלפון<input class="inp" data-f="phone" value="${esc(e.phone)}" style="direction:ltr;text-align:end"></label>
   <label>מייל<input class="inp" data-f="email" value="${esc(e.email)}" style="direction:ltr;text-align:end"></label>
   <label>שפת לקוח<select data-f="lang">${['he','en','fr','es'].map(l=>`<option ${l===e.lang?'selected':''} value="${l}">${({he:'עברית',en:'English',fr:'Français',es:'Español'})[l]}</option>`).join('')}</select></label>
-  <label>צוות<select data-f="team"><option value="yossi" ${e.team==='yossi'?'selected':''}>יוסי אזולאי</option><option value="yossi+band" ${e.team!=='yossi'?'selected':''}>יוסי + נגנים</option></select></label>
+  <label>צוות<select data-f="team">${Object.entries(TEAMS).map(([k,v])=>`<option value="${k}" ${(e.team||'yossi')===k||(k==='band'&&e.team==='yossi+band')?'selected':''}>${v}</option>`).join('')}</select></label>
+  <label>כנריות / נגנים נוספים<input class="inp" data-f="extraMusicians" value="${esc(e.extraMusicians||'')}"></label>
+  <label>מנהל מופע<input class="inp" data-f="showManager" value="${esc(e.showManager||'')}"></label>
   <label>הגברה<input class="inp" data-f="sound" value="${esc(e.sound)}"></label>
   <label>מקור<input class="inp" value="${SRC[e.source]||''}" disabled></label>
   ${e.quote.abroad?`<label>מלון<select data-f="hotelApproved"><option value="0" ${!e.hotelApproved?'selected':''}>ממתין לאישור שם ומיקום</option><option value="1" ${e.hotelApproved?'selected':''}>אושר ✓</option></select></label>`:''}
-  <label class="wide">תיאום מוזיקה<input class="inp" data-f="music" value="${esc(e.music)}"></label>
+  ${e.quote.abroad||e.ctype==='abroad'?`<label>טיסות<input class="inp" data-f="flightsInfo" value="${esc(e.flightsInfo||'')}"></label><label>מלונות<input class="inp" data-f="hotelsInfo" value="${esc(e.hotelsInfo||'')}"></label>`:''}
+  <label class="wide">תיאום מוזיקה<textarea data-f="music" rows="2">${esc(e.music)}</textarea></label>
   <label class="wide">הערות<textarea data-f="notes" rows="2">${esc(e.notes)}</textarea></label></div>
-  <p class="muted" style="font-size:14px;margin-bottom:0">כל שינוי כאן מתעדכן ביומן גוגל.</p></div>`;
+  <p class="muted" style="font-size:14px;margin-bottom:0">כל שינוי כאן נשמר מיד, ומתעדכן ביומן גוגל תוך כ-10 דקות (כשמנוע האוטומציות פעיל).</p></div>`;
  } else if(S.evTab==='quote'){
   b=docPanel(e,'quote');
  } else if(S.evTab==='contract'){
@@ -1546,6 +1549,8 @@ const followText={he:e=>`היי ${e.couple||e.client}, רצינו לוודא ש�
 const formText={he:'שלום! תודה שפנית ליוסי אזולאי 🎶 כדי שנבדוק זמינות ונכין הצעה, נשמח שתמלא/י את הטופס הקצר: yossi-azulay.com/he/form',en:'Hi! Thank you for contacting Yossi Azulay 🎶 To check availability and prepare a quote, please fill in this short form: yossi-azulay.com/en/form',fr:'Bonjour ! Merci d’avoir contacté Yossi Azulay 🎶 Pour vérifier la disponibilité et préparer un devis, merci de remplir ce court formulaire : yossi-azulay.com/fr/form',es:'¡Hola! Gracias por contactar a Yossi Azulay 🎶 Para consultar disponibilidad y preparar un presupuesto, complete este breve formulario: yossi-azulay.com/es/form'};
 
 /* ================= DOCUMENTS (quote + order form, new design) ================= */
+const TEAMS={yossi:'יוסי אזולאי',canaries:'יוסי + כנריות',kids:'יוסי + מיוסיקידס',band:'יוסי + נגנים',kidscan:'יוסי + קידס + כנריות',other:'אחר'};
+const teamLine=e=>{const b=TEAMS[e.team==='yossi+band'?'band':e.team]||TEAMS.yossi;return [b==='אחר'?'יוסי אזולאי':b,e.extraMusicians,'מנהל מופע'].filter(Boolean).join(' + ')};
 const NATURE={wedding:['כניסה לחופה','חתונה'],aliyah:['עלייה לתורה','בר מצווה'],tefillin:['הנחת תפילין','בר מצווה'],henna:['מופע חינה','חינה'],other:['','']};
 function docD(e){
  const o=e.doc||(e.doc={});const qt=e.quote;
@@ -1559,7 +1564,7 @@ function docD(e){
   title:o.title||'',idno:o.idno||'',street:o.street||'',house:o.house||'',city:o.city!=null?o.city:(e.city||''),country:o.country!=null?o.country:(e.country||''),phone2:o.phone2||'',
   nature:o.nature!=null?o.nature:N[0],etypeHe:o.etypeHe!=null?o.etypeHe:N[1],typeEn:o.typeEn!=null?o.typeEn:((window.YDOC&&YDOC.ET[e.etype]||{en:''}).en),
   venue:o.venue!=null?o.venue:[e.venue,e.city].filter(Boolean).join(', '),startTime:o.startTime||'',showTime:o.showTime||'',endTime:o.endTime||'',
-  team:o.team!=null?o.team:(lang==='he'?'יוסי אזולאי + מנהל מופע':'Yossi Azulay + Show manager'),notes:o.notes||''};
+  team:o.team!=null?o.team:(lang==='he'?teamLine(e):'Yossi Azulay + Show manager'),notes:o.notes||''};
 }
 function syncQuote(e){const d=docD(e);Object.assign(e.quote,{feeMode:true,basePrice:+d.fee||0,items:{},sound:'spec',discount:0,cur:d.cur,abroad:d.abroad,depositPct:+d.depositPct||25})}
 function docPanel(e,kind){
