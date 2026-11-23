@@ -271,6 +271,12 @@ function digestItems_(events) {
       if (to === 1) add(e, 'מחר האירוע', true);
       if (to === 0) add(e, 'היום האירוע', true);
       if (to === -1) add(e, 'תודה + בקשת המלצה', false);
+      if ((e.ctype === 'abroad' || (e.quote || {}).abroad) && to <= -2 && !e.flightReport) add(e, 'דו״ח טיסה: להפיק במערכת של יקי (רו״ח)', to <= -7);
+      const cr = crew_(e);
+      const notCoord = cr.filter(c => !c.coord).map(c => c.l);
+      if (notCoord.length && to <= 45 && to >= 0) add(e, 'לתאם צוות: ' + notCoord.join(', '), to <= 14);
+      const noInv = cr.filter(c => !c.inv || !c.filed).map(c => c.l);
+      if (noInv.length && to <= -2) add(e, 'צוות: חשבונית + תיוק חסרים (' + noInv.join(', ') + ')', to <= -7);
     }
   });
   return out.sort((a, b) => (b.urgent - a.urgent) || String(a.e.date).localeCompare(String(b.e.date)));
@@ -290,6 +296,14 @@ function morningDigest() {
    ${upcoming.length ? `<h3 style="font-weight:400;margin:22px 0 6px">אירועים בשבועיים הקרובים</h3><ul style="padding-right:18px;margin:0">${upcoming.map(e => `<li>${fmt_(e.date)} · ${esc_(e.client)} · ${esc_(e.venue || e.city || '')}</li>`).join('')}</ul>` : ''}
    <p style="margin-top:22px"><a href="${CRM_URL}" style="background:#2b211c;color:#f5f0e8;padding:10px 20px;border-radius:999px;text-decoration:none">פתיחת מערכת הניהול</a></p></div>`;
   MailApp.sendEmail({to: OWNER_EMAIL, subject: `סיכום בוקר · ${items.length} לטיפול`, htmlBody: html, name: 'מערכת ניהול – יוסי אזולאי'});
+}
+function crew_(e) {
+  const t = e.team === 'yossi+band' ? 'band' : e.team, L = [];
+  if (t === 'canaries' || t === 'kidscan') L.push(['canaries', 'כנריות']);
+  if (t === 'kids' || t === 'kidscan') L.push(['kids', 'מיוסיקידס']);
+  if (t === 'band') L.push(['band', 'נגנים']);
+  if ((e.extraMusicians || '').trim()) L.push(['extra', 'נגנים נוספים']);
+  return L.map(([k, l]) => Object.assign({k, l}, (e.crew || {})[k] || {}));
 }
 function esc_(s) { return String(s == null ? '' : s).replace(/[&<>"]/g, c => ({'&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;'}[c])); }
 
