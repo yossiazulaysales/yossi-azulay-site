@@ -1,0 +1,9 @@
+User-agent: *
+Disallow: /admin.html
+Disallow: /portal.html
+Disallow: /typo-demo.html
+Disallow: /wmusic/
+Disallow: /tools/
+Disallow: /engine/
+
+Sitemap: https://yossi-azulay.com/sitemap.xml

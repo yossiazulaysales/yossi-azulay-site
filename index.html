@@ -3,15 +3,24 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>יוסי אזולאי · זמר חופות, בר מצוות וטקסים יהודיים בישראל ובעולם</title>
-<meta name="description" content="יוסי אזולאי, זמר, יוצר ומפיק מוזיקלי. כניסות לחופה, בר מצוות וטקסים יהודיים בישראל וברחבי העולם, מאז 2004.">
+<title>יוסי אזולאי | Yossi Azulay · זמר חופות, בר מצוות וטקסים יהודיים</title>
+<meta name="description" content="יוסי אזולאי, זמר, יוצר ומפיק מוזיקלי. כניסות לחופה, בר מצוות וטקסים יהודיים בישראל וברחבי העולם, מאז 2004. Yossi Azulay, Jewish ceremony singer.">
+<link rel="canonical" href="https://yossi-azulay.com/">
+<meta property="og:site_name" content="יוסי אזולאי · Yossi Azulay">
 <meta property="og:title" content="יוסי אזולאי · Yossi Azulay">
 <meta property="og:description" content="קולה של הנשמה היהודית, ברחבי תבל. חופות, בר מצוות וטקסים יהודיים בישראל ובעולם.">
 <meta property="og:image" content="https://yossi-azulay.com/hero-yossi.jpg">
+<meta property="og:url" content="https://yossi-azulay.com/">
 <meta property="og:type" content="website">
+<meta property="og:locale" content="he_IL">
+<meta name="twitter:card" content="summary_large_image">
 <meta name="theme-color" content="#f3ede3">
-<link rel="icon" type="image/png" href="logo-mark.png">
-<link rel="apple-touch-icon" href="logo-mark.png">
+<link rel="icon" href="/favicon.ico" sizes="any">
+<link rel="icon" type="image/png" sizes="48x48" href="/favicon-48.png">
+<link rel="icon" type="image/png" sizes="96x96" href="/favicon-96.png">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="manifest" href="/site.webmanifest">
+<script type="application/ld+json">{"@context": "https://schema.org", "@graph": [{"@type": "Person", "@id": "https://yossi-azulay.com/#yossi", "name": "יוסי אזולאי", "alternateName": ["Yossi Azulay", "Yossi Azoulay"], "url": "https://yossi-azulay.com/", "image": "https://yossi-azulay.com/hero-yossi.jpg", "jobTitle": "זמר, יוצר ומפיק מוזיקלי", "description": "יוסי אזולאי, זמר, יוצר ומפיק מוזיקלי מירושלים. כניסות לחופה, בר מצוות וטקסים יהודיים בישראל ובעולם, מאז 2004.", "birthPlace": {"@type": "Place", "name": "ירושלים"}, "knowsLanguage": ["he", "en", "fr", "es"], "sameAs": ["https://www.instagram.com/yossi_azulay_55", "https://www.facebook.com/Azulayossi/", "https://www.youtube.com/channel/UC-MkkELmpMXohuCzcLfP-Mw", "https://open.spotify.com/artist/0ervBY5UeqTk1YOatn1Re7", "https://music.apple.com/il/artist/yossi-azulay/544512336"]}, {"@type": "WebSite", "@id": "https://yossi-azulay.com/#site", "url": "https://yossi-azulay.com/", "name": "יוסי אזולאי · Yossi Azulay", "inLanguage": "he", "publisher": {"@id": "https://yossi-azulay.com/#yossi"}}]}</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Frank+Ruhl+Libre:wght@300;400;500&family=Heebo:wght@300;400;500;600&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
@@ -1637,7 +1646,7 @@ function render(){
  if(S.view==='portal'&&S.ptab==='contract')initSig();
 }
 function go(v){if(location.hash!=='#'+v)location.hash=v;else{S.view=v;render()}window.scrollTo(0,0)}
-function fromHash(){const h=location.hash.slice(1);if(h.startsWith('site-')&&PAGES.includes(h.slice(5))&&h!=='site-producer'){S.view='site';S.page=h.slice(5)}else{S.view='site';if(S.view==='site'&&h==='site')S.page='home'}render()}
+function fromHash(){const h=location.hash.slice(1);if(!h&&window.__START&&!fromHash.done){fromHash.done=1;if(window.__LANG)S.lang=window.__LANG;S.view='site';S.page=window.__START;render();return}if(h.startsWith('site-')&&PAGES.includes(h.slice(5))&&h!=='site-producer'){S.view='site';S.page=h.slice(5)}else{S.view='site';if(S.view==='site'&&h==='site')S.page='home'}render()}
 window.addEventListener('hashchange',fromHash);
 
 /* signature */
