@@ -1,0 +1,11 @@
+<div class="typo-switch" role="group" aria-label="השוואת טיפוגרפיה"><button type="button" data-t="1" aria-pressed="true">טיפוגרפיה חדשה</button><button type="button" data-t="0" aria-pressed="false">הנוכחית</button></div>
+<script>
+document.querySelector('.typo-switch').addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;document.documentElement.classList.toggle('typo',b.dataset.t==='1');document.querySelectorAll('.typo-switch button').forEach(x=>x.setAttribute('aria-pressed',x===b))});
+/* line breaks: keep names together, no single word at the end of a title or paragraph */
+(function(){const KEEP=[/יוסי אזולאי/g,/Yossi Azulay/g,/שיר המעלות/g,/אנא בכח/g];
+function fix(el){if(el.dataset.tf)return;el.dataset.tf=1;const w=document.createTreeWalker(el,NodeFilter.SHOW_TEXT);let n,last=null;while(n=w.nextNode()){let t=n.nodeValue;KEEP.forEach(r=>t=t.replace(r,m=>m.replace(/ /g,'\u00a0')));n.nodeValue=t;if(t.trim())last=n}
+ if(last){last.nodeValue=last.nodeValue.replace(/ (\S+\s*)$/,'\u00a0$1')}}
+function brk(){const h=document.querySelector('.hero .tagline');if(h&&!h.dataset.br&&/היהודית,/.test(h.textContent)){h.dataset.br=1;h.innerHTML=h.innerHTML.replace(/היהודית,\s*/,'היהודית,<br>')}}
+function run(){brk();document.documentElement.dataset.lang=(document.querySelector('.hlangs [aria-pressed=true]')||{}).dataset?.lang||'he';document.querySelectorAll('main h1,main h2,main h3,main .sub,main .lead,main p').forEach(fix)}
+new MutationObserver(run).observe(document.body,{childList:true,subtree:true});run()})();
+</script>

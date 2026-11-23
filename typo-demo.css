@@ -38,3 +38,6 @@ html.typo .page.dark p,html.typo .page.dark .lead{color:#e6dccd}
 .typo-switch button{border:0;background:transparent;color:#d9c29a;padding:8px 14px;border-radius:999px;cursor:pointer;font:inherit}
 .typo-switch button[aria-pressed=true]{background:#d9b77e;color:#231812}
 html.typo .sfoot .cap{font-size:12.5px!important;font-weight:400!important;letter-spacing:.14em!important}
+/* home title: smaller, two lines, centered in its column */
+html.typo .hero .tagline{font-size:clamp(34px,3.55vw,54px)!important;line-height:1.12!important;text-align:center;white-space:nowrap}
+@media (max-width:640px){html.typo .hero .tagline{font-size:clamp(28px,7.6vw,34px)!important}}
