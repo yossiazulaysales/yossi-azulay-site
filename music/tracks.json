@@ -155,117 +155,131 @@
    "note": ""
   },
   {
+   "t": "Katonti",
+   "f": "music/26-katonti.mp3",
+   "len": "4:36",
+   "note": ""
+  },
+  {
    "t": "Nishba",
-   "f": "music/26-nishba.mp3",
+   "f": "music/27-nishba.mp3",
    "len": "4:40",
    "note": ""
   },
   {
    "t": "Ose Shalom Bimromav",
-   "f": "music/27-ose-shalom-bimromav.mp3",
+   "f": "music/28-ose-shalom-bimromav.mp3",
    "len": "0:41",
    "note": ""
   },
   {
    "t": "Rachem",
-   "f": "music/28-rachem.mp3",
+   "f": "music/29-rachem.mp3",
    "len": "4:00",
    "note": ""
   },
   {
    "t": "Shalom Aleichem",
-   "f": "music/29-shalom-aleichem.mp3",
+   "f": "music/30-shalom-aleichem.mp3",
    "len": "3:59",
    "note": ""
   },
   {
    "t": "Shirat Ha-Navad",
-   "f": "music/30-shirat-ha-navad.mp3",
+   "f": "music/31-shirat-ha-navad.mp3",
    "len": "5:39",
    "note": ""
   },
   {
    "t": "Tfilat Av",
-   "f": "music/31-tfilat-av.mp3",
+   "f": "music/32-tfilat-av.mp3",
    "len": "4:53",
    "note": ""
   },
   {
+   "t": "Ve-Ha'er Eineinu",
+   "f": "music/33-ve-ha-er-eineinu.mp3",
+   "len": "5:25",
+   "note": ""
+  },
+  {
    "t": "Vehi She-Amda",
-   "f": "music/32-vehi-she-amda.mp3",
+   "f": "music/34-vehi-she-amda.mp3",
    "len": "5:10",
    "note": ""
   },
   {
    "t": "Vezakeni",
-   "f": "music/33-vezakeni.mp3",
+   "f": "music/35-vezakeni.mp3",
    "len": "4:48",
    "note": ""
   },
   {
    "t": "Yasmin",
-   "f": "music/34-yasmin.mp3",
+   "f": "music/36-yasmin.mp3",
    "len": "4:14",
    "note": ""
   },
   {
    "t": "Yeh Li Chalom",
-   "f": "music/35-yeh-li-chalom.mp3",
+   "f": "music/37-yeh-li-chalom.mp3",
    "len": "4:22",
    "note": ""
   },
   {
    "t": "Yerushalayim Shel Zahav",
-   "f": "music/36-yerushalayim-shel-zahav.mp3",
+   "f": "music/38-yerushalayim-shel-zahav.mp3",
    "len": "5:06",
    "note": ""
   },
   {
+   "t": "Tzur Mishelo Achalnu",
+   "f": "music/39-tzur-mishelo-achalnu.mp3",
+   "len": "5:50",
+   "note": ""
+  },
+  {
    "t": "Tfilat Haderech",
-   "f": "music/37-tfilat-haderech.mp3",
+   "f": "music/40-tfilat-haderech.mp3",
    "len": "4:52",
    "note": ""
   },
   {
    "t": "Erev Shel Shoshanim",
-   "f": "music/38-erev-shel-shoshanim.mp3",
+   "f": "music/41-erev-shel-shoshanim.mp3",
    "len": "0:56",
    "note": ""
   },
   {
    "t": "Tfilat Kala",
-   "f": "music/39-tfilat-kala.mp3",
+   "f": "music/42-tfilat-kala.mp3",
    "len": "4:33",
    "note": ""
   },
   {
    "t": "Shma Israel",
-   "f": "music/40-shma-israel.mp3",
+   "f": "music/43-shma-israel.mp3",
    "len": "0:47",
    "note": ""
   },
   {
    "t": "Shir La-Ma'alot",
-   "f": "music/41-shir-la-ma-alot.mp3",
+   "f": "music/44-shir-la-ma-alot.mp3",
    "len": "4:39",
    "note": ""
   },
   {
    "t": "Yerushalayim Shel Zahav – Piano",
-   "f": "music/42-yerushalayim-shel-zahav-piano.mp3",
+   "f": "music/45-yerushalayim-shel-zahav-piano.mp3",
    "len": "2:28",
    "note": ""
   },
   {
    "t": "Brit Olam",
-   "f": "music/43-brit-olam.mp3",
+   "f": "music/46-brit-olam.mp3",
    "len": "4:53",
    "note": ""
   }
  ],
- "missing": [
-  "Katonti",
-  "Ve-Ha'er Eineinu",
-  "Tzur Mishelo Achalnu"
- ]
+ "missing": []
 }
