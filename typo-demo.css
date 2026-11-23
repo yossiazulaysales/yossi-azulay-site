@@ -41,3 +41,5 @@ html.typo .sfoot .cap{font-size:12.5px!important;font-weight:400!important;lette
 /* home title: smaller, two lines, centered in its column */
 html.typo .hero .tagline{font-size:clamp(34px,3.55vw,54px)!important;line-height:1.12!important;text-align:center;white-space:nowrap}
 @media (max-width:640px){html.typo .hero .tagline{font-size:clamp(28px,7.6vw,34px)!important}}
+/* new studio portrait (warm-toned to the site) */
+html.typo .hwin .hpane img[src*=studio]{object-position:50% 30%!important}

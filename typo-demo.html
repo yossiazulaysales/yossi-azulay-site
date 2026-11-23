@@ -645,7 +645,7 @@ table.t tr.click:hover td{background:var(--soft)}
 .hwin .hsnd:hover{background:rgba(35,24,18,.75)}
 .hwin .hsnd.done{opacity:0!important;pointer-events:none}
 </style>
-<link rel="stylesheet" href="typo-demo.css?v=d938cadc">
+<link rel="stylesheet" href="typo-demo.css?v=7a3d62b0">
 </head>
 <body>
 
@@ -1021,7 +1021,7 @@ function siteView(){
   <div class="htext"><h1 class="tagline">${lang==='he'?'קולה של הנשמה היהודית, ברחבי תבל':'<bdi dir="ltr">Jewish Singer, Worldwide</bdi>'}</h1><p class="sub">${esc(x.intro)}</p>
    <div class="facts">${x.facts.map(f=>`<div><b>${esc(f[0])}</b><span>${esc(f[1])}</span></div>`).join('')}</div>
    <a class="lnk cap" href="#site-videos" data-page="videos">${esc(x.gallery)} <span class="ar">${arrow}</span></a></div>
-  <figure class="hwin"><div class="reveal"><div class="hpane"><i class="hdoor l" aria-hidden="true"></i><i class="hdoor r" aria-hidden="true"></i><i class="hshine" aria-hidden="true"></i><img src="hero-yossi.jpg" alt="${lang==='he'?'יוסי אזולאי שר בחופה':'Yossi Azulay singing at a chuppah'}" width="880" height="1134">${vid?`<video class="hvid" src="hero-clip.mp4" muted autoplay playsinline preload="auto" aria-hidden="true"></video>`:''}</div></div>${vid?`<button type="button" class="hsnd" data-act="heroSound">${lang==='he'?'🔊 לשמוע':lang==='fr'?'🔊 Écouter':lang==='es'?'🔊 Escuchar':'🔊 Listen'}</button>`:''}<div class="hsill"></div></figure></section>
+  <figure class="hwin"><div class="reveal"><div class="hpane"><i class="hdoor l" aria-hidden="true"></i><i class="hdoor r" aria-hidden="true"></i><i class="hshine" aria-hidden="true"></i><img src="hero-yossi-studio.jpg" alt="${lang==='he'?'יוסי אזולאי שר בחופה':'Yossi Azulay singing at a chuppah'}" width="880" height="1134">${vid?`<video class="hvid" src="hero-clip.mp4" muted autoplay playsinline preload="auto" aria-hidden="true"></video>`:''}</div></div>${vid?`<button type="button" class="hsnd" data-act="heroSound">${lang==='he'?'🔊 לשמוע':lang==='fr'?'🔊 Écouter':lang==='es'?'🔊 Escuchar':'🔊 Listen'}</button>`:''}<div class="hsill"></div></figure></section>
   <div class="endcta"><span>${esc(x.endq)}</span><a class="btn-gold cap" href="#site-booking" data-page="booking">${esc(t.check)}</a></div>`;
  } else if(pg==='producer'){
   const P=PRD[lang];const prods=[...new Set(EVENTS.filter(e=>e.producer).map(e=>e.producer))];
