@@ -9,8 +9,11 @@ s=s.replace('<head>','<head>\n<meta name="robots" content="noindex,nofollow">\n<
 import hashlib
 v=hashlib.md5((root/'typo-demo.css').read_bytes()).hexdigest()[:8]
 s=s.replace('</head>',f'<link rel="stylesheet" href="typo-demo.css?v={v}">\n</head>',1)
-s=s.replace('src="hero-yossi.jpg"','src="hero-yossi-studio.jpg"')
-assert 'hero-yossi-studio.jpg' in s
+s=s.replace('<img src="hero-yossi.jpg"','<img class="person" src="yossi-cutout.webp"')
+assert 'yossi-cutout.webp' in s
+a='</div></div>${vid?`<button type="button" class="hsnd"'
+assert s.count(a)==1
+s=s.replace(a,'</div><div class="hlegs" aria-hidden="true"><img class="person" src="yossi-legs.webp" alt=""></div></div>${vid?`<button type="button" class="hsnd"')
 s=s.replace('</body>',tail+'</body>',1)
 (root/'typo-demo.html').write_text(s,encoding='utf-8')
 print('typo-demo.html built',len(s))

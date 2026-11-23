@@ -645,7 +645,7 @@ table.t tr.click:hover td{background:var(--soft)}
 .hwin .hsnd:hover{background:rgba(35,24,18,.75)}
 .hwin .hsnd.done{opacity:0!important;pointer-events:none}
 </style>
-<link rel="stylesheet" href="typo-demo.css?v=7a3d62b0">
+<link rel="stylesheet" href="typo-demo.css?v=b2fb0461">
 </head>
 <body>
 
@@ -1021,7 +1021,7 @@ function siteView(){
   <div class="htext"><h1 class="tagline">${lang==='he'?'קולה של הנשמה היהודית, ברחבי תבל':'<bdi dir="ltr">Jewish Singer, Worldwide</bdi>'}</h1><p class="sub">${esc(x.intro)}</p>
    <div class="facts">${x.facts.map(f=>`<div><b>${esc(f[0])}</b><span>${esc(f[1])}</span></div>`).join('')}</div>
    <a class="lnk cap" href="#site-videos" data-page="videos">${esc(x.gallery)} <span class="ar">${arrow}</span></a></div>
-  <figure class="hwin"><div class="reveal"><div class="hpane"><i class="hdoor l" aria-hidden="true"></i><i class="hdoor r" aria-hidden="true"></i><i class="hshine" aria-hidden="true"></i><img src="hero-yossi-studio.jpg" alt="${lang==='he'?'יוסי אזולאי שר בחופה':'Yossi Azulay singing at a chuppah'}" width="880" height="1134">${vid?`<video class="hvid" src="hero-clip.mp4" muted autoplay playsinline preload="auto" aria-hidden="true"></video>`:''}</div></div>${vid?`<button type="button" class="hsnd" data-act="heroSound">${lang==='he'?'🔊 לשמוע':lang==='fr'?'🔊 Écouter':lang==='es'?'🔊 Escuchar':'🔊 Listen'}</button>`:''}<div class="hsill"></div></figure></section>
+  <figure class="hwin"><div class="reveal"><div class="hpane"><i class="hdoor l" aria-hidden="true"></i><i class="hdoor r" aria-hidden="true"></i><i class="hshine" aria-hidden="true"></i><img class="person" src="yossi-cutout.webp" alt="${lang==='he'?'יוסי אזולאי שר בחופה':'Yossi Azulay singing at a chuppah'}" width="880" height="1134">${vid?`<video class="hvid" src="hero-clip.mp4" muted autoplay playsinline preload="auto" aria-hidden="true"></video>`:''}</div><div class="hlegs" aria-hidden="true"><img class="person" src="yossi-legs.webp" alt=""></div></div>${vid?`<button type="button" class="hsnd" data-act="heroSound">${lang==='he'?'🔊 לשמוע':lang==='fr'?'🔊 Écouter':lang==='es'?'🔊 Escuchar':'🔊 Listen'}</button>`:''}<div class="hsill"></div></figure></section>
   <div class="endcta"><span>${esc(x.endq)}</span><a class="btn-gold cap" href="#site-booking" data-page="booking">${esc(t.check)}</a></div>`;
  } else if(pg==='producer'){
   const P=PRD[lang];const prods=[...new Set(EVENTS.filter(e=>e.producer).map(e=>e.producer))];
@@ -1792,7 +1792,7 @@ import {getFirestore,collection,addDoc,serverTimestamp} from "https://www.gstati
 const db=getFirestore(initializeApp({apiKey:"AIzaSyBQg7PvR6yxFbU_Lkpd4MvAq88fROldjZ0",authDomain:"yossi-azulay.firebaseapp.com",projectId:"yossi-azulay",storageBucket:"yossi-azulay.firebasestorage.app",messagingSenderId:"884186379961",appId:"1:884186379961:web:9d6559a66c97fc7ead8d68"}));
 window.ydbSaveLead=d=>addDoc(collection(db,'leads'),Object.assign({},d,{status:'new',source:'site',createdAt:serverTimestamp()}));
 </script>
-<script>document.addEventListener('ended',e=>{const v=e.target;if(!v.classList||!v.classList.contains('hvid'))return;v.classList.add('done');const b=document.querySelector('.hsnd');if(b)b.classList.add('done');setTimeout(()=>{v.remove();b&&b.remove()},1400)},true);
+<script>document.addEventListener('ended',e=>{const v=e.target;if(!v.classList||!v.classList.contains('hvid'))return;v.classList.add('done');const hw=v.closest('.hwin');hw&&hw.classList.add('vdone');const b=document.querySelector('.hsnd');if(b)b.classList.add('done');setTimeout(()=>{v.remove();b&&b.remove()},1400)},true);
 document.addEventListener('error',e=>{const v=e.target;if(v.classList&&v.classList.contains('hvid')){v.remove();const b=document.querySelector('.hsnd');b&&b.remove()}},true);</script>
 <div class="typo-switch" role="group" aria-label="השוואת טיפוגרפיה"><button type="button" data-t="1" aria-pressed="true">טיפוגרפיה חדשה</button><button type="button" data-t="0" aria-pressed="false">הנוכחית</button></div>
 <script>
