@@ -1524,7 +1524,7 @@ function evDetail(e){
   b=`<div class="panel scroll"><h2>תיאום צוות (פנימי, הלקוח לא רואה)</h2>${CR.length?`<table class="t"><thead><tr><th>צוות</th><th>מי / פרטים</th><th>תואם</th><th>התקבלה חשבונית</th><th>תויקה</th></tr></thead><tbody>${CR.map(([k,l])=>`<tr><td><b>${esc(l)}</b></td><td><input class="inp" data-crewn="${k}" value="${esc(((e.crew||{})[k]||{}).name||'')}" placeholder="שם ומחיר"><input class="inp" data-crewp="${k}" value="${esc(((e.crew||{})[k]||{}).phone||'')}" placeholder="טלפון לוואטסאפ" dir="ltr" style="margin-top:4px"></td><td>${ck(k,'coord','תואם')}</td><td>${ck(k,'inv','התקבלה')}</td><td>${ck(k,'filed','תויקה')}</td></tr>`).join('')}</tbody></table>`:`<div class="empty">אין צוות נוסף. בוחרים צוות בלשונית "פרטים" (כנריות, נגנים, מיוסיקידס).</div>`}
   ${CR.length?`<div class="hr"></div><h3 class="lh">הנחיות לצוות (נשלחות יומיים לפני)</h3><div class="fields">
    <label>שעת הגעה לצוות<input class="inp" type="time" data-f="crewCall" value="${esc(e.crewCall||'')}"></label>
-   <label>לבוש<input class="inp" data-f="crewDress" value="${esc(e.crewDress||'')}" placeholder="לדוגמה: שחור אלגנטי"></label>
+   <label>לבוש<input class="inp" data-f="crewDress" value="${esc(e.crewDress||'שחור אלגנטי')}"></label>
    <label class="wide">הערות לצוות<input class="inp" data-f="crewNotes" value="${esc(e.crewNotes||'')}" placeholder="חניה, כניסה לאמנים, איש קשר במקום…"></label></div>
    <div class="row" style="margin-top:12px"><button class="btn pri" type="button" data-act="crewBrief">הודעת הנחיות לצוות</button>${(e.sent||{}).crewBrief?`<span class="tag" style="background:var(--okbg);color:var(--ok)">נשלח ✓</span>`:''}</div>`:''}</div>
   <div class="panel scroll"><h2>ספקים והוצאות (פנימי, הלקוח לא רואה)</h2><table class="t"><thead><tr><th>ספק</th><th>תפקיד</th><th class="n">עלות</th><th>חשבונית בתיקייה</th><th>הועלתה לרו״ח</th></tr></thead><tbody>${e.suppliers.map((x,i)=>`<tr><td><b>${esc(x.name)}</b></td><td>${esc(x.role)}</td><td class="n">${money(x.cost)}</td><td><label class="row" style="gap:6px"><input type="checkbox" data-sup="${i}" ${x.inv?'checked':''}> ${x.inv?'התקבלה':'חסרה'}</label></td><td><label class="row" style="gap:6px"><input type="checkbox" data-supacc="${i}" ${x.acc?'checked':''}> ${x.acc?'הועלתה':'לא'}</label></td></tr>`).join('')||'<tr><td colspan="5" class="empty">אין ספקים</td></tr>'}</tbody></table>
@@ -1572,7 +1572,7 @@ function crewBriefText(e,name){
  const L=[`היי ${name||''},`.replace(' ,',','),`תזכורת להופעה עם יוסי אזולאי:`,'',
   `📅 ${dt}`,`📍 ${[e.venue,e.city].filter(Boolean).join(', ')}`,
   e.crewCall?`⏰ הגעה: ${e.crewCall}`:'',(d.showTime||f.chuppah)?`🎤 ${e.etype==='wedding'?'חופה':'מופע'}: ${d.showTime||f.chuppah}`:'',
-  e.crewDress?`👔 לבוש: ${e.crewDress}`:'',
+  `👔 לבוש: ${e.crewDress||'שחור אלגנטי'}`,
   songs.length?'🎵 שירים:\n'+songs.join('\n'):'🎵 רשימת השירים תישלח בנפרד',
   e.showManager?`📞 מנהל מופע: ${e.showManager}`:'',e.crewNotes?`📝 ${e.crewNotes}`:'','','תודה!'];
  return L.filter((x,i)=>x!==''||i===2||i===L.length-2).join('\n');
