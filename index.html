@@ -642,7 +642,7 @@ table.t tr.click:hover td{background:var(--soft)}
 .gwin::before{display:none}
 .gwin .reveal{position:relative}
 .gwin .hpane{background:linear-gradient(180deg,#b5a08b 0%,#ae9984 55%,#a48e78 82%,#9a836d 100%)}
-.gwin .person{position:absolute;top:0;left:1.8%;width:90.9%;height:auto;margin-top:8.5%;max-width:none;transform:none}
+.gwin .hpane .person,.gwin .hlegs .person{position:absolute;top:0;left:1.8%;width:90.9%!important;height:auto!important;object-fit:contain!important;margin-top:8.5%;max-width:none;transform:none!important;animation:none!important}
 .gwin .hlegs{position:absolute;left:9px;right:9px;top:9px;bottom:0;z-index:6;pointer-events:none}
 .gwin .hlegs .person{-webkit-mask:linear-gradient(180deg,transparent 72.5%,#000 74.5%);mask:linear-gradient(180deg,transparent 72.5%,#000 74.5%);filter:drop-shadow(0 14px 10px rgba(35,24,18,.38)) drop-shadow(0 3px 2px rgba(35,24,18,.25))}
 @media (max-width:640px){.gwin{max-width:300px}}
@@ -992,7 +992,7 @@ es:[
 };
 /* ================= PUBLIC SITE ================= */
 const GITEMS=[{p:'g01.jpg'},{p:'g02.jpg'},{p:'vid-masada.jpg',src:'vid-masada.mp4',v:{he:'בר מצווה במצדה',en:'Bar Mitzvah at Masada',fr:'Bar Mitzvah à Massada',es:'Bar Mitzvá en Masada'}},{p:'g03.jpg'},{p:'g04.jpg'},{p:'g11.jpg',tall:1},{p:'g05.jpg'},{p:'g06.jpg'},{p:'vid-aliyah.jpg',src:'vid-aliyah.mp4',v:{he:'עלייה לתורה',en:'Aliyah to the Torah',fr:'Montée à la Torah',es:'Aliyá a la Torá'}},{p:'g07.jpg'},{p:'g08.jpg'},{p:'g15.jpg',tall:1},{p:'g09.jpg'},{p:'g10.jpg'},{p:'g12.jpg'},{p:'vid-olamia.jpg',src:'vid-olamia.mp4',v:{he:'בר מצווה בעולמיא',en:'Bar Mitzvah at Olamia',fr:'Bar Mitzvah à Olamia',es:'Bar Mitzvá en Olamia'}},{p:'g13.jpg'},{p:'g14.jpg'},{p:'g16.jpg'},{p:'g17.jpg'},{p:'g18.jpg'},{p:'vid-allenby.jpg',src:'vid-allenby.mp4',v:{he:'בר מצווה בבית הכנסת אלנבי',en:'Bar Mitzvah, Allenby Synagogue',fr:'Bar Mitzvah, synagogue Allenby',es:'Bar Mitzvá, sinagoga Allenby'}},{p:'g19.jpg'},{p:'g20.jpg'},{p:'g22.jpg'},{p:'g23.jpg'}];
-const GL={he:{t:'רגעים מהטקסים',all:'הכל',vid:'וידאו',pic:'תמונות',photo:'תמונה',close:'סגירה',prev:'הקודם',next:'הבא'},en:{t:'Moments from the ceremonies',all:'All',vid:'Videos',pic:'Photos',photo:'Photo',close:'Close',prev:'Previous',next:'Next'},fr:{t:'Moments des cérémonies',all:'Tout',vid:'Vidéos',pic:'Photos',photo:'Photo',close:'Fermer',prev:'Précédent',next:'Suivant'},es:{t:'Momentos de las ceremonias',all:'Todo',vid:'Vídeos',pic:'Fotos',photo:'Foto',close:'Cerrar',prev:'Anterior',next:'Siguiente'}};
+const GL={he:{t:'רגעים בלתי נשכחים',all:'הכל',vid:'וידאו',pic:'תמונות',photo:'תמונה',close:'סגירה',prev:'הקודם',next:'הבא'},en:{t:'Moments from the ceremonies',all:'All',vid:'Videos',pic:'Photos',photo:'Photo',close:'Close',prev:'Previous',next:'Next'},fr:{t:'Moments des cérémonies',all:'Tout',vid:'Vidéos',pic:'Photos',photo:'Photo',close:'Fermer',prev:'Précédent',next:'Suivant'},es:{t:'Momentos de las ceremonias',all:'Todo',vid:'Vídeos',pic:'Fotos',photo:'Foto',close:'Cerrar',prev:'Anterior',next:'Siguiente'}};
 let GF='all',GI=-1;
 function galIdx(){return GITEMS.map((it,i)=>i).filter(i=>GF==='all'||(GF==='vid')===!!GITEMS[i].v)}
 function galShow(i){const lang=S.lang;GI=i;const it=GITEMS[i],G=GL[lang];let lb=document.getElementById('glb');
